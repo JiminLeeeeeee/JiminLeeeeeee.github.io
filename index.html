@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>WORLD ARCHIVE</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --neon-cyan:#00fff5;
+  --neon-pink:#ff2d78;
+  --neon-purple:#b44fff;
+  --neon-green:#00ff9f;
+  --neon-orange:#ff9f00;
+  --neon-blue:#0099ff;
+  --bg:#04050d;
+  --panel:rgba(0,255,245,.04);
+  --border:rgba(0,255,245,.2);
+}
+body{background:var(--bg);color:#e0f7f7;font-family:'Noto Sans KR',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);pointer-events:none;z-index:9999;}
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,245,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,245,.04) 1px,transparent 1px);background-size:40px 40px;z-index:0;}
+
+/* ══ 페이지 공통 ══ */
+.page{display:none;position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:48px 24px 72px;}
+.page.active{display:block;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+@keyframes glitch{0%,95%,100%{transform:translate(0);}96%{transform:translate(-2px,1px);filter:hue-rotate(20deg);}97%{transform:translate(2px,-1px);filter:hue-rotate(-20deg);}98%{transform:translate(0);}}
+
+/* ══ 공통 UI ══ */
+.sys-bar{display:flex;justify-content:space-between;align-items:center;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:rgba(0,255,245,.4);margin-bottom:32px;letter-spacing:.1em;}
+.sys-dot{width:8px;height:8px;border-radius:50%;background:var(--neon-cyan);box-shadow:0 0 8px var(--neon-cyan);display:inline-block;margin-right:6px;animation:blink 1.2s infinite;}
+.neon-line{height:1px;background:linear-gradient(90deg,transparent,var(--neon-cyan),var(--neon-purple),var(--neon-pink),transparent);margin:28px 0;box-shadow:0 0 8px rgba(0,255,245,.3);}
+.section-label{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.3em;color:rgba(0,255,245,.4);margin-bottom:14px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(0,255,245,.5);letter-spacing:.15em;cursor:pointer;border:1px solid var(--border);padding:7px 16px;background:var(--panel);transition:all .2s;margin-bottom:32px;text-decoration:none;}
+.back-btn:hover{color:var(--neon-cyan);border-color:var(--neon-cyan);background:rgba(0,255,245,.07);}
+
+/* 페이지 제목 공통 */
+.page-title{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2.2rem);font-weight:900;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.page-sub{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(0,255,245,.4);letter-spacing:.2em;margin-bottom:28px;}
+
+/* 검색/필터 바 */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;align-items:center;}
+.filter-input{flex:1;min-width:180px;background:var(--panel);border:1px solid var(--border);padding:8px 14px;font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--neon-cyan);outline:none;letter-spacing:.1em;}
+.filter-input::placeholder{color:rgba(0,255,245,.25);}
+.filter-input:focus{border-color:var(--neon-cyan);box-shadow:0 0 10px rgba(0,255,245,.1);}
+.filter-btn{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.15em;padding:8px 14px;border:1px solid var(--border);background:var(--panel);color:rgba(0,255,245,.5);cursor:pointer;transition:all .2s;}
+.filter-btn:hover,.filter-btn.active{border-color:var(--neon-cyan);color:var(--neon-cyan);background:rgba(0,255,245,.07);}
+
+/* ══════════════════════════════════
+   대문
+══════════════════════════════════ */
+.site-title{font-family:'Orbitron',monospace;font-size:clamp(2rem,6vw,4rem);font-weight:900;line-height:1;letter-spacing:.05em;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple),var(--neon-pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:glitch 4s infinite;}
+.site-sub{font-family:'Share Tech Mono',monospace;color:rgba(0,255,245,.5);font-size:.8rem;letter-spacing:.25em;margin-top:8px;}
+.terminal{border:1px solid var(--border);background:rgba(0,255,245,.03);padding:20px 24px;font-family:'Share Tech Mono',monospace;font-size:.82rem;line-height:1.9;color:rgba(0,255,245,.7);margin-bottom:36px;position:relative;}
+.terminal::before{content:'> SYSTEM INTRO';position:absolute;top:-10px;left:16px;background:var(--bg);padding:0 8px;color:var(--neon-cyan);font-size:.7rem;letter-spacing:.2em;}
+.terminal .prompt{color:var(--neon-pink);}
+.terminal .val{color:#e0f7f7;}
+.cursor{display:inline-block;width:8px;height:.9em;background:var(--neon-cyan);animation:blink .8s infinite;vertical-align:middle;}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:40px;}
+.cat-card{border:1px solid var(--border);background:var(--panel);padding:18px 16px;cursor:pointer;transition:all .25s;text-decoration:none;display:block;position:relative;overflow:hidden;}
+.cat-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,255,245,.06),transparent);transition:left .4s;}
+.cat-card:hover{border-color:var(--neon-cyan);background:rgba(0,255,245,.07);box-shadow:0 0 20px rgba(0,255,245,.1),inset 0 0 20px rgba(0,255,245,.03);}
+.cat-card:hover::before{left:100%;}
+.cat-id{font-family:'Orbitron',monospace;font-size:.6rem;color:var(--neon-pink);letter-spacing:.2em;margin-bottom:8px;}
+.cat-name{font-family:'Orbitron',monospace;font-size:.9rem;color:var(--neon-cyan);margin-bottom:6px;}
+.cat-desc{font-size:.75rem;color:rgba(224,247,247,.45);line-height:1.6;}
+.cat-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:rgba(0,255,245,.3);font-size:1rem;transition:all .25s;}
+.cat-card:hover .cat-arrow{color:var(--neon-cyan);right:10px;}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px;}
+.stat{flex:1;min-width:120px;border:1px solid var(--border);padding:14px 16px;background:var(--panel);text-align:center;}
+.stat-n{font-family:'Orbitron',monospace;font-size:1.6rem;color:var(--neon-cyan);display:block;text-shadow:0 0 14px rgba(0,255,245,.5);}
+.stat-l{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255,245,.35);letter-spacing:.2em;}
+.log{border:1px solid var(--border);background:var(--panel);overflow:hidden;margin-bottom:40px;}
+.log-head{background:rgba(0,255,245,.07);padding:9px 18px;font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.25em;color:var(--neon-cyan);border-bottom:1px solid var(--border);}
+.log-row{display:flex;gap:14px;align-items:center;padding:11px 18px;border-bottom:1px solid rgba(0,255,245,.06);font-size:.8rem;transition:background .2s;}
+.log-row:last-child{border-bottom:none;}
+.log-row:hover{background:rgba(0,255,245,.04);}
+.log-time{font-family:'Share Tech Mono',monospace;color:rgba(0,255,245,.35);font-size:.72rem;min-width:80px;}
+.log-tag{font-size:.65rem;padding:2px 7px;border:1px solid;border-radius:2px;}
+.tag-c{border-color:var(--neon-pink);color:var(--neon-pink);}
+.tag-w{border-color:var(--neon-purple);color:var(--neon-purple);}
+.tag-s{border-color:var(--neon-cyan);color:var(--neon-cyan);}
+.tag-m{border-color:var(--neon-green);color:var(--neon-green);}
+.tag-e{border-color:var(--neon-orange);color:var(--neon-orange);}
+.tag-g{border-color:var(--neon-blue);color:var(--neon-blue);}
+.log-title{color:rgba(224,247,247,.7);}
+footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255,245,.2);letter-spacing:.2em;text-align:center;}
+
+/* ══════════════════════════════════
+   캐릭터 페이지
+══════════════════════════════════ */
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:40px;}
+.char-card{border:1px solid var(--border);background:var(--panel);cursor:pointer;transition:all .28s;position:relative;overflow:hidden;}
+.char-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);pointer-events:none;}
+.char-card:hover{border-color:var(--neon-cyan);transform:translateY(-4px);box-shadow:0 0 24px rgba(0,255,245,.15),0 8px 24px rgba(0,0,0,.4);}
+.char-face{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;filter:brightness(.9) contrast(1.05);}
+.char-face-placeholder{width:100%;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(0,255,245,.05),rgba(180,79,255,.05));font-size:3.5rem;color:rgba(0,255,245,.2);}
+.char-info{position:absolute;bottom:0;left:0;right:0;padding:14px 12px 12px;z-index:2;}
+.char-name{font-family:'Orbitron',monospace;font-size:.85rem;color:var(--neon-cyan);font-weight:700;text-shadow:0 0 10px rgba(0,255,245,.5);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.char-gender-tag{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.1em;padding:2px 7px;border:1px solid;display:inline-block;}
+.gender-m{border-color:rgba(0,140,255,.6);color:#4db8ff;}
+.gender-f{border-color:rgba(255,45,120,.6);color:#ff7ab0;}
+.gender-n{border-color:rgba(180,79,255,.6);color:#cc99ff;}
+.add-empty-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px dashed rgba(0,255,245,.15);background:transparent;padding:18px 16px;cursor:pointer;transition:all .25s;font-family:'Share Tech Mono',monospace;font-size:.68rem;color:rgba(0,255,245,.25);letter-spacing:.15em;width:100%;aspect-ratio:3/4;}
+.add-empty-btn:hover{border-color:rgba(0,255,245,.4);color:rgba(0,255,245,.6);background:rgba(0,255,245,.03);}
+.add-empty-btn span{font-size:1.5rem;}
+
+/* ══════════════════════════════════
+   세계관 페이지
+══════════════════════════════════ */
+.world-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:40px;}
+.world-card{border:1px solid var(--border);background:var(--panel);padding:22px 20px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.world-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(180,79,255,.05),transparent);transition:left .4s;}
+.world-card:hover{border-color:var(--neon-purple);background:rgba(180,79,255,.07);box-shadow:0 0 20px rgba(180,79,255,.1);}
+.world-card:hover::before{left:100%;}
+.world-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.world-card-id{font-family:'Orbitron',monospace;font-size:.58rem;color:var(--neon-purple);letter-spacing:.2em;}
+.world-card-type{font-family:'Share Tech Mono',monospace;font-size:.6rem;padding:2px 8px;border:1px solid rgba(180,79,255,.4);color:rgba(180,79,255,.7);}
+.world-card-name{font-family:'Orbitron',monospace;font-size:1rem;color:#d4aaff;margin-bottom:8px;}
+.world-card-desc{font-size:.78rem;color:rgba(224,247,247,.45);line-height:1.7;}
+.world-card-meta{margin-top:14px;padding-top:12px;border-top:1px solid rgba(180,79,255,.15);display:flex;gap:10px;flex-wrap:wrap;}
+.world-meta-chip{font-family:'Share Tech Mono',monospace;font-size:.6rem;padding:2px 8px;background:rgba(180,79,255,.08);border:1px solid rgba(180,79,255,.2);color:rgba(180,79,255,.6);}
+
+/* 세계관 모달 */
+.wmodal-body{padding:28px;}
+.wmodal-header{margin-bottom:20px;}
+.wmodal-name{font-family:'Orbitron',monospace;font-size:1.4rem;color:#d4aaff;margin-bottom:4px;}
+.wmodal-type{font-family:'Share Tech Mono',monospace;font-size:.65rem;padding:3px 10px;border:1px solid rgba(180,79,255,.4);color:rgba(180,79,255,.7);display:inline-block;}
+.wmodal-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+@media(max-width:540px){.wmodal-grid{grid-template-columns:1fr;}}
+.wmodal-section{margin-bottom:18px;}
+.wmodal-section-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.3em;color:var(--neon-purple);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(180,79,255,.2);}
+.wmodal-field{display:flex;gap:12px;margin-bottom:7px;font-size:.82rem;}
+.wmodal-key{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(180,79,255,.5);min-width:64px;padding-top:1px;flex-shrink:0;}
+.wmodal-val{color:rgba(224,247,247,.8);line-height:1.7;}
+.wmodal-desc{font-size:.82rem;color:rgba(224,247,247,.65);line-height:1.9;border-left:2px solid rgba(180,79,255,.2);padding-left:14px;}
+
+/* ══════════════════════════════════
+   설정집 페이지
+══════════════════════════════════ */
+.setting-tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.setting-tab{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.15em;padding:10px 18px;border:1px solid transparent;border-bottom:none;cursor:pointer;color:rgba(0,255,245,.35);transition:all .2s;margin-bottom:-1px;}
+.setting-tab:hover{color:rgba(0,255,245,.7);}
+.setting-tab.active{border-color:var(--border);border-bottom-color:var(--bg);color:var(--neon-cyan);background:rgba(0,255,245,.03);}
+.setting-panel{display:none;}
+.setting-panel.active{display:block;animation:fadeIn .25s ease;}
+.setting-list{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
+.setting-item{border:1px solid var(--border);background:var(--panel);padding:18px 20px;cursor:pointer;transition:all .25s;position:relative;}
+.setting-item:hover{border-color:var(--neon-green);background:rgba(0,255,159,.05);box-shadow:0 0 16px rgba(0,255,159,.08);}
+.setting-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.setting-item-name{font-family:'Orbitron',monospace;font-size:.9rem;color:var(--neon-green);}
+.setting-item-badge{font-family:'Share Tech Mono',monospace;font-size:.6rem;padding:2px 8px;border:1px solid rgba(0,255,159,.3);color:rgba(0,255,159,.6);}
+.setting-item-desc{font-size:.8rem;color:rgba(224,247,247,.45);line-height:1.7;}
+.setting-item-arrow{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:rgba(0,255,159,.25);transition:all .2s;}
+.setting-item:hover .setting-item-arrow{color:var(--neon-green);right:12px;}
+
+/* 설정집 모달 */
+.smodal-body{padding:28px;}
+.smodal-name{font-family:'Orbitron',monospace;font-size:1.3rem;color:var(--neon-green);margin-bottom:6px;}
+.smodal-badge{font-family:'Share Tech Mono',monospace;font-size:.62rem;padding:2px 9px;border:1px solid rgba(0,255,159,.3);color:rgba(0,255,159,.6);display:inline-block;margin-bottom:18px;}
+.smodal-section{margin-bottom:18px;}
+.smodal-section-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.3em;color:var(--neon-green);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(0,255,159,.2);}
+.smodal-desc{font-size:.83rem;color:rgba(224,247,247,.7);line-height:1.95;}
+.smodal-rule-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.smodal-rule-list li{font-size:.82rem;color:rgba(224,247,247,.65);padding-left:16px;position:relative;line-height:1.7;}
+.smodal-rule-list li::before{content:'▸';position:absolute;left:0;color:var(--neon-green);opacity:.6;}
+
+/* ══════════════════════════════════
+   지도·장소 페이지
+══════════════════════════════════ */
+.map-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;margin-bottom:32px;}
+@media(max-width:620px){.map-layout{grid-template-columns:1fr;}}
+.map-sidebar{display:flex;flex-direction:column;gap:8px;}
+.map-world-btn{border:1px solid var(--border);background:var(--panel);padding:12px 14px;cursor:pointer;transition:all .2s;text-align:left;}
+.map-world-btn.active,.map-world-btn:hover{border-color:var(--neon-orange);background:rgba(255,159,0,.07);}
+.map-world-btn-name{font-family:'Orbitron',monospace;font-size:.78rem;color:rgba(224,247,247,.7);margin-bottom:2px;}
+.map-world-btn.active .map-world-btn-name{color:var(--neon-orange);}
+.map-world-btn-count{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:rgba(0,255,245,.3);}
+.map-content{border:1px solid var(--border);background:var(--panel);padding:20px;}
+.map-content-title{font-family:'Orbitron',monospace;font-size:.9rem;color:var(--neon-orange);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(255,159,0,.2);}
+.place-list{display:flex;flex-direction:column;gap:8px;}
+.place-item{border:1px solid rgba(255,159,0,.15);background:rgba(255,159,0,.03);padding:14px 16px;cursor:pointer;transition:all .2s;}
+.place-item:hover{border-color:var(--neon-orange);background:rgba(255,159,0,.08);}
+.place-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.place-item-name{font-family:'Orbitron',monospace;font-size:.82rem;color:rgba(224,247,247,.85);}
+.place-item-type{font-family:'Share Tech Mono',monospace;font-size:.6rem;padding:1px 7px;border:1px solid rgba(255,159,0,.3);color:rgba(255,159,0,.7);}
+.place-item-desc{font-size:.75rem;color:rgba(224,247,247,.4);line-height:1.6;}
+
+/* 장소 모달 */
+.pmodal-body{padding:28px;}
+.pmodal-name{font-family:'Orbitron',monospace;font-size:1.3rem;color:var(--neon-orange);margin-bottom:4px;}
+.pmodal-type{font-family:'Share Tech Mono',monospace;font-size:.62rem;padding:2px 9px;border:1px solid rgba(255,159,0,.3);color:rgba(255,159,0,.6);display:inline-block;margin-bottom:18px;}
+.pmodal-section{margin-bottom:18px;}
+.pmodal-section-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.3em;color:var(--neon-orange);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,159,0,.2);}
+.pmodal-field{display:flex;gap:12px;margin-bottom:7px;font-size:.82rem;}
+.pmodal-key{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(255,159,0,.5);min-width:60px;padding-top:1px;flex-shrink:0;}
+.pmodal-val{color:rgba(224,247,247,.8);line-height:1.7;}
+.pmodal-desc{font-size:.83rem;color:rgba(224,247,247,.65);line-height:1.95;border-left:2px solid rgba(255,159,0,.2);padding-left:14px;}
+
+/* ══════════════════════════════════
+   사건·역사 페이지
+══════════════════════════════════ */
+.timeline{position:relative;padding-left:32px;margin-bottom:40px;}
+.timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--neon-cyan),var(--neon-purple),var(--neon-pink));}
+.timeline-item{position:relative;margin-bottom:28px;cursor:pointer;}
+.timeline-dot{position:absolute;left:-26px;top:6px;width:12px;height:12px;border:2px solid var(--neon-cyan);background:var(--bg);transform:rotate(45deg);transition:all .2s;}
+.timeline-item:hover .timeline-dot{background:var(--neon-cyan);box-shadow:0 0 10px var(--neon-cyan);}
+.timeline-card{border:1px solid var(--border);background:var(--panel);padding:16px 18px;transition:all .25s;}
+.timeline-item:hover .timeline-card{border-color:var(--neon-cyan);background:rgba(0,255,245,.05);}
+.timeline-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;}
+.timeline-era{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--neon-pink);letter-spacing:.1em;}
+.timeline-type{font-family:'Share Tech Mono',monospace;font-size:.6rem;padding:2px 8px;border:1px solid rgba(0,255,245,.2);color:rgba(0,255,245,.5);}
+.timeline-title{font-family:'Orbitron',monospace;font-size:.92rem;color:rgba(224,247,247,.9);margin-bottom:6px;}
+.timeline-desc{font-size:.78rem;color:rgba(224,247,247,.4);line-height:1.7;}
+
+/* 역사 모달 */
+.hmodal-body{padding:28px;}
+.hmodal-era{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--neon-pink);letter-spacing:.15em;margin-bottom:4px;}
+.hmodal-title{font-family:'Orbitron',monospace;font-size:1.3rem;color:rgba(224,247,247,.95);margin-bottom:14px;}
+.hmodal-section{margin-bottom:18px;}
+.hmodal-section-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.3em;color:var(--neon-pink);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,45,120,.2);}
+.hmodal-field{display:flex;gap:12px;margin-bottom:7px;font-size:.82rem;}
+.hmodal-key{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(255,45,120,.5);min-width:60px;padding-top:1px;flex-shrink:0;}
+.hmodal-val{color:rgba(224,247,247,.8);line-height:1.7;}
+.hmodal-desc{font-size:.83rem;color:rgba(224,247,247,.65);line-height:1.95;border-left:2px solid rgba(255,45,120,.2);padding-left:14px;}
+.hmodal-figures{display:flex;flex-wrap:wrap;gap:6px;}
+.hmodal-figure{font-family:'Share Tech Mono',monospace;font-size:.62rem;padding:3px 9px;border:1px solid rgba(255,45,120,.25);color:rgba(255,45,120,.7);}
+
+/* ══════════════════════════════════
+   용어사전 페이지
+══════════════════════════════════ */
+.glossary-alpha{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;}
+.alpha-btn{font-family:'Share Tech Mono',monospace;font-size:.65rem;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);background:var(--panel);cursor:pointer;color:rgba(0,255,245,.4);transition:all .2s;}
+.alpha-btn:hover,.alpha-btn.active{border-color:var(--neon-blue);color:var(--neon-blue);background:rgba(0,153,255,.07);}
+.glossary-list{display:flex;flex-direction:column;gap:0;margin-bottom:40px;border:1px solid var(--border);}
+.glossary-item{border-bottom:1px solid rgba(0,255,245,.06);padding:14px 18px;cursor:pointer;transition:background .2s;display:flex;gap:16px;align-items:flex-start;}
+.glossary-item:last-child{border-bottom:none;}
+.glossary-item:hover{background:rgba(0,153,255,.05);}
+.glossary-term{font-family:'Orbitron',monospace;font-size:.85rem;color:#7dc8ff;min-width:110px;flex-shrink:0;margin-top:2px;}
+.glossary-short{font-size:.8rem;color:rgba(224,247,247,.5);line-height:1.7;flex:1;}
+.glossary-cat{font-family:'Share Tech Mono',monospace;font-size:.58rem;padding:2px 7px;border:1px solid rgba(0,153,255,.25);color:rgba(0,153,255,.6);align-self:flex-start;white-space:nowrap;}
+
+/* 용어 모달 */
+.gmodal-body{padding:28px;}
+.gmodal-term{font-family:'Orbitron',monospace;font-size:1.5rem;color:#7dc8ff;margin-bottom:4px;}
+.gmodal-cat{font-family:'Share Tech Mono',monospace;font-size:.62rem;padding:2px 9px;border:1px solid rgba(0,153,255,.3);color:rgba(0,153,255,.6);display:inline-block;margin-bottom:18px;}
+.gmodal-section{margin-bottom:18px;}
+.gmodal-section-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.3em;color:var(--neon-blue);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(0,153,255,.2);}
+.gmodal-desc{font-size:.83rem;color:rgba(224,247,247,.7);line-height:1.95;}
+.gmodal-related{display:flex;flex-wrap:wrap;gap:6px;}
+.gmodal-rel-tag{font-family:'Share Tech Mono',monospace;font-size:.62rem;padding:3px 9px;border:1px solid rgba(0,153,255,.2);color:rgba(0,153,255,.6);cursor:pointer;transition:all .2s;}
+.gmodal-rel-tag:hover{border-color:var(--neon-blue);color:var(--neon-blue);}
+
+/* ══════════════════════════════════
+   공통 모달
+══════════════════════════════════ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);}
+.modal-overlay.open{display:flex;animation:fadeIn .25s ease;}
+.modal{background:#060810;border:1px solid var(--border);max-width:820px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 0 60px rgba(0,255,245,.08);}
+.modal::-webkit-scrollbar{width:4px;}
+.modal::-webkit-scrollbar-thumb{background:rgba(0,255,245,.2);border-radius:2px;}
+.modal-topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;border-bottom:1px solid var(--border);background:rgba(0,255,245,.04);font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255,245,.4);letter-spacing:.2em;}
+.modal-close{background:none;border:1px solid rgba(255,45,120,.3);color:var(--neon-pink);width:28px;height:28px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.modal-close:hover{background:rgba(255,45,120,.15);border-color:var(--neon-pink);}
+
+/* 캐릭터 모달 전용 */
+.char-modal-body{display:grid;grid-template-columns:220px 1fr;gap:0;}
+@media(max-width:560px){.char-modal-body{grid-template-columns:1fr;}}
+.char-modal-img-col{border-right:1px solid var(--border);padding:22px;display:flex;flex-direction:column;align-items:center;gap:14px;background:rgba(0,255,245,.02);}
+.modal-fullbody{width:100%;max-height:340px;object-fit:contain;display:block;}
+.modal-fullbody-placeholder{width:100%;height:260px;display:flex;align-items:center;justify-content:center;font-size:4rem;color:rgba(0,255,245,.15);border:1px dashed rgba(0,255,245,.1);}
+.modal-char-name{font-family:'Orbitron',monospace;font-size:1.15rem;font-weight:900;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;line-height:1.2;}
+.modal-char-gender{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.1em;padding:3px 10px;border:1px solid;display:inline-block;margin-top:4px;}
+.char-modal-info{padding:22px;}
+.modal-section{margin-bottom:20px;}
+.modal-section:last-child{margin-bottom:0;}
+.modal-section-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.3em;color:var(--neon-pink);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,45,120,.2);}
+.modal-field{display:flex;gap:12px;margin-bottom:7px;font-size:.82rem;}
+.modal-field-key{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255,245,.4);min-width:70px;padding-top:1px;flex-shrink:0;}
+.modal-field-val{color:rgba(224,247,247,.8);line-height:1.7;}
+.modal-desc{font-size:.82rem;color:rgba(224,247,247,.65);line-height:1.9;border-left:2px solid rgba(0,255,245,.15);padding-left:14px;}
+.modal-tag-list{display:flex;flex-wrap:wrap;gap:6px;}
+.modal-tag{font-family:'Share Tech Mono',monospace;font-size:.6rem;padding:2px 8px;border:1px solid rgba(0,255,245,.2);color:rgba(0,255,245,.5);}
+@media(max-width:560px){.char-modal-img-col{border-right:none;border-bottom:1px solid var(--border);}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- ════════════════════════════════════════
+                   대문
+════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="sys-bar">
+    <span><span class="sys-dot"></span>SYSTEM ONLINE</span>
+    <span>WIKI_ARCHIVE v2.0</span>
+    <span>NODE: ACTIVE</span>
+  </div>
+  <h1 class="site-title">WORLD<br>ARCHIVE</h1>
+  <p class="site-sub">// PERSONAL LORE DATABASE //</p>
+  <div class="neon-line"></div>
+  <div class="terminal">
+    <div><span class="prompt">$ </span><span class="val">init wiki --mode=personal</span></div>
+    <div><span class="prompt">$ </span><span class="val">desc: "자작 캐릭터와 세계관을 기록하는 개인 아카이브"</span></div>
+    <div><span class="prompt">$ </span><span class="val">status: <span style="color:var(--neon-cyan)">READY</span></span></div>
+    <div><span class="prompt">$ </span><span class="cursor"></span></div>
+  </div>
+  <p class="section-label">🗂 // CATEGORIES</p>
+  <div class="cat-grid">
+    <a class="cat-card" onclick="goPage('page-chars');return false;" href="#">
+      <div class="cat-id">CAT-01</div><div class="cat-name">🧑‍🎨 캐릭터</div>
+      <div class="cat-desc">자작 캐릭터 프로필 DB</div><span class="cat-arrow">›</span>
+    </a>
+    <a class="cat-card" onclick="goPage('page-world');return false;" href="#">
+      <div class="cat-id">CAT-02</div><div class="cat-name">🌍 세계관</div>
+      <div class="cat-desc">지리·역사·세력 데이터</div><span class="cat-arrow">›</span>
+    </a>
+    <a class="cat-card" onclick="goPage('page-setting');return false;" href="#">
+      <div class="cat-id">CAT-03</div><div class="cat-name">📜 설정집</div>
+      <div class="cat-desc">마법·기술·언어 체계</div><span class="cat-arrow">›</span>
+    </a>
+    <a class="cat-card" onclick="goPage('page-map');return false;" href="#">
+      <div class="cat-id">CAT-04</div><div class="cat-name">🗺️ 지도·장소</div>
+      <div class="cat-desc">지명 및 공간 정보</div><span class="cat-arrow">›</span>
+    </a>
+    <a class="cat-card" onclick="goPage('page-history');return false;" href="#">
+      <div class="cat-id">CAT-05</div><div class="cat-name">⚔️ 사건·역사</div>
+      <div class="cat-desc">연대기 및 주요 이벤트</div><span class="cat-arrow">›</span>
+    </a>
+    <a class="cat-card" onclick="goPage('page-glossary');return false;" href="#">
+      <div class="cat-id">CAT-06</div><div class="cat-name">🔖 용어사전</div>
+      <div class="cat-desc">고유명사·개념 인덱스</div><span class="cat-arrow">›</span>
+    </a>
+  </div>
+  <div class="stats">
+    <div class="stat"><span class="stat-n">03</span><span class="stat-l">🧑‍🎨 CHARACTERS</span></div>
+    <div class="stat"><span class="stat-n">02</span><span class="stat-l">🌍 WORLD DOCS</span></div>
+    <div class="stat"><span class="stat-n">03</span><span class="stat-l">📜 SETTINGS</span></div>
+    <div class="stat"><span class="stat-n">00</span><span class="stat-l">📄 TOTAL PAGES</span></div>
+  </div>
+  <div class="log">
+    <div class="log-head">🕰 // RECENT UPDATES</div>
+    <div class="log-row"><span class="log-time">0000-00-00</span><span class="log-tag tag-c">🧑‍🎨 캐릭터</span><span class="log-title">위키 대문 개설</span></div>
+    <div class="log-row"><span class="log-time">——</span><span class="log-tag tag-w">🌍 세계관</span><span class="log-title">항목을 추가해보세요</span></div>
+    <div class="log-row"><span class="log-time">——</span><span class="log-tag tag-s">📜 설정</span><span class="log-title">업데이트가 여기 표시됩니다</span></div>
+  </div>
+  <footer>[ PERSONAL WIKI ARCHIVE · GITHUB PAGES · ALL RIGHTS RESERVED ]</footer>
+</div>
+
+<!-- ════════════════════════════════════════
+                 캐릭터
+════════════════════════════════════════ -->
+<div class="page" id="page-chars">
+  <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
+  <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
+  <h2 class="page-title">🧑‍🎨 CHARACTER DATABASE</h2>
+  <p class="page-sub">// 등록된 자작 캐릭터 목록 //</p>
+  <div class="filter-bar">
+    <input class="filter-input" type="text" placeholder="// SEARCH CHARACTER..." id="char-search" oninput="renderChars()"/>
+    <button class="filter-btn active" onclick="setCharFilter('all',this)">ALL</button>
+    <button class="filter-btn" onclick="setCharFilter('남',this)">♂ 남</button>
+    <button class="filter-btn" onclick="setCharFilter('여',this)">♀ 여</button>
+    <button class="filter-btn" onclick="setCharFilter('기타',this)">◈ 기타</button>
+  </div>
+  <div class="neon-line"></div>
+  <div class="char-grid" id="char-grid"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+                 세계관
+════════════════════════════════════════ -->
+<div class="page" id="page-world">
+  <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
+  <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
+  <h2 class="page-title">🌍 WORLD DATABASE</h2>
+  <p class="page-sub">// 세계관·지역·세력 데이터 //</p>
+  <div class="filter-bar">
+    <input class="filter-input" type="text" placeholder="// SEARCH WORLD..." id="world-search" oninput="renderWorld()"/>
+    <button class="filter-btn active" onclick="setWorldFilter('all',this)">ALL</button>
+    <button class="filter-btn" onclick="setWorldFilter('세계',this)">🌐 세계</button>
+    <button class="filter-btn" onclick="setWorldFilter('왕국',this)">👑 왕국</button>
+    <button class="filter-btn" onclick="setWorldFilter('세력',this)">⚔ 세력</button>
+  </div>
+  <div class="neon-line"></div>
+  <div class="world-grid" id="world-grid"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+                 설정집
+════════════════════════════════════════ -->
+<div class="page" id="page-setting">
+  <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
+  <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
+  <h2 class="page-title">📜 SETTING DATABASE</h2>
+  <p class="page-sub">// 마법·기술·언어·문화 체계 //</p>
+  <div class="neon-line"></div>
+  <div class="setting-tabs">
+    <button class="setting-tab active" onclick="setSettingTab('magic',this)">✨ 마법 체계</button>
+    <button class="setting-tab" onclick="setSettingTab('tech',this)">⚙️ 기술·도구</button>
+    <button class="setting-tab" onclick="setSettingTab('culture',this)">🏛️ 문화·풍속</button>
+  </div>
+  <div class="setting-panel active" id="sp-magic">
+    <div class="setting-list" id="sl-magic"></div>
+  </div>
+  <div class="setting-panel" id="sp-tech">
+    <div class="setting-list" id="sl-tech"></div>
+  </div>
+  <div class="setting-panel" id="sp-culture">
+    <div class="setting-list" id="sl-culture"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+                지도·장소
+════════════════════════════════════════ -->
+<div class="page" id="page-map">
+  <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
+  <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
+  <h2 class="page-title">🗺️ LOCATION DATABASE</h2>
+  <p class="page-sub">// 세계 지명·공간 정보 //</p>
+  <div class="neon-line"></div>
+  <div class="map-layout">
+    <div class="map-sidebar" id="map-sidebar"></div>
+    <div class="map-content">
+      <div class="map-content-title" id="map-content-title">// SELECT WORLD</div>
+      <div class="place-list" id="place-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+               사건·역사
+════════════════════════════════════════ -->
+<div class="page" id="page-history">
+  <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
+  <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
+  <h2 class="page-title">⚔️ HISTORY DATABASE</h2>
+  <p class="page-sub">// 연대기·주요 사건 기록 //</p>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setHistFilter('all',this)">ALL</button>
+    <button class="filter-btn" onclick="setHistFilter('전쟁',this)">⚔ 전쟁</button>
+    <button class="filter-btn" onclick="setHistFilter('사건',this)">📌 사건</button>
+    <button class="filter-btn" onclick="setHistFilter('발견',this)">🔍 발견</button>
+  </div>
+  <div class="neon-line"></div>
+  <div class="timeline" id="timeline"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+               용어사전
+════════════════════════════════════════ -->
+<div class="page" id="page-glossary">
+  <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
+  <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
+  <h2 class="page-title">🔖 GLOSSARY DATABASE</h2>
+  <p class="page-sub">// 고유명사·개념 인덱스 //</p>
+  <div class="filter-bar">
+    <input class="filter-input" type="text" placeholder="// SEARCH TERM..." id="glossary-search" oninput="renderGlossary()"/>
+  </div>
+  <div class="glossary-alpha" id="glossary-alpha"></div>
+  <div class="neon-line"></div>
+  <div class="glossary-list" id="glossary-list"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+                  모달
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-topbar">
+      <span id="modal-label">// FILE</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════
+   ████  데이터  ████
+   각 배열에 항목을 추가/수정하세요.
+════════════════════════════════════════ */
+
+/* ── 캐릭터 ── */
+const CHARACTERS = [
+  { id:'CHR-001', name:'아리엘 레이', gender:'여', genderClass:'gender-f', face:null, fullbody:null,
+    age:'23세', height:'165cm', role:'마법사 / 왕립 아카데미 수석', world:'에르나 왕국',
+    tags:['마법사','주인공','왕족'],
+    personality:'차갑고 완벽주의적이지만 내면에 따뜻함을 숨기고 있다. 실수를 용납하지 못하는 성격 탓에 혼자 모든 것을 감당하려 한다.',
+    background:'왕립 아카데미 역대 최연소 수석 졸업생. 평민 출신임에도 뛰어난 마법 재능으로 귀족들 사이에서 인정받았다.',
+    abilities:'화염·빙결 이중 속성 마법 / 마력 감지 / 고속 주문 발동' },
+  { id:'CHR-002', name:'카이 벨트', gender:'남', genderClass:'gender-m', face:null, fullbody:null,
+    age:'27세', height:'182cm', role:'용병 / 전 왕국 기사단원', world:'에르나 왕국',
+    tags:['검사','용병','과거가 있는 인물'],
+    personality:'겉으로는 냉정하고 말이 없지만, 의뢰한 사람에게는 끝까지 책임지는 의리파.',
+    background:'왕국 최정예 기사단 "철의 날개" 출신. 3년 전 단장 암살 사건에 연루되어 억울하게 축출되었다.',
+    abilities:'쌍검술 / 기(氣) 방어막 / 독 저항 체질' },
+  { id:'CHR-003', name:'루나 오버', gender:'기타', genderClass:'gender-n', face:null, fullbody:null,
+    age:'외형 16세 (실제 불명)', height:'158cm', role:'정령 / 고대 유물 수호자', world:'공허의 사원',
+    tags:['정령','수수께끼','비인간'],
+    personality:'인간 감정에 익숙하지 않아 엉뚱한 행동을 자주 한다. 모든 것을 순수한 호기심으로 대한다.',
+    background:'수백 년 전 대마법사가 봉인한 고대 정령. 아리엘이 유적 탐사 중 봉인을 실수로 해제하여 각성했다.',
+    abilities:'공간 이동 / 물체 투과 / 과거 감지 / 봉인술' },
+];
+
+/* ── 세계관 ── */
+const WORLDS = [
+  { id:'WLD-001', name:'에르나 왕국', type:'왕국', tags:['군주제','마법 국가','중세풍'],
+    population:'약 300만', area:'동부 대륙 중앙부', capital:'에르나시',
+    desc:'마법이 일상화된 중세풍 왕국. 왕립 마법 아카데미를 중심으로 마법 기술이 발전했으며 귀족·평민 간 신분 갈등이 깊다.',
+    feature:'마법 의회 제도 / 정령 조약', history:'건국 500주년을 앞두고 있으며, 초대 왕이 정령과 맺은 조약이 지금도 유효하다.' },
+  { id:'WLD-002', name:'공허의 사원', type:'세계', tags:['이차원','봉인된 공간','고대'],
+    population:'정령 다수 (인간 없음)', area:'차원 틈새', capital:'없음',
+    desc:'고대 마법사들이 위험한 정령들을 봉인하기 위해 만든 이차원 공간. 시간 흐름이 외부와 다르다.',
+    feature:'봉인 마법 / 시간 왜곡', history:'약 800년 전 대마법사 연합이 건설. 현재는 관리자가 부재하여 봉인이 약해지고 있다.' },
+];
+
+/* ── 설정집 ── */
+const SETTINGS = {
+  magic: [
+    { id:'MGC-001', name:'속성 마법 체계', badge:'핵심 규칙',
+      summary:'화·수·풍·토·빛·어둠 6속성. 이중 속성은 1만 명 중 1명 확률.',
+      rules:['속성은 출생 시 결정되며 변경 불가','마력은 감정에 따라 증폭 또는 약화','이중 속성 보유자는 두 속성 간 상충 위험'],
+      detail:'기초 마법은 누구나 훈련으로 익힐 수 있으나, 고급 마법은 속성 적합자에게만 가능하다. 마력량은 개인차가 크며 수련으로 늘릴 수 있다.' },
+    { id:'MGC-002', name:'봉인 마법', badge:'희귀 마법',
+      summary:'존재나 공간을 결계 안에 가두는 고난이도 마법. 대마법사급만 사용 가능.',
+      rules:['봉인 강도는 시전자의 마력에 비례','봉인 해제는 시전자 사망 또는 대응 마법 필요','장기 봉인 시 봉인체의 기억이 손상될 수 있음'],
+      detail:'공허의 사원 전체가 봉인 마법으로 이루어진 구조물이다. 현재 봉인이 조금씩 약해지는 현상이 보고되고 있다.' },
+  ],
+  tech: [
+    { id:'TCH-001', name:'마력 전도석', badge:'핵심 기술',
+      summary:'마력을 저장하고 전도하는 특수 광물. 에르나 왕국 경제의 핵심 자원.',
+      rules:['과충전 시 폭발 위험','정제 없이 사용 불가','광산은 왕실 관할'],
+      detail:'마력 전도석은 자연에서 채굴되며 왕국 각지의 마력 등불, 전송 마법 장치 등에 활용된다.' },
+  ],
+  culture: [
+    { id:'CLT-001', name:'정령 조약 기념일', badge:'왕국 문화',
+      summary:'매년 춘분에 초대 왕과 정령이 맺은 조약을 기념하는 왕국 최대 명절.',
+      rules:['이 날은 마법 사용을 삼가는 관습','왕이 직접 정령의 사원에 참배','귀족·평민 모두 동일한 흰 의복 착용'],
+      detail:'7일간 이어지는 축제 기간 동안 신분 차별이 없어지며, 가장 오래된 평등 관습으로 여겨진다.' },
+  ],
+};
+
+/* ── 지도·장소 ── */
+const LOCATIONS = {
+  'WLD-001': {
+    worldName: '에르나 왕국',
+    places: [
+      { id:'LOC-001', name:'에르나시', type:'도시', desc:'왕국의 수도. 왕성과 왕립 마법 아카데미가 위치한 정치·학문의 중심지.',
+        feature:'왕성 / 왕립 아카데미 / 대시장', notable:'아리엘 레이가 수학한 아카데미 본원 소재지.' },
+      { id:'LOC-002', name:'철광 요새', type:'군사 거점', desc:'에르나 왕국 북방 국경을 수호하는 요새. 기사단 "철의 날개"의 본거지였다.',
+        feature:'방어 마법 결계 / 지하 훈련장', notable:'카이 벨트가 소속되었던 기사단의 근거지. 현재는 폐쇄 상태.' },
+      { id:'LOC-003', name:'낙엽 상인 마을', type:'마을', desc:'왕도 남쪽 숲 근처의 조용한 마을. 마법과 무관한 평민들이 많이 산다.',
+        feature:'약초 시장 / 소규모 치유원', notable:'아리엘의 고향 마을로 알려져 있다.' },
+    ]
+  },
+  'WLD-002': {
+    worldName: '공허의 사원',
+    places: [
+      { id:'LOC-004', name:'봉인의 방', type:'성소', desc:'가장 강력한 정령들이 봉인된 핵심 공간. 금빛 결계가 방 전체를 감싸고 있다.',
+        feature:'다중 봉인 결계 / 시간 정지 구역', notable:'루나 오버가 봉인되어 있던 장소.' },
+      { id:'LOC-005', name:'기억의 회랑', type:'특수 구역', desc:'봉인된 정령들의 기억이 잔상으로 떠도는 긴 복도. 과거를 감지하는 능력자에게 위험하다.',
+        feature:'기억 잔상 / 환각 유발', notable:'루나 오버가 자신의 과거를 처음으로 목격한 장소.' },
+    ]
+  },
+};
+
+/* ── 사건·역사 ── */
+const HISTORY = [
+  { id:'EVT-001', era:'건국 원년 (500년 전)', type:'사건', title:'에르나 왕국 건국',
+    desc:'초대 왕 에르나 1세가 분열된 동부 대륙을 통일하고 왕국을 선포했다.',
+    cause:'대륙 분쟁 종식 및 마법사 연합의 지지', result:'왕국 수립 및 정령 조약 체결',
+    figures:['에르나 1세','대마법사 오리온'], detail:'건국 당시 대마법사 오리온이 공허의 사원을 완성하여 위험 정령들을 봉인했다. 이것이 왕국 안정의 초석이 되었다.' },
+  { id:'EVT-002', era:'건국 120년 (380년 전)', type:'전쟁', title:'마법사 대숙청',
+    desc:'귀족 의회가 평민 출신 마법사들을 대규모로 추방하거나 처형한 사건.',
+    cause:'귀족들의 권력 독점 시도 / 평민 마법사 급증에 대한 두려움', result:'이중 속성 마법사 관련 기록 대부분 소각',
+    figures:['의회 수장 베르다'], detail:'이 사건 이후 평민 출신 마법사는 아카데미 입학이 사실상 불가능해졌고, 아리엘이 수석 입학하기까지 380년이 걸렸다.' },
+  { id:'EVT-003', era:'현재 3년 전', type:'사건', title:'철의 날개 단장 암살 사건',
+    desc:'기사단 단장이 원인 불명으로 사망. 카이 벨트가 누명을 쓰고 추방되었다.',
+    cause:'불명 (배후 세력 추정)', result:'카이 벨트 축출 / 기사단 세력 약화',
+    figures:['카이 벨트','단장 라인하르트 (사망)'], detail:'사건 현장에서 카이만이 발견되었으나 그는 결백을 주장하고 있다. 배후에 의회 세력이 있다는 소문이 있다.' },
+];
+
+/* ── 용어사전 ── */
+const GLOSSARY = [
+  { id:'GLS-001', term:'마력 전도석', category:'기술', short:'마력을 저장·전도하는 특수 광물. 왕국 경제의 핵심 자원.', detail:'자연에서 채굴되며 왕실이 독점 관리한다. 과충전 시 폭발 위험이 있다.', related:['봉인 마법','속성 마법 체계'] },
+  { id:'GLS-002', term:'이중 속성', category:'마법', short:'두 가지 마법 속성을 동시에 보유하는 극히 드문 현상.', detail:'1만 명 중 1명 확률로 발현. 두 속성이 상충할 경우 마력 폭주 위험이 있다.', related:['속성 마법 체계','아리엘 레이'] },
+  { id:'GLS-003', term:'공허의 사원', category:'장소', short:'위험한 정령들을 봉인하기 위해 만들어진 이차원 공간.', detail:'800년 전 대마법사 오리온이 설계·건설. 현재 봉인이 약해지고 있다.', related:['봉인 마법','루나 오버'] },
+  { id:'GLS-004', term:'철의 날개', category:'조직', short:'에르나 왕국 최정예 기사단. 현재는 사실상 해체 상태.', detail:'카이 벨트의 단장 암살 사건 이후 조직이 와해되었으며, 생존 단원들은 뿔뿔이 흩어졌다.', related:['카이 벨트','철광 요새'] },
+  { id:'GLS-005', term:'정령 조약', category:'역사', short:'건국 시 초대 왕과 정령들이 맺은 공존 협약.', detail:'정령은 인간을 해치지 않고, 왕국은 정령의 영역을 침범하지 않는다는 내용. 현재도 유효하다.', related:['에르나 왕국','정령 조약 기념일'] },
+];
+
+/* ════════════════════════════════════════
+   ████  상태  ████
+════════════════════════════════════════ */
+let charFilter = 'all';
+let worldFilter = 'all';
+let histFilter = 'all';
+let selectedWorld = Object.keys(LOCATIONS)[0];
+let glossaryAlpha = 'all';
+
+/* ════════════════════════════════════════
+   ████  페이지 전환  ████
+════════════════════════════════════════ */
+function goPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if (id === 'page-chars')    renderChars();
+  if (id === 'page-world')    renderWorld();
+  if (id === 'page-setting')  renderSettings();
+  if (id === 'page-map')      renderMap();
+  if (id === 'page-history')  renderHistory();
+  if (id === 'page-glossary') renderGlossary();
+}
+
+/* ════════════════════════════════════════
+   ████  캐릭터  ████
+════════════════════════════════════════ */
+function renderChars() {
+  const q = (document.getElementById('char-search')?.value||'').toLowerCase();
+  const grid = document.getElementById('char-grid');
+  const list = CHARACTERS.filter(c =>
+    (charFilter==='all'||c.gender===charFilter) &&
+    (!q||c.name.includes(q)||c.tags.some(t=>t.includes(q)))
+  );
+  grid.innerHTML = list.map(c=>`
+    <div class="char-card" onclick="openCharModal('${c.id}')">
+      ${c.face?`<img class="char-face" src="${c.face}" alt="${c.name}"/>`:`<div class="char-face-placeholder">👤</div>`}
+      <div class="char-info">
+        <div class="char-name">${c.name}</div>
+        <span class="char-gender-tag ${c.genderClass}">${c.gender}</span>
+      </div>
+    </div>`).join('')+`
+    <button class="add-empty-btn" onclick="alert('CHARACTERS 배열에 항목을 추가하세요!')">
+      <span>＋</span>NEW CHARACTER
+    </button>`;
+}
+function setCharFilter(v,btn){
+  charFilter=v;
+  document.querySelectorAll('#page-chars .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderChars();
+}
+function openCharModal(id){
+  const c=CHARACTERS.find(x=>x.id===id); if(!c)return;
+  document.getElementById('modal-label').textContent=`// ${c.id} — CHARACTER FILE`;
+  document.getElementById('modal-content').innerHTML=`
+    <div class="char-modal-body">
+      <div class="char-modal-img-col">
+        ${c.fullbody?`<img class="modal-fullbody" src="${c.fullbody}" alt="${c.name}"/>`:`<div class="modal-fullbody-placeholder">🖼️</div>`}
+        <div style="text-align:center">
+          <div class="modal-char-name">${c.name}</div>
+          <span class="modal-char-gender ${c.genderClass}">${c.gender}</span>
+        </div>
+      </div>
+      <div class="char-modal-info">
+        <div class="modal-section">
+          <div class="modal-section-title">// BASIC INFO</div>
+          <div class="modal-field"><span class="modal-field-key">나이</span><span class="modal-field-val">${c.age}</span></div>
+          <div class="modal-field"><span class="modal-field-key">신장</span><span class="modal-field-val">${c.height}</span></div>
+          <div class="modal-field"><span class="modal-field-key">역할</span><span class="modal-field-val">${c.role}</span></div>
+          <div class="modal-field"><span class="modal-field-key">출신 세계</span><span class="modal-field-val">${c.world}</span></div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-title">// PERSONALITY</div>
+          <p class="modal-desc">${c.personality}</p>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-title">// BACKGROUND</div>
+          <p class="modal-desc">${c.background}</p>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-title">// ABILITIES</div>
+          <p class="modal-desc">${c.abilities}</p>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-title">// TAGS</div>
+          <div class="modal-tag-list">${c.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('')}</div>
+        </div>
+      </div>
+    </div>`;
+  openModal();
+}
+
+/* ════════════════════════════════════════
+   ████  세계관  ████
+════════════════════════════════════════ */
+function renderWorld(){
+  const q=(document.getElementById('world-search')?.value||'').toLowerCase();
+  const grid=document.getElementById('world-grid');
+  const list=WORLDS.filter(w=>
+    (worldFilter==='all'||w.type===worldFilter)&&
+    (!q||w.name.includes(q)||w.tags.some(t=>t.includes(q)))
+  );
+  grid.innerHTML=list.map(w=>`
+    <div class="world-card" onclick="openWorldModal('${w.id}')">
+      <div class="world-card-top">
+        <span class="world-card-id">${w.id}</span>
+        <span class="world-card-type">${w.type}</span>
+      </div>
+      <div class="world-card-name">${w.name}</div>
+      <div class="world-card-desc">${w.desc}</div>
+      <div class="world-card-meta">${w.tags.map(t=>`<span class="world-meta-chip">${t}</span>`).join('')}</div>
+    </div>`).join('')+`
+    <div class="world-card" style="cursor:pointer;border-style:dashed;opacity:.4;" onclick="alert('WORLDS 배열에 항목을 추가하세요!')">
+      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--neon-purple);margin-bottom:6px;">+ NEW WORLD</div>
+      <div style="font-size:.75rem;color:rgba(224,247,247,.35);">새 세계관·세력 추가</div>
+    </div>`;
+}
+function setWorldFilter(v,btn){
+  worldFilter=v;
+  document.querySelectorAll('#page-world .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderWorld();
+}
+function openWorldModal(id){
+  const w=WORLDS.find(x=>x.id===id);if(!w)return;
+  document.getElementById('modal-label').textContent=`// ${w.id} — WORLD FILE`;
+  document.getElementById('modal-content').innerHTML=`
+    <div class="wmodal-body">
+      <div class="wmodal-header">
+        <div class="wmodal-name">${w.name}</div>
+        <span class="wmodal-type">${w.type}</span>
+      </div>
+      <div class="wmodal-grid">
+        <div>
+          <div class="wmodal-section">
+            <div class="wmodal-section-title">// BASIC DATA</div>
+            <div class="wmodal-field"><span class="wmodal-key">인구</span><span class="wmodal-val">${w.population}</span></div>
+            <div class="wmodal-field"><span class="wmodal-key">위치</span><span class="wmodal-val">${w.area}</span></div>
+            <div class="wmodal-field"><span class="wmodal-key">수도</span><span class="wmodal-val">${w.capital}</span></div>
+          </div>
+          <div class="wmodal-section">
+            <div class="wmodal-section-title">// FEATURE</div>
+            <p class="wmodal-desc">${w.feature}</p>
+          </div>
+        </div>
+        <div>
+          <div class="wmodal-section">
+            <div class="wmodal-section-title">// OVERVIEW</div>
+            <p class="wmodal-desc">${w.desc}</p>
+          </div>
+          <div class="wmodal-section">
+            <div class="wmodal-section-title">// HISTORY NOTE</div>
+            <p class="wmodal-desc">${w.history}</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-tag-list">${w.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('')}</div>
+    </div>`;
+  openModal();
+}
+
+/* ════════════════════════════════════════
+   ████  설정집  ████
+════════════════════════════════════════ */
+function renderSettings(){
+  ['magic','tech','culture'].forEach(cat=>{
+    const el=document.getElementById(`sl-${cat}`);
+    if(!el)return;
+    const list=SETTINGS[cat]||[];
+    el.innerHTML=list.map(s=>`
+      <div class="setting-item" onclick="openSettingModal('${cat}','${s.id}')">
+        <div class="setting-item-top">
+          <span class="setting-item-name">${s.name}</span>
+          <span class="setting-item-badge">${s.badge}</span>
+        </div>
+        <div class="setting-item-desc">${s.summary}</div>
+        <span class="setting-item-arrow">›</span>
+      </div>`).join('')+`
+      <div class="setting-item" style="border-style:dashed;opacity:.4;cursor:pointer;" onclick="alert('SETTINGS 배열에 항목을 추가하세요!')">
+        <div class="setting-item-name" style="font-size:.78rem;">+ 새 항목 추가</div>
+      </div>`;
+  });
+}
+function setSettingTab(cat,btn){
+  document.querySelectorAll('.setting-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.setting-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`sp-${cat}`).classList.add('active');
+}
+function openSettingModal(cat,id){
+  const s=(SETTINGS[cat]||[]).find(x=>x.id===id);if(!s)return;
+  document.getElementById('modal-label').textContent=`// ${s.id} — SETTING FILE`;
+  document.getElementById('modal-content').innerHTML=`
+    <div class="smodal-body">
+      <div class="smodal-name">${s.name}</div>
+      <span class="smodal-badge">${s.badge}</span>
+      <div class="smodal-section">
+        <div class="smodal-section-title">// SUMMARY</div>
+        <p class="smodal-desc">${s.summary}</p>
+      </div>
+      <div class="smodal-section">
+        <div class="smodal-section-title">// DETAIL</div>
+        <p class="smodal-desc">${s.detail}</p>
+      </div>
+      <div class="smodal-section">
+        <div class="smodal-section-title">// RULES</div>
+        <ul class="smodal-rule-list">${s.rules.map(r=>`<li>${r}</li>`).join('')}</ul>
+      </div>
+    </div>`;
+  openModal();
+}
+
+/* ════════════════════════════════════════
+   ████  지도·장소  ████
+════════════════════════════════════════ */
+function renderMap(){
+  const sidebar=document.getElementById('map-sidebar');
+  sidebar.innerHTML=Object.entries(LOCATIONS).map(([wid,wdata])=>`
+    <div class="map-world-btn ${wid===selectedWorld?'active':''}" onclick="selectWorld('${wid}')">
+      <div class="map-world-btn-name">${wdata.worldName}</div>
+      <div class="map-world-btn-count">${wdata.places.length} LOCATIONS</div>
+    </div>`).join('');
+  renderPlaces();
+}
+function selectWorld(wid){
+  selectedWorld=wid;renderMap();
+}
+function renderPlaces(){
+  const wdata=LOCATIONS[selectedWorld];
+  if(!wdata)return;
+  document.getElementById('map-content-title').textContent=`// ${wdata.worldName}`;
+  document.getElementById('place-list').innerHTML=wdata.places.map(p=>`
+    <div class="place-item" onclick="openPlaceModal('${p.id}')">
+      <div class="place-item-top">
+        <span class="place-item-name">${p.name}</span>
+        <span class="place-item-type">${p.type}</span>
+      </div>
+      <div class="place-item-desc">${p.desc}</div>
+    </div>`).join('');
+}
+function openPlaceModal(id){
+  let p=null;
+  Object.values(LOCATIONS).forEach(w=>{ const found=w.places.find(x=>x.id===id); if(found)p=found; });
+  if(!p)return;
+  document.getElementById('modal-label').textContent=`// ${p.id} — LOCATION FILE`;
+  document.getElementById('modal-content').innerHTML=`
+    <div class="pmodal-body">
+      <div class="pmodal-name">${p.name}</div>
+      <span class="pmodal-type">${p.type}</span>
+      <div class="pmodal-section">
+        <div class="pmodal-section-title">// OVERVIEW</div>
+        <p class="pmodal-desc">${p.desc}</p>
+      </div>
+      <div class="pmodal-section">
+        <div class="pmodal-section-title">// FEATURE</div>
+        <div class="pmodal-field"><span class="pmodal-key">주요 시설</span><span class="pmodal-val">${p.feature}</span></div>
+      </div>
+      <div class="pmodal-section">
+        <div class="pmodal-section-title">// NOTABLE</div>
+        <p class="pmodal-desc">${p.notable}</p>
+      </div>
+    </div>`;
+  openModal();
+}
+
+/* ════════════════════════════════════════
+   ████  사건·역사  ████
+════════════════════════════════════════ */
+function renderHistory(){
+  const list=HISTORY.filter(h=>histFilter==='all'||h.type===histFilter);
+  document.getElementById('timeline').innerHTML=list.map(h=>`
+    <div class="timeline-item" onclick="openHistModal('${h.id}')">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="timeline-card-top">
+          <span class="timeline-era">${h.era}</span>
+          <span class="timeline-type">${h.type}</span>
+        </div>
+        <div class="timeline-title">${h.title}</div>
+        <div class="timeline-desc">${h.desc}</div>
+      </div>
+    </div>`).join('');
+}
+function setHistFilter(v,btn){
+  histFilter=v;
+  document.querySelectorAll('#page-history .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderHistory();
+}
+function openHistModal(id){
+  const h=HISTORY.find(x=>x.id===id);if(!h)return;
+  document.getElementById('modal-label').textContent=`// ${h.id} — HISTORY FILE`;
+  document.getElementById('modal-content').innerHTML=`
+    <div class="hmodal-body">
+      <div class="hmodal-era">${h.era}</div>
+      <div class="hmodal-title">${h.title}</div>
+      <div class="hmodal-section">
+        <div class="hmodal-section-title">// OVERVIEW</div>
+        <p class="hmodal-desc">${h.desc}</p>
+      </div>
+      <div class="hmodal-section">
+        <div class="hmodal-section-title">// CAUSE & RESULT</div>
+        <div class="hmodal-field"><span class="hmodal-key">원인</span><span class="hmodal-val">${h.cause}</span></div>
+        <div class="hmodal-field"><span class="hmodal-key">결과</span><span class="hmodal-val">${h.result}</span></div>
+      </div>
+      <div class="hmodal-section">
+        <div class="hmodal-section-title">// DETAIL</div>
+        <p class="hmodal-desc">${h.detail}</p>
+      </div>
+      <div class="hmodal-section">
+        <div class="hmodal-section-title">// KEY FIGURES</div>
+        <div class="hmodal-figures">${h.figures.map(f=>`<span class="hmodal-figure">${f}</span>`).join('')}</div>
+      </div>
+    </div>`;
+  openModal();
+}
+
+/* ════════════════════════════════════════
+   ████  용어사전  ████
+════════════════════════════════════════ */
+function renderGlossary(){
+  const q=(document.getElementById('glossary-search')?.value||'').toLowerCase();
+  const alphaEl=document.getElementById('glossary-alpha');
+  const cats=[...new Set(GLOSSARY.map(g=>g.category))];
+  alphaEl.innerHTML=`<button class="alpha-btn ${glossaryAlpha==='all'?'active':''}" onclick="setAlpha('all')">ALL</button>`
+    +cats.map(c=>`<button class="alpha-btn ${glossaryAlpha===c?'active':''}" onclick="setAlpha('${c}')">${c}</button>`).join('');
+  const list=GLOSSARY.filter(g=>
+    (glossaryAlpha==='all'||g.category===glossaryAlpha)&&
+    (!q||g.term.includes(q)||g.short.includes(q))
+  );
+  document.getElementById('glossary-list').innerHTML=list.map(g=>`
+    <div class="glossary-item" onclick="openGlossaryModal('${g.id}')">
+      <span class="glossary-term">${g.term}</span>
+      <span class="glossary-short">${g.short}</span>
+      <span class="glossary-cat">${g.category}</span>
+    </div>`).join('');
+}
+function setAlpha(v){
+  glossaryAlpha=v;renderGlossary();
+}
+function openGlossaryModal(id){
+  const g=GLOSSARY.find(x=>x.id===id);if(!g)return;
+  document.getElementById('modal-label').textContent=`// ${g.id} — GLOSSARY FILE`;
+  document.getElementById('modal-content').innerHTML=`
+    <div class="gmodal-body">
+      <div class="gmodal-term">${g.term}</div>
+      <span class="gmodal-cat">${g.category}</span>
+      <div class="gmodal-section">
+        <div class="gmodal-section-title">// DEFINITION</div>
+        <p class="gmodal-desc">${g.detail}</p>
+      </div>
+      <div class="gmodal-section">
+        <div class="gmodal-section-title">// RELATED</div>
+        <div class="gmodal-related">${g.related.map(r=>`<span class="gmodal-rel-tag">${r}</span>`).join('')}</div>
+      </div>
+    </div>`;
+  openModal();
+}
+
+/* ════════════════════════════════════════
+   ████  모달 공통  ████
+════════════════════════════════════════ */
+function openModal(){
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function closeModalOnBg(e){
+  if(e.target===document.getElementById('modal'))closeModal();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>
