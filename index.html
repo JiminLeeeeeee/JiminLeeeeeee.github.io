@@ -111,12 +111,50 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 /* ══════════════════════════════════
    세계관 페이지
 ══════════════════════════════════ */
+
+/* 세계관 히어로 배너 */
+.world-hero{position:relative;width:100%;height:260px;margin-bottom:32px;overflow:hidden;border:1px solid var(--border);}
+.world-hero-img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.75) saturate(1.1);}
+.world-hero-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+/* SVG 도형으로 채운 플레이스홀더 배경 */
+.world-hero-placeholder svg{position:absolute;inset:0;width:100%;height:100%;}
+.world-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,5,13,.95) 0%,rgba(4,5,13,.4) 50%,rgba(4,5,13,.15) 100%);pointer-events:none;}
+.world-hero-corner{position:absolute;width:20px;height:20px;border-color:var(--neon-purple);border-style:solid;opacity:.7;}
+.world-hero-corner.tl{top:12px;left:12px;border-width:2px 0 0 2px;}
+.world-hero-corner.tr{top:12px;right:12px;border-width:2px 2px 0 0;}
+.world-hero-corner.bl{bottom:12px;left:12px;border-width:0 0 2px 2px;}
+.world-hero-corner.br{bottom:12px;right:12px;border-width:0 2px 2px 0;}
+.world-hero-label{position:absolute;bottom:20px;left:24px;z-index:2;}
+.world-hero-label-id{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:rgba(180,79,255,.7);letter-spacing:.25em;margin-bottom:4px;}
+.world-hero-label-name{font-family:'Orbitron',monospace;font-size:clamp(1.2rem,3vw,2rem);font-weight:900;color:#fff;text-shadow:0 0 20px rgba(180,79,255,.5);}
+.world-hero-label-type{font-family:'Share Tech Mono',monospace;font-size:.62rem;padding:2px 8px;border:1px solid rgba(180,79,255,.5);color:rgba(180,79,255,.9);display:inline-block;margin-top:6px;}
+.world-hero-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(180,79,255,.025) 3px,rgba(180,79,255,.025) 4px);pointer-events:none;}
+/* 이미지 없을 때 도형 애니메이션 */
+@keyframes rotateSlow{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes rotateSlowR{from{transform:rotate(0deg);}to{transform:rotate(-360deg);}}
+.ph-ring1{animation:rotateSlow 18s linear infinite;transform-origin:center;}
+.ph-ring2{animation:rotateSlowR 12s linear infinite;transform-origin:center;}
+.ph-ring3{animation:rotateSlow 8s linear infinite;transform-origin:center;}
+/* 썸네일 네비 */
+.world-hero-nav{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.world-thumb{width:64px;height:44px;border:1px solid var(--border);cursor:pointer;overflow:hidden;position:relative;transition:all .2s;flex-shrink:0;}
+.world-thumb.active{border-color:var(--neon-purple);box-shadow:0 0 10px rgba(180,79,255,.3);}
+.world-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.world-thumb-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;background:linear-gradient(135deg,rgba(180,79,255,.08),rgba(0,255,245,.05));}
+
 .world-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:40px;}
-.world-card{border:1px solid var(--border);background:var(--panel);padding:22px 20px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.world-card{border:1px solid var(--border);background:var(--panel);cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
 .world-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(180,79,255,.05),transparent);transition:left .4s;}
 .world-card:hover{border-color:var(--neon-purple);background:rgba(180,79,255,.07);box-shadow:0 0 20px rgba(180,79,255,.1);}
 .world-card:hover::before{left:100%;}
-.world-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+/* 카드 이미지 썸네일 */
+.world-card-thumb{width:100%;height:120px;overflow:hidden;position:relative;}
+.world-card-thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.8);transition:filter .3s;}
+.world-card:hover .world-card-thumb img{filter:brightness(.95);}
+.world-card-thumb-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.2rem;position:relative;overflow:hidden;}
+.world-card-thumb-ph::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(180,79,255,.08),rgba(0,255,245,.04));}
+.world-card-body{padding:18px 16px;}
+.world-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
 .world-card-id{font-family:'Orbitron',monospace;font-size:.58rem;color:var(--neon-purple);letter-spacing:.2em;}
 .world-card-type{font-family:'Share Tech Mono',monospace;font-size:.6rem;padding:2px 8px;border:1px solid rgba(180,79,255,.4);color:rgba(180,79,255,.7);}
 .world-card-name{font-family:'Orbitron',monospace;font-size:1rem;color:#d4aaff;margin-bottom:8px;}
@@ -125,7 +163,18 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .world-meta-chip{font-family:'Share Tech Mono',monospace;font-size:.6rem;padding:2px 8px;background:rgba(180,79,255,.08);border:1px solid rgba(180,79,255,.2);color:rgba(180,79,255,.6);}
 
 /* 세계관 모달 */
-.wmodal-body{padding:28px;}
+.wmodal-body{padding:0;}
+.wmodal-hero{width:100%;height:200px;position:relative;overflow:hidden;}
+.wmodal-hero img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.8);}
+.wmodal-hero-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.wmodal-hero-ph svg{position:absolute;inset:0;width:100%;height:100%;}
+.wmodal-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,8,16,.98) 0%,rgba(6,8,16,.3) 100%);}
+.wmodal-hero-corner{position:absolute;width:16px;height:16px;border-color:var(--neon-purple);border-style:solid;opacity:.6;}
+.wmodal-hero-corner.tl{top:10px;left:10px;border-width:2px 0 0 2px;}
+.wmodal-hero-corner.tr{top:10px;right:10px;border-width:2px 2px 0 0;}
+.wmodal-hero-corner.bl{bottom:10px;left:10px;border-width:0 0 2px 2px;}
+.wmodal-hero-corner.br{bottom:10px;right:10px;border-width:0 2px 2px 0;}
+.wmodal-inner{padding:24px 28px 28px;}
 .wmodal-header{margin-bottom:20px;}
 .wmodal-name{font-family:'Orbitron',monospace;font-size:1.4rem;color:#d4aaff;margin-bottom:4px;}
 .wmodal-type{font-family:'Share Tech Mono',monospace;font-size:.65rem;padding:3px 10px;border:1px solid rgba(180,79,255,.4);color:rgba(180,79,255,.7);display:inline-block;}
@@ -377,6 +426,13 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
   <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
   <h2 class="page-title">🌍 WORLD DATABASE</h2>
   <p class="page-sub">// 세계관·지역·세력 데이터 //</p>
+  <!-- 세계관 히어로 배너 -->
+  <div class="world-hero" id="world-hero">
+    <!-- JS로 렌더링 -->
+  </div>
+  <!-- 썸네일 네비 -->
+  <div class="world-hero-nav" id="world-hero-nav"></div>
+
   <div class="filter-bar">
     <input class="filter-input" type="text" placeholder="// SEARCH WORLD..." id="world-search" oninput="renderWorld()"/>
     <button class="filter-btn active" onclick="setWorldFilter('all',this)">ALL</button>
@@ -509,10 +565,16 @@ const CHARACTERS = [
 /* ── 세계관 ── */
 const WORLDS = [
   { id:'WLD-001', name:'에르나 왕국', type:'왕국', tags:['군주제','마법 국가','중세풍'],
+    image: null,   /* 세계관 대표 이미지 URL — 없으면 null */
+    color: ['#2a0a4a','#0a1a3a','#1a0a2a'],  /* 플레이스홀더 그라디언트 색상 */
+    icon: '🏰',
     population:'약 300만', area:'동부 대륙 중앙부', capital:'에르나시',
     desc:'마법이 일상화된 중세풍 왕국. 왕립 마법 아카데미를 중심으로 마법 기술이 발전했으며 귀족·평민 간 신분 갈등이 깊다.',
     feature:'마법 의회 제도 / 정령 조약', history:'건국 500주년을 앞두고 있으며, 초대 왕이 정령과 맺은 조약이 지금도 유효하다.' },
   { id:'WLD-002', name:'공허의 사원', type:'세계', tags:['이차원','봉인된 공간','고대'],
+    image: null,
+    color: ['#0a0a2a','#1a0a3a','#0a1a1a'],
+    icon: '🌀',
     population:'정령 다수 (인간 없음)', area:'차원 틈새', capital:'없음',
     desc:'고대 마법사들이 위험한 정령들을 봉인하기 위해 만든 이차원 공간. 시간 흐름이 외부와 다르다.',
     feature:'봉인 마법 / 시간 왜곡', history:'약 800년 전 대마법사 연합이 건설. 현재는 관리자가 부재하여 봉인이 약해지고 있다.' },
@@ -688,26 +750,115 @@ function openCharModal(id){
 /* ════════════════════════════════════════
    ████  세계관  ████
 ════════════════════════════════════════ */
+
+/* SVG 플레이스홀더 생성 헬퍼 */
+function worldPlaceholderSVG(w, size='large'){
+  const c = w.color || ['#1a0a3a','#0a1a3a','#0a0a2a'];
+  const s = size==='small' ? 64 : 400;
+  return `<svg viewBox="0 0 ${s} ${s}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="bg${w.id}" cx="50%" cy="50%" r="70%">
+        <stop offset="0%" stop-color="${c[0]}"/>
+        <stop offset="60%" stop-color="${c[1]}"/>
+        <stop offset="100%" stop-color="${c[2]}"/>
+      </radialGradient>
+    </defs>
+    <rect width="${s}" height="${s}" fill="url(#bg${w.id})"/>
+    <circle cx="${s*.5}" cy="${s*.5}" r="${s*.38}" fill="none" stroke="rgba(180,79,255,.18)" stroke-width="${s*.008}" class="ph-ring1"/>
+    <circle cx="${s*.5}" cy="${s*.5}" r="${s*.28}" fill="none" stroke="rgba(0,255,245,.12)" stroke-width="${s*.005}" class="ph-ring2"/>
+    <circle cx="${s*.5}" cy="${s*.5}" r="${s*.18}" fill="none" stroke="rgba(180,79,255,.25)" stroke-width="${s*.004}" class="ph-ring3"/>
+    <polygon points="${s*.5},${s*.28} ${s*.62},${s*.56} ${s*.5},${s*.48} ${s*.38},${s*.56}" fill="rgba(180,79,255,.15)" stroke="rgba(180,79,255,.3)" stroke-width="${s*.003}"/>
+    <polygon points="${s*.5},${s*.72} ${s*.38},${s*.44} ${s*.5},${s*.52} ${s*.62},${s*.44}" fill="rgba(0,255,245,.1)" stroke="rgba(0,255,245,.2)" stroke-width="${s*.003}"/>
+    ${[...Array(6)].map((_,i)=>{
+      const a=i/6*Math.PI*2; const r=s*.44;
+      const x=s*.5+Math.cos(a)*r; const y=s*.5+Math.sin(a)*r;
+      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${s*.012}" fill="rgba(180,79,255,.4)"/>`;
+    }).join('')}
+    <text x="${s*.5}" y="${s*.57}" text-anchor="middle" font-size="${s*.18}" opacity=".25">${w.icon||'🌐'}</text>
+  </svg>`;
+}
+
+let heroActiveIdx = 0;
+
+function renderWorldHero(idx){
+  heroActiveIdx = idx;
+  const w = WORLDS[idx];
+  if(!w) return;
+  const heroEl = document.getElementById('world-hero');
+  if(!heroEl) return;
+
+  heroEl.innerHTML = w.image
+    ? `<img class="world-hero-img" src="${w.image}" alt="${w.name}"/>
+       <div class="world-hero-overlay"></div>`
+    : `<div class="world-hero-placeholder">${worldPlaceholderSVG(w,'large')}</div>
+       <div class="world-hero-overlay"></div>`;
+
+  heroEl.innerHTML += `
+    <div class="world-hero-scan"></div>
+    <div class="world-hero-corner tl"></div>
+    <div class="world-hero-corner tr"></div>
+    <div class="world-hero-corner bl"></div>
+    <div class="world-hero-corner br"></div>
+    <div class="world-hero-label">
+      <div class="world-hero-label-id">${w.id}</div>
+      <div class="world-hero-label-name">${w.name}</div>
+      <span class="world-hero-label-type">${w.type}</span>
+    </div>`;
+
+  // 썸네일 active 상태 업데이트
+  document.querySelectorAll('.world-thumb').forEach((el,i)=>{
+    el.classList.toggle('active', i===idx);
+  });
+}
+
+function renderWorldNav(){
+  const nav = document.getElementById('world-hero-nav');
+  if(!nav) return;
+  nav.innerHTML = WORLDS.map((w,i)=>`
+    <div class="world-thumb ${i===heroActiveIdx?'active':''}" onclick="renderWorldHero(${i})">
+      ${w.image
+        ? `<img src="${w.image}" alt="${w.name}"/>`
+        : `<div class="world-thumb-ph">${w.icon||'🌐'}</div>`}
+    </div>`).join('');
+}
+
 function renderWorld(){
   const q=(document.getElementById('world-search')?.value||'').toLowerCase();
   const grid=document.getElementById('world-grid');
+
+  // 히어로 배너 초기 렌더
+  if(WORLDS.length > 0){
+    renderWorldHero(heroActiveIdx);
+    renderWorldNav();
+  }
+
   const list=WORLDS.filter(w=>
     (worldFilter==='all'||w.type===worldFilter)&&
     (!q||w.name.includes(q)||w.tags.some(t=>t.includes(q)))
   );
-  grid.innerHTML=list.map(w=>`
+  grid.innerHTML=list.map((w,i)=>`
     <div class="world-card" onclick="openWorldModal('${w.id}')">
-      <div class="world-card-top">
-        <span class="world-card-id">${w.id}</span>
-        <span class="world-card-type">${w.type}</span>
+      <div class="world-card-thumb">
+        ${w.image
+          ? `<img src="${w.image}" alt="${w.name}"/>`
+          : `<div class="world-card-thumb-ph">${worldPlaceholderSVG(w,'small')}</div>`}
       </div>
-      <div class="world-card-name">${w.name}</div>
-      <div class="world-card-desc">${w.desc}</div>
-      <div class="world-card-meta">${w.tags.map(t=>`<span class="world-meta-chip">${t}</span>`).join('')}</div>
+      <div class="world-card-body">
+        <div class="world-card-top">
+          <span class="world-card-id">${w.id}</span>
+          <span class="world-card-type">${w.type}</span>
+        </div>
+        <div class="world-card-name">${w.icon||''} ${w.name}</div>
+        <div class="world-card-desc">${w.desc}</div>
+        <div class="world-card-meta">${w.tags.map(t=>`<span class="world-meta-chip">${t}</span>`).join('')}</div>
+      </div>
     </div>`).join('')+`
     <div class="world-card" style="cursor:pointer;border-style:dashed;opacity:.4;" onclick="alert('WORLDS 배열에 항목을 추가하세요!')">
-      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--neon-purple);margin-bottom:6px;">+ NEW WORLD</div>
-      <div style="font-size:.75rem;color:rgba(224,247,247,.35);">새 세계관·세력 추가</div>
+      <div class="world-card-thumb-ph" style="height:120px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:rgba(180,79,255,.3);">＋</div>
+      <div class="world-card-body">
+        <div class="world-card-name" style="font-size:.85rem;">NEW WORLD</div>
+        <div class="world-card-desc">새 세계관·세력 추가</div>
+      </div>
     </div>`;
 }
 function setWorldFilter(v,btn){
@@ -720,35 +871,47 @@ function openWorldModal(id){
   document.getElementById('modal-label').textContent=`// ${w.id} — WORLD FILE`;
   document.getElementById('modal-content').innerHTML=`
     <div class="wmodal-body">
-      <div class="wmodal-header">
-        <div class="wmodal-name">${w.name}</div>
-        <span class="wmodal-type">${w.type}</span>
+      <div class="wmodal-hero">
+        ${w.image
+          ? `<img src="${w.image}" alt="${w.name}"/>`
+          : `<div class="wmodal-hero-ph">${worldPlaceholderSVG(w,'large')}</div>`}
+        <div class="wmodal-hero-overlay"></div>
+        <div class="wmodal-hero-corner tl"></div>
+        <div class="wmodal-hero-corner tr"></div>
+        <div class="wmodal-hero-corner bl"></div>
+        <div class="wmodal-hero-corner br"></div>
       </div>
-      <div class="wmodal-grid">
-        <div>
-          <div class="wmodal-section">
-            <div class="wmodal-section-title">// BASIC DATA</div>
-            <div class="wmodal-field"><span class="wmodal-key">인구</span><span class="wmodal-val">${w.population}</span></div>
-            <div class="wmodal-field"><span class="wmodal-key">위치</span><span class="wmodal-val">${w.area}</span></div>
-            <div class="wmodal-field"><span class="wmodal-key">수도</span><span class="wmodal-val">${w.capital}</span></div>
+      <div class="wmodal-inner">
+        <div class="wmodal-header">
+          <div class="wmodal-name">${w.icon||''} ${w.name}</div>
+          <span class="wmodal-type">${w.type}</span>
+        </div>
+        <div class="wmodal-grid">
+          <div>
+            <div class="wmodal-section">
+              <div class="wmodal-section-title">// BASIC DATA</div>
+              <div class="wmodal-field"><span class="wmodal-key">인구</span><span class="wmodal-val">${w.population}</span></div>
+              <div class="wmodal-field"><span class="wmodal-key">위치</span><span class="wmodal-val">${w.area}</span></div>
+              <div class="wmodal-field"><span class="wmodal-key">수도</span><span class="wmodal-val">${w.capital}</span></div>
+            </div>
+            <div class="wmodal-section">
+              <div class="wmodal-section-title">// FEATURE</div>
+              <p class="wmodal-desc">${w.feature}</p>
+            </div>
           </div>
-          <div class="wmodal-section">
-            <div class="wmodal-section-title">// FEATURE</div>
-            <p class="wmodal-desc">${w.feature}</p>
+          <div>
+            <div class="wmodal-section">
+              <div class="wmodal-section-title">// OVERVIEW</div>
+              <p class="wmodal-desc">${w.desc}</p>
+            </div>
+            <div class="wmodal-section">
+              <div class="wmodal-section-title">// HISTORY NOTE</div>
+              <p class="wmodal-desc">${w.history}</p>
+            </div>
           </div>
         </div>
-        <div>
-          <div class="wmodal-section">
-            <div class="wmodal-section-title">// OVERVIEW</div>
-            <p class="wmodal-desc">${w.desc}</p>
-          </div>
-          <div class="wmodal-section">
-            <div class="wmodal-section-title">// HISTORY NOTE</div>
-            <p class="wmodal-desc">${w.history}</p>
-          </div>
-        </div>
+        <div class="modal-tag-list">${w.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('')}</div>
       </div>
-      <div class="modal-tag-list">${w.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('')}</div>
     </div>`;
   openModal();
 }
