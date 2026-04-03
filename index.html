@@ -104,6 +104,7 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .gender-m{border-color:rgba(0,140,255,.6);color:#4db8ff;}
 .gender-f{border-color:rgba(255,45,120,.6);color:#ff7ab0;}
 .gender-n{border-color:rgba(180,79,255,.6);color:#cc99ff;}
+.gender-u{border-color:rgba(0,200,180,.6);color:#00c8b4;}
 .add-empty-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px dashed rgba(0,255,245,.15);background:transparent;padding:18px 16px;cursor:pointer;transition:all .25s;font-family:'Share Tech Mono',monospace;font-size:.68rem;color:rgba(0,255,245,.25);letter-spacing:.15em;width:100%;aspect-ratio:3/4;}
 .add-empty-btn:hover{border-color:rgba(0,255,245,.4);color:rgba(0,255,245,.6);background:rgba(0,255,245,.03);}
 .add-empty-btn span{font-size:1.5rem;}
@@ -135,12 +136,17 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .ph-ring1{animation:rotateSlow 18s linear infinite;transform-origin:center;}
 .ph-ring2{animation:rotateSlowR 12s linear infinite;transform-origin:center;}
 .ph-ring3{animation:rotateSlow 8s linear infinite;transform-origin:center;}
-/* 썸네일 네비 */
-.world-hero-nav{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
-.world-thumb{width:64px;height:44px;border:1px solid var(--border);cursor:pointer;overflow:hidden;position:relative;transition:all .2s;flex-shrink:0;}
-.world-thumb.active{border-color:var(--neon-purple);box-shadow:0 0 10px rgba(180,79,255,.3);}
-.world-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
-.world-thumb-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;background:linear-gradient(135deg,rgba(180,79,255,.08),rgba(0,255,245,.05));}
+/* 세계관 필터 네비 버튼 */
+.world-filter-nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.world-nav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:90px;flex:1;max-width:140px;padding:14px 10px;border:1px solid var(--border);background:var(--panel);cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.world-nav-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(180,79,255,.06),transparent);transition:left .35s;}
+.world-nav-btn:hover{border-color:var(--neon-purple);background:rgba(180,79,255,.07);}
+.world-nav-btn:hover::before{left:100%;}
+.world-nav-btn.active{border-color:var(--neon-purple);background:rgba(180,79,255,.1);box-shadow:0 0 14px rgba(180,79,255,.15);}
+.wnb-icon{font-size:2rem;line-height:1;}
+.wnb-label{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.15em;color:rgba(0,255,245,.4);}
+.world-nav-btn.active .wnb-label{color:var(--neon-purple);}
+.world-nav-btn:hover .wnb-label{color:rgba(180,79,255,.8);}
 
 .world-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:40px;}
 .world-card{border:1px solid var(--border);background:var(--panel);cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
@@ -191,8 +197,8 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
    설정집 페이지
 ══════════════════════════════════ */
 .setting-tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
-.setting-tab{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.15em;padding:10px 18px;border:1px solid transparent;border-bottom:none;cursor:pointer;color:rgba(0,255,245,.35);transition:all .2s;margin-bottom:-1px;}
-.setting-tab:hover{color:rgba(0,255,245,.7);}
+.setting-tab{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.15em;padding:10px 18px;border:1px solid transparent;border-bottom:none;cursor:pointer;color:rgba(0,255,245,.35);transition:all .2s;margin-bottom:-1px;background:transparent;}
+.setting-tab:hover{color:rgba(0,255,245,.7);background:transparent;}
 .setting-tab.active{border-color:var(--border);border-bottom-color:var(--bg);color:var(--neon-cyan);background:rgba(0,255,245,.03);}
 .setting-panel{display:none;}
 .setting-panel.active{display:block;animation:fadeIn .25s ease;}
@@ -304,6 +310,46 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .gmodal-rel-tag:hover{border-color:var(--neon-blue);color:var(--neon-blue);}
 
 /* ══════════════════════════════════
+   비밀번호 모달
+══════════════════════════════════ */
+.pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px);}
+.pw-overlay.open{display:flex;animation:fadeIn .25s ease;}
+.pw-box{background:#060810;border:1px solid rgba(255,159,0,.35);max-width:360px;width:100%;padding:36px 32px;position:relative;box-shadow:0 0 40px rgba(255,159,0,.1);}
+.pw-box-corner{position:absolute;width:14px;height:14px;border-color:var(--neon-orange);border-style:solid;opacity:.6;}
+.pw-box-corner.tl{top:10px;left:10px;border-width:2px 0 0 2px;}
+.pw-box-corner.tr{top:10px;right:10px;border-width:2px 2px 0 0;}
+.pw-box-corner.bl{bottom:10px;left:10px;border-width:0 0 2px 2px;}
+.pw-box-corner.br{bottom:10px;right:10px;border-width:0 2px 2px 0;}
+.pw-icon{font-size:2rem;text-align:center;margin-bottom:12px;}
+.pw-title{font-family:'Orbitron',monospace;font-size:1rem;color:var(--neon-orange);text-align:center;letter-spacing:.1em;margin-bottom:4px;}
+.pw-sub{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(255,159,0,.45);text-align:center;letter-spacing:.15em;margin-bottom:28px;}
+.pw-dots{display:flex;justify-content:center;gap:14px;margin-bottom:24px;}
+.pw-dot{width:14px;height:14px;border:2px solid rgba(255,159,0,.35);border-radius:50%;transition:all .2s;}
+.pw-dot.filled{background:var(--neon-orange);border-color:var(--neon-orange);box-shadow:0 0 8px rgba(255,159,0,.6);}
+.pw-dot.error{background:var(--neon-pink);border-color:var(--neon-pink);animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
+.pw-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.pw-key{font-family:'Orbitron',monospace;font-size:.9rem;color:rgba(255,159,0,.7);border:1px solid rgba(255,159,0,.2);background:rgba(255,159,0,.04);padding:14px;cursor:pointer;transition:all .15s;text-align:center;}
+.pw-key:hover{border-color:var(--neon-orange);color:var(--neon-orange);background:rgba(255,159,0,.1);box-shadow:0 0 10px rgba(255,159,0,.1);}
+.pw-key:active{transform:scale(.95);}
+.pw-key.wide{grid-column:span 2;}
+.pw-err{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--neon-pink);text-align:center;letter-spacing:.1em;height:16px;transition:opacity .2s;}
+.pw-cancel{display:block;width:100%;margin-top:14px;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255,245,.3);letter-spacing:.2em;background:none;border:1px solid rgba(0,255,245,.1);padding:8px;cursor:pointer;transition:all .2s;}
+.pw-cancel:hover{color:rgba(0,255,245,.6);border-color:rgba(0,255,245,.25);}
+
+/* 기타 페이지 내 서브카드 */
+.etc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:40px;}
+.etc-card{border:1px solid var(--border);background:var(--panel);padding:22px 20px;cursor:pointer;transition:all .25s;text-decoration:none;display:block;position:relative;overflow:hidden;}
+.etc-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,159,0,.05),transparent);transition:left .4s;}
+.etc-card:hover{border-color:var(--neon-orange);background:rgba(255,159,0,.06);box-shadow:0 0 18px rgba(255,159,0,.08);}
+.etc-card:hover::before{left:100%;}
+.etc-card-icon{font-size:2rem;margin-bottom:12px;}
+.etc-card-name{font-family:'Orbitron',monospace;font-size:1rem;color:var(--neon-orange);margin-bottom:6px;}
+.etc-card-desc{font-size:.78rem;color:rgba(224,247,247,.4);line-height:1.7;}
+.etc-card-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:rgba(255,159,0,.25);font-size:1rem;transition:all .2s;}
+.etc-card:hover .etc-card-arrow{color:var(--neon-orange);right:10px;}
+
+/* ══════════════════════════════════
    공통 모달
 ══════════════════════════════════ */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);}
@@ -375,13 +421,11 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
       <div class="cat-id">CAT-04</div><div class="cat-name">🗺️ 지도·장소</div>
       <div class="cat-desc">지명 및 공간 정보</div><span class="cat-arrow">›</span>
     </a>
-    <a class="cat-card" onclick="goPage('page-history');return false;" href="#">
-      <div class="cat-id">CAT-05</div><div class="cat-name">⚔️ 사건·역사</div>
-      <div class="cat-desc">연대기 및 주요 이벤트</div><span class="cat-arrow">›</span>
-    </a>
-    <a class="cat-card" onclick="goPage('page-glossary');return false;" href="#">
-      <div class="cat-id">CAT-06</div><div class="cat-name">🔖 용어사전</div>
-      <div class="cat-desc">고유명사·개념 인덱스</div><span class="cat-arrow">›</span>
+    <a class="cat-card" onclick="tryOpenEtc();return false;" href="#" style="border-color:rgba(255,159,0,.25);">
+      <div class="cat-id" style="color:var(--neon-orange);">CAT-05</div>
+      <div class="cat-name" style="color:var(--neon-orange);">🔒 기타</div>
+      <div class="cat-desc">사건·역사 / 용어사전</div>
+      <span class="cat-arrow" style="color:rgba(255,159,0,.3);">›</span>
     </a>
   </div>
   <div class="stats">
@@ -408,10 +452,11 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
   <h2 class="page-title">🧑‍🎨 CHARACTER DATABASE</h2>
   <p class="page-sub">// 등록된 자작 캐릭터 목록 //</p>
   <div class="filter-bar">
-    <input class="filter-input" type="text" placeholder="// SEARCH CHARACTER..." id="char-search" oninput="renderChars()"/>
-    <button class="filter-btn active" onclick="setCharFilter('all',this)">ALL</button>
+    <input class="filter-input" type="text" placeholder="// 캐릭터 검색..." id="char-search" oninput="renderChars()"/>
+    <button class="filter-btn active" onclick="setCharFilter('all',this)">전체</button>
     <button class="filter-btn" onclick="setCharFilter('남',this)">♂ 남</button>
     <button class="filter-btn" onclick="setCharFilter('여',this)">♀ 여</button>
+    <button class="filter-btn" onclick="setCharFilter('무',this)">◌ 무</button>
     <button class="filter-btn" onclick="setCharFilter('기타',this)">◈ 기타</button>
   </div>
   <div class="neon-line"></div>
@@ -425,20 +470,28 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
   <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
   <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
   <h2 class="page-title">🌍 WORLD DATABASE</h2>
-  <p class="page-sub">// 세계관·지역·세력 데이터 //</p>
-  <!-- 세계관 히어로 배너 -->
-  <div class="world-hero" id="world-hero">
-    <!-- JS로 렌더링 -->
+  <p class="page-sub">// 메인세계 · 그 외 세계 //</p>
+  <!-- 세계관 필터 버튼 (히어로 위) -->
+  <div class="world-filter-nav">
+    <button class="world-nav-btn active" onclick="setWorldFilter('all',this)" data-filter="all">
+      <span class="wnb-icon">🗂️</span>
+      <span class="wnb-label">전체</span>
+    </button>
+    <button class="world-nav-btn" onclick="setWorldFilter('메인세계',this)" data-filter="메인세계">
+      <span class="wnb-icon">🌍</span>
+      <span class="wnb-label">메인세계</span>
+    </button>
+    <button class="world-nav-btn" onclick="setWorldFilter('그 외 세계',this)" data-filter="그 외 세계">
+      <span class="wnb-icon">🌀</span>
+      <span class="wnb-label">그 외 세계</span>
+    </button>
   </div>
-  <!-- 썸네일 네비 -->
-  <div class="world-hero-nav" id="world-hero-nav"></div>
 
-  <div class="filter-bar">
+  <!-- 세계관 히어로 배너 -->
+  <div class="world-hero" id="world-hero"></div>
+
+  <div class="filter-bar" style="margin-top:20px;">
     <input class="filter-input" type="text" placeholder="// SEARCH WORLD..." id="world-search" oninput="renderWorld()"/>
-    <button class="filter-btn active" onclick="setWorldFilter('all',this)">ALL</button>
-    <button class="filter-btn" onclick="setWorldFilter('세계',this)">🌐 세계</button>
-    <button class="filter-btn" onclick="setWorldFilter('왕국',this)">👑 왕국</button>
-    <button class="filter-btn" onclick="setWorldFilter('세력',this)">⚔ 세력</button>
   </div>
   <div class="neon-line"></div>
   <div class="world-grid" id="world-grid"></div>
@@ -488,11 +541,36 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 </div>
 
 <!-- ════════════════════════════════════════
+               기타 (잠금)
+════════════════════════════════════════ -->
+<div class="page" id="page-etc">
+  <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
+  <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
+  <h2 class="page-title">🔒 기타</h2>
+  <p class="page-sub">// 사건·역사 / 용어사전 //</p>
+  <div class="neon-line"></div>
+  <div class="etc-grid">
+    <a class="etc-card" onclick="goPage('page-history');return false;" href="#">
+      <div class="etc-card-icon">⚔️</div>
+      <div class="etc-card-name">사건·역사</div>
+      <div class="etc-card-desc">연대기 및 주요 이벤트 기록</div>
+      <span class="etc-card-arrow">›</span>
+    </a>
+    <a class="etc-card" onclick="goPage('page-glossary');return false;" href="#">
+      <div class="etc-card-icon">🔖</div>
+      <div class="etc-card-name">용어사전</div>
+      <div class="etc-card-desc">고유명사·개념 인덱스</div>
+      <span class="etc-card-arrow">›</span>
+    </a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
                사건·역사
 ════════════════════════════════════════ -->
 <div class="page" id="page-history">
   <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
-  <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
+  <button class="back-btn" onclick="goPage('page-etc')">← BACK TO 기타</button>
   <h2 class="page-title">⚔️ HISTORY DATABASE</h2>
   <p class="page-sub">// 연대기·주요 사건 기록 //</p>
   <div class="filter-bar">
@@ -510,7 +588,7 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 ════════════════════════════════════════ -->
 <div class="page" id="page-glossary">
   <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
-  <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
+  <button class="back-btn" onclick="goPage('page-etc')">← BACK TO 기타</button>
   <h2 class="page-title">🔖 GLOSSARY DATABASE</h2>
   <p class="page-sub">// 고유명사·개념 인덱스 //</p>
   <div class="filter-bar">
@@ -519,6 +597,43 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
   <div class="glossary-alpha" id="glossary-alpha"></div>
   <div class="neon-line"></div>
   <div class="glossary-list" id="glossary-list"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+              비밀번호 모달
+════════════════════════════════════════ -->
+<div class="pw-overlay" id="pw-overlay">
+  <div class="pw-box">
+    <div class="pw-box-corner tl"></div>
+    <div class="pw-box-corner tr"></div>
+    <div class="pw-box-corner bl"></div>
+    <div class="pw-box-corner br"></div>
+    <div class="pw-icon">🔒</div>
+    <div class="pw-title">ACCESS LOCKED</div>
+    <div class="pw-sub">// 비밀번호 4자리를 입력하세요 //</div>
+    <div class="pw-dots" id="pw-dots">
+      <div class="pw-dot" id="pd0"></div>
+      <div class="pw-dot" id="pd1"></div>
+      <div class="pw-dot" id="pd2"></div>
+      <div class="pw-dot" id="pd3"></div>
+    </div>
+    <div class="pw-keypad">
+      <button class="pw-key" onclick="pwInput('1')">1</button>
+      <button class="pw-key" onclick="pwInput('2')">2</button>
+      <button class="pw-key" onclick="pwInput('3')">3</button>
+      <button class="pw-key" onclick="pwInput('4')">4</button>
+      <button class="pw-key" onclick="pwInput('5')">5</button>
+      <button class="pw-key" onclick="pwInput('6')">6</button>
+      <button class="pw-key" onclick="pwInput('7')">7</button>
+      <button class="pw-key" onclick="pwInput('8')">8</button>
+      <button class="pw-key" onclick="pwInput('9')">9</button>
+      <button class="pw-key" onclick="pwDelete()">⌫</button>
+      <button class="pw-key" onclick="pwInput('0')">0</button>
+      <button class="pw-key" onclick="pwClear()">C</button>
+    </div>
+    <div class="pw-err" id="pw-err"></div>
+    <button class="pw-cancel" onclick="closePw()">CANCEL</button>
+  </div>
 </div>
 
 <!-- ════════════════════════════════════════
@@ -541,20 +656,26 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 ════════════════════════════════════════ */
 
 /* ── 캐릭터 ── */
+/* gender: '여' | '남' | '무' | '기타' | '없음'
+   genderClass: 'gender-f' | 'gender-m' | 'gender-u' | 'gender-n' | 'gender-x'
+   creator: 디자인 원작자 이름 (없으면 null) */
 const CHARACTERS = [
   { id:'CHR-001', name:'아리엘 레이', gender:'여', genderClass:'gender-f', face:null, fullbody:null,
+    creator: null,
     age:'23세', height:'165cm', role:'마법사 / 왕립 아카데미 수석', world:'에르나 왕국',
     tags:['마법사','주인공','왕족'],
     personality:'차갑고 완벽주의적이지만 내면에 따뜻함을 숨기고 있다. 실수를 용납하지 못하는 성격 탓에 혼자 모든 것을 감당하려 한다.',
     background:'왕립 아카데미 역대 최연소 수석 졸업생. 평민 출신임에도 뛰어난 마법 재능으로 귀족들 사이에서 인정받았다.',
     abilities:'화염·빙결 이중 속성 마법 / 마력 감지 / 고속 주문 발동' },
   { id:'CHR-002', name:'카이 벨트', gender:'남', genderClass:'gender-m', face:null, fullbody:null,
+    creator: null,
     age:'27세', height:'182cm', role:'용병 / 전 왕국 기사단원', world:'에르나 왕국',
     tags:['검사','용병','과거가 있는 인물'],
     personality:'겉으로는 냉정하고 말이 없지만, 의뢰한 사람에게는 끝까지 책임지는 의리파.',
     background:'왕국 최정예 기사단 "철의 날개" 출신. 3년 전 단장 암살 사건에 연루되어 억울하게 축출되었다.',
     abilities:'쌍검술 / 기(氣) 방어막 / 독 저항 체질' },
   { id:'CHR-003', name:'루나 오버', gender:'기타', genderClass:'gender-n', face:null, fullbody:null,
+    creator: null,
     age:'외형 16세 (실제 불명)', height:'158cm', role:'정령 / 고대 유물 수호자', world:'공허의 사원',
     tags:['정령','수수께끼','비인간'],
     personality:'인간 감정에 익숙하지 않아 엉뚱한 행동을 자주 한다. 모든 것을 순수한 호기심으로 대한다.',
@@ -564,20 +685,60 @@ const CHARACTERS = [
 
 /* ── 세계관 ── */
 const WORLDS = [
-  { id:'WLD-001', name:'에르나 왕국', type:'왕국', tags:['군주제','마법 국가','중세풍'],
-    image: null,   /* 세계관 대표 이미지 URL — 없으면 null */
-    color: ['#2a0a4a','#0a1a3a','#1a0a2a'],  /* 플레이스홀더 그라디언트 색상 */
-    icon: '🏰',
-    population:'약 300만', area:'동부 대륙 중앙부', capital:'에르나시',
-    desc:'마법이 일상화된 중세풍 왕국. 왕립 마법 아카데미를 중심으로 마법 기술이 발전했으며 귀족·평민 간 신분 갈등이 깊다.',
-    feature:'마법 의회 제도 / 정령 조약', history:'건국 500주년을 앞두고 있으며, 초대 왕이 정령과 맺은 조약이 지금도 유효하다.' },
-  { id:'WLD-002', name:'공허의 사원', type:'세계', tags:['이차원','봉인된 공간','고대'],
+  {
+    id: 'WLD-001',
+    name: '다단티아',
+    type: '메인세계',
+    icon: '🌍',
     image: null,
-    color: ['#0a0a2a','#1a0a3a','#0a1a1a'],
+    mapImage: null,
+    color: ['#0a1e3a','#0d2e1a','#1a1a0a'],
+    tags: ['메인 무대', '대륙', '마법 문명'],
+    size: '동서 약 4,000km · 남북 약 2,800km',
+    climate: '온대~냉대 혼재 / 남부는 열대',
+    population: '약 2,000만 추정',
+    continents: '단일 대륙 + 군도 지역',
+    desc: '이 세계관의 주 무대가 되는 행성. 단일 대륙을 여러 왕국과 세력이 나눠 지배하고 있으며, 마법이 일상과 깊게 얽혀 있다. 대륙 중앙부의 에르나 왕국이 현재 가장 강력한 세력이다.',
+    feature: '마력 전도석 산지 / 정령 서식 구역 / 고대 유적 다수',
+    cosmology: '행성 주위를 두 개의 위성이 공전하며, 두 위성이 동시에 뜨는 날은 마력이 폭증한다고 알려져 있다.',
+    history: '약 1,000년 전 대분열 이후 현재의 국경 구도가 형성되었다. 고대에는 단일 제국이 대륙 전체를 지배했다는 기록이 남아있다.',
+  },
+  {
+    id: 'WLD-002',
+    name: '에헬라',
+    type: '그 외 세계',
     icon: '🌀',
-    population:'정령 다수 (인간 없음)', area:'차원 틈새', capital:'없음',
-    desc:'고대 마법사들이 위험한 정령들을 봉인하기 위해 만든 이차원 공간. 시간 흐름이 외부와 다르다.',
-    feature:'봉인 마법 / 시간 왜곡', history:'약 800년 전 대마법사 연합이 건설. 현재는 관리자가 부재하여 봉인이 약해지고 있다.' },
+    image: null,
+    mapImage: null,
+    color: ['#0a0a2a','#1a083a','#05050f'],
+    tags: ['이차원', '정령계', '고대'],
+    size: '물리적 크기 불명',
+    climate: '개념적 환경 — 빛과 어둠만 존재',
+    population: '정령 다수 · 인간 진입 불가',
+    continents: '차원 구분 없음',
+    desc: '정령들이 본래 거주하던 이차원 세계. 물리 법칙이 다단티아와 다르게 적용되며, 시간의 흐름 자체가 불규칙하다. 대마법사들이 봉인술을 개발하기 이전에는 다단티아와 자유롭게 연결되어 있었다.',
+    feature: '시간 왜곡 / 기억 잔상 / 봉인 구조물',
+    cosmology: '에헬라는 다단티아에 겹쳐 존재하는 레이어 구조로, 특정 조건이 충족되면 두 세계의 경계가 얇아진다.',
+    history: '공허의 사원은 에헬라의 일부를 물리적으로 고정하여 만들어진 봉인 구조물이다. 약 800년 전 대마법사 연합에 의해 설계되었다.',
+  },
+  {
+    id: 'WLD-003',
+    name: '슈단티아',
+    type: '그 외 세계',
+    icon: '🌀',
+    image: null,
+    mapImage: null,
+    color: ['#1a0505','#2a0a0a','#0a0505'],
+    tags: ['대립 세계', '금지 구역', '미탐사'],
+    size: '불명',
+    climate: '불명 — 탐사 생존자 없음',
+    population: '불명',
+    continents: '불명',
+    desc: '다단티아의 이면에 존재한다고 전해지는 세계. 고대 기록에는 "모든 것을 집어삼키는 역세계"로 기술되어 있다. 실존 여부조차 확인되지 않았으나, 봉인이 약해지는 현상의 원인으로 지목되고 있다.',
+    feature: '불명 / 접촉 시 기억 소실 보고',
+    cosmology: '다단티아의 마력이 일정 임계치를 초과하면 슈단티아로 흘러들어간다는 가설이 있다.',
+    history: '에헬라의 정령들조차 슈단티아에 대해 이야기하기를 꺼린다. 유일하게 남은 기록은 대분열 이전 고대 제국의 경고문뿐이다.',
+  },
 ];
 
 /* ── 설정집 ── */
@@ -663,6 +824,7 @@ let worldFilter = 'all';
 let histFilter = 'all';
 let selectedWorld = Object.keys(LOCATIONS)[0];
 let glossaryAlpha = 'all';
+let etcUnlocked = false;   // 기타 카테고리 잠금 해제 여부
 
 /* ════════════════════════════════════════
    ████  페이지 전환  ████
@@ -677,6 +839,76 @@ function goPage(id) {
   if (id === 'page-map')      renderMap();
   if (id === 'page-history')  renderHistory();
   if (id === 'page-glossary') renderGlossary();
+}
+
+/* ════════════════════════════════════════
+   ████  비밀번호 (기타 카테고리)  ████
+════════════════════════════════════════ */
+const PW_CORRECT = '0000';
+let pwCurrent = '';
+
+function tryOpenEtc() {
+  if (etcUnlocked) { goPage('page-etc'); return; }
+  pwCurrent = '';
+  updatePwDots();
+  document.getElementById('pw-err').textContent = '';
+  document.getElementById('pw-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePw() {
+  document.getElementById('pw-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  pwCurrent = '';
+  updatePwDots();
+}
+
+function pwInput(digit) {
+  if (pwCurrent.length >= 4) return;
+  pwCurrent += digit;
+  updatePwDots();
+  if (pwCurrent.length === 4) {
+    setTimeout(() => checkPw(), 120);
+  }
+}
+
+function pwDelete() {
+  pwCurrent = pwCurrent.slice(0, -1);
+  updatePwDots();
+}
+
+function pwClear() {
+  pwCurrent = '';
+  updatePwDots();
+  document.getElementById('pw-err').textContent = '';
+}
+
+function updatePwDots() {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById(`pd${i}`);
+    dot.classList.toggle('filled', i < pwCurrent.length);
+    dot.classList.remove('error');
+  }
+}
+
+function checkPw() {
+  if (pwCurrent === PW_CORRECT) {
+    etcUnlocked = true;
+    closePw();
+    goPage('page-etc');
+  } else {
+    document.getElementById('pw-err').textContent = '// 비밀번호가 틀렸습니다';
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById(`pd${i}`);
+      dot.classList.remove('filled');
+      dot.classList.add('error');
+    }
+    setTimeout(() => {
+      pwCurrent = '';
+      updatePwDots();
+      document.getElementById('pw-err').textContent = '';
+    }, 700);
+  }
 }
 
 /* ════════════════════════════════════════
@@ -708,7 +940,7 @@ function setCharFilter(v,btn){
 }
 function openCharModal(id){
   const c=CHARACTERS.find(x=>x.id===id); if(!c)return;
-  document.getElementById('modal-label').textContent=`// ${c.id} — CHARACTER FILE`;
+  document.getElementById('modal-label').textContent=`// ${c.id} — 캐릭터 파일`;
   document.getElementById('modal-content').innerHTML=`
     <div class="char-modal-body">
       <div class="char-modal-img-col">
@@ -720,26 +952,30 @@ function openCharModal(id){
       </div>
       <div class="char-modal-info">
         <div class="modal-section">
-          <div class="modal-section-title">// BASIC INFO</div>
+          <div class="modal-section-title">// 기본 정보</div>
           <div class="modal-field"><span class="modal-field-key">나이</span><span class="modal-field-val">${c.age}</span></div>
           <div class="modal-field"><span class="modal-field-key">신장</span><span class="modal-field-val">${c.height}</span></div>
           <div class="modal-field"><span class="modal-field-key">역할</span><span class="modal-field-val">${c.role}</span></div>
           <div class="modal-field"><span class="modal-field-key">출신 세계</span><span class="modal-field-val">${c.world}</span></div>
         </div>
         <div class="modal-section">
-          <div class="modal-section-title">// PERSONALITY</div>
+          <div class="modal-section-title">// 성격</div>
           <p class="modal-desc">${c.personality}</p>
         </div>
         <div class="modal-section">
-          <div class="modal-section-title">// BACKGROUND</div>
+          <div class="modal-section-title">// 설정</div>
           <p class="modal-desc">${c.background}</p>
         </div>
         <div class="modal-section">
-          <div class="modal-section-title">// ABILITIES</div>
+          <div class="modal-section-title">// 능력</div>
           <p class="modal-desc">${c.abilities}</p>
         </div>
         <div class="modal-section">
-          <div class="modal-section-title">// TAGS</div>
+          <div class="modal-section-title">// 디자인 원작자</div>
+          <p class="modal-desc" style="color:rgba(224,247,247,.55);">${c.creator || '—'}</p>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-title">// 태그</div>
           <div class="modal-tag-list">${c.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('')}</div>
         </div>
       </div>
@@ -804,32 +1040,17 @@ function renderWorldHero(idx){
       <div class="world-hero-label-name">${w.name}</div>
       <span class="world-hero-label-type">${w.type}</span>
     </div>`;
-
-  // 썸네일 active 상태 업데이트
-  document.querySelectorAll('.world-thumb').forEach((el,i)=>{
-    el.classList.toggle('active', i===idx);
-  });
-}
-
-function renderWorldNav(){
-  const nav = document.getElementById('world-hero-nav');
-  if(!nav) return;
-  nav.innerHTML = WORLDS.map((w,i)=>`
-    <div class="world-thumb ${i===heroActiveIdx?'active':''}" onclick="renderWorldHero(${i})">
-      ${w.image
-        ? `<img src="${w.image}" alt="${w.name}"/>`
-        : `<div class="world-thumb-ph">${w.icon||'🌐'}</div>`}
-    </div>`).join('');
 }
 
 function renderWorld(){
   const q=(document.getElementById('world-search')?.value||'').toLowerCase();
   const grid=document.getElementById('world-grid');
 
-  // 히어로 배너 초기 렌더
-  if(WORLDS.length > 0){
-    renderWorldHero(heroActiveIdx);
-    renderWorldNav();
+  // 히어로 배너: 현재 필터에 맞는 첫 번째 세계 표시
+  const visible = WORLDS.filter(w=>worldFilter==='all'||w.type===worldFilter);
+  if(visible.length > 0){
+    const heroTarget = WORLDS.indexOf(visible[0]);
+    renderWorldHero(heroTarget);
   }
 
   const list=WORLDS.filter(w=>
@@ -863,8 +1084,9 @@ function renderWorld(){
 }
 function setWorldFilter(v,btn){
   worldFilter=v;
-  document.querySelectorAll('#page-world .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');renderWorld();
+  document.querySelectorAll('.world-nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderWorld();
 }
 function openWorldModal(id){
   const w=WORLDS.find(x=>x.id===id);if(!w)return;
@@ -889,28 +1111,42 @@ function openWorldModal(id){
         <div class="wmodal-grid">
           <div>
             <div class="wmodal-section">
-              <div class="wmodal-section-title">// BASIC DATA</div>
+              <div class="wmodal-section-title">// 기본 데이터</div>
+              <div class="wmodal-field"><span class="wmodal-key">규모</span><span class="wmodal-val">${w.size}</span></div>
+              <div class="wmodal-field"><span class="wmodal-key">기후</span><span class="wmodal-val">${w.climate}</span></div>
               <div class="wmodal-field"><span class="wmodal-key">인구</span><span class="wmodal-val">${w.population}</span></div>
-              <div class="wmodal-field"><span class="wmodal-key">위치</span><span class="wmodal-val">${w.area}</span></div>
-              <div class="wmodal-field"><span class="wmodal-key">수도</span><span class="wmodal-val">${w.capital}</span></div>
+              <div class="wmodal-field"><span class="wmodal-key">대륙 구성</span><span class="wmodal-val">${w.continents}</span></div>
             </div>
             <div class="wmodal-section">
-              <div class="wmodal-section-title">// FEATURE</div>
+              <div class="wmodal-section-title">// 주요 특징</div>
               <p class="wmodal-desc">${w.feature}</p>
             </div>
           </div>
           <div>
             <div class="wmodal-section">
-              <div class="wmodal-section-title">// OVERVIEW</div>
+              <div class="wmodal-section-title">// 개요</div>
               <p class="wmodal-desc">${w.desc}</p>
             </div>
             <div class="wmodal-section">
-              <div class="wmodal-section-title">// HISTORY NOTE</div>
+              <div class="wmodal-section-title">// 우주·세계 구조</div>
+              <p class="wmodal-desc">${w.cosmology}</p>
+            </div>
+            <div class="wmodal-section">
+              <div class="wmodal-section-title">// 역사 메모</div>
               <p class="wmodal-desc">${w.history}</p>
             </div>
           </div>
         </div>
-        <div class="modal-tag-list">${w.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('')}</div>
+        ${w.mapImage ? `
+        <div class="wmodal-section">
+          <div class="wmodal-section-title">// 세계 지도</div>
+          <img src="${w.mapImage}" style="width:100%;border:1px solid rgba(180,79,255,.2);margin-top:4px;" alt="${w.name} 지도"/>
+        </div>` : `
+        <div class="wmodal-section">
+          <div class="wmodal-section-title">// 세계 지도</div>
+          <div style="width:100%;height:80px;border:1px dashed rgba(180,79,255,.2);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(180,79,255,.35);letter-spacing:.15em;">MAP IMAGE PLACEHOLDER</div>
+        </div>`}
+        <div class="modal-tag-list" style="margin-top:16px;">${w.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('')}</div>
       </div>
     </div>`;
   openModal();
