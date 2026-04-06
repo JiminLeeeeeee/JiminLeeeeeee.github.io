@@ -310,6 +310,47 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .gmodal-rel-tag:hover{border-color:var(--neon-blue);color:var(--neon-blue);}
 
 /* ══════════════════════════════════
+   생물도감 페이지
+══════════════════════════════════ */
+.bestiary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:40px;}
+.bestiary-card{border:1px solid var(--border);background:var(--panel);cursor:pointer;transition:all .25s;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.bestiary-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,255,159,.05),transparent);transition:left .4s;}
+.bestiary-card:hover{border-color:var(--neon-green);background:rgba(0,255,159,.05);box-shadow:0 0 18px rgba(0,255,159,.08);}
+.bestiary-card:hover::before{left:100%;}
+/* 생물 이미지/아이콘 영역 */
+.bestiary-card-img{width:100%;height:110px;overflow:hidden;position:relative;flex-shrink:0;}
+.bestiary-card-img img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.85);}
+.bestiary-card-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg,rgba(0,255,159,.06),rgba(0,255,245,.04));}
+.bestiary-card-body{padding:14px 16px;flex:1;display:flex;flex-direction:column;gap:6px;}
+.bestiary-card-top{display:flex;justify-content:space-between;align-items:center;}
+.bestiary-card-name{font-family:'Orbitron',monospace;font-size:.88rem;color:var(--neon-green);}
+.bestiary-card-type{font-family:'Share Tech Mono',monospace;font-size:.58rem;padding:2px 7px;border:1px solid rgba(0,255,159,.3);color:rgba(0,255,159,.6);}
+.bestiary-card-aka{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:rgba(0,255,245,.35);letter-spacing:.05em;}
+.bestiary-card-desc{font-size:.76rem;color:rgba(224,247,247,.4);line-height:1.65;flex:1;}
+.bestiary-card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px;}
+.bestiary-card-tag{font-family:'Share Tech Mono',monospace;font-size:.58rem;padding:1px 6px;border:1px solid rgba(0,255,159,.15);color:rgba(0,255,159,.5);}
+
+/* 생물도감 모달 */
+.bmodal-body{display:grid;grid-template-columns:200px 1fr;gap:0;}
+@media(max-width:540px){.bmodal-body{grid-template-columns:1fr;}}
+.bmodal-img-col{border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px;background:rgba(0,255,159,.02);}
+.bmodal-img{width:100%;max-height:280px;object-fit:contain;display:block;}
+.bmodal-img-ph{width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-size:4.5rem;border:1px dashed rgba(0,255,159,.15);}
+.bmodal-creature-name{font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--neon-green);text-align:center;line-height:1.3;}
+.bmodal-type-badge{font-family:'Share Tech Mono',monospace;font-size:.6rem;padding:2px 9px;border:1px solid rgba(0,255,159,.35);color:rgba(0,255,159,.7);display:inline-block;margin-top:2px;}
+.bmodal-info-col{padding:20px;}
+.bmodal-section{margin-bottom:16px;}
+.bmodal-section:last-child{margin-bottom:0;}
+.bmodal-section-title{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.3em;color:var(--neon-green);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid rgba(0,255,159,.18);}
+.bmodal-field{display:flex;gap:10px;margin-bottom:6px;font-size:.8rem;align-items:flex-start;}
+.bmodal-key{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:rgba(0,255,159,.45);min-width:64px;padding-top:1px;flex-shrink:0;}
+.bmodal-val{color:rgba(224,247,247,.8);line-height:1.7;}
+.bmodal-desc{font-size:.8rem;color:rgba(224,247,247,.65);line-height:1.9;border-left:2px solid rgba(0,255,159,.15);padding-left:12px;}
+.bmodal-tag-list{display:flex;flex-wrap:wrap;gap:5px;}
+.bmodal-tag{font-family:'Share Tech Mono',monospace;font-size:.58rem;padding:2px 7px;border:1px solid rgba(0,255,159,.2);color:rgba(0,255,159,.5);}
+@media(max-width:540px){.bmodal-img-col{border-right:none;border-bottom:1px solid var(--border);}}
+
+/* ══════════════════════════════════
    비밀번호 모달
 ══════════════════════════════════ */
 .pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px);}
@@ -440,7 +481,7 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
     <div class="log-row"><span class="log-time">——</span><span class="log-tag tag-w">🌍 세계관</span><span class="log-title">항목을 추가해보세요</span></div>
     <div class="log-row"><span class="log-time">——</span><span class="log-tag tag-s">📜 설정</span><span class="log-title">업데이트가 여기 표시됩니다</span></div>
   </div>
-  <footer>[ PERSONAL WIKI ARCHIVE · GITHUB PAGES · ALL RIGHTS RESERVED ]</footer>
+  <footer>[ ⚠ 본 위키의 모든 창작물(세계관·설정·이미지)은 창작자의 고유 저작물입니다 · 무단 도용·표절·2차 사용을 금지합니다 ]</footer>
 </div>
 
 <!-- ════════════════════════════════════════
@@ -547,7 +588,7 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
   <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
   <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
   <h2 class="page-title">🔒 기타</h2>
-  <p class="page-sub">// 사건·역사 / 용어사전 //</p>
+  <p class="page-sub">// 사건·역사 / 용어사전 / 생물도감 //</p>
   <div class="neon-line"></div>
   <div class="etc-grid">
     <a class="etc-card" onclick="goPage('page-history');return false;" href="#">
@@ -560,6 +601,12 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
       <div class="etc-card-icon">🔖</div>
       <div class="etc-card-name">용어사전</div>
       <div class="etc-card-desc">고유명사·개념 인덱스</div>
+      <span class="etc-card-arrow">›</span>
+    </a>
+    <a class="etc-card" onclick="goPage('page-bestiary');return false;" href="#">
+      <div class="etc-card-icon">🦎</div>
+      <div class="etc-card-name">생물도감</div>
+      <div class="etc-card-desc">세계관 생물·종족 데이터베이스</div>
       <span class="etc-card-arrow">›</span>
     </a>
   </div>
@@ -600,8 +647,24 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 </div>
 
 <!-- ════════════════════════════════════════
-              비밀번호 모달
+               생물도감
 ════════════════════════════════════════ -->
+<div class="page" id="page-bestiary">
+  <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
+  <button class="back-btn" onclick="goPage('page-etc')">← BACK TO 기타</button>
+  <h2 class="page-title">🦎 BESTIARY DATABASE</h2>
+  <p class="page-sub">// 세계관 생물·종족 데이터베이스 //</p>
+  <div class="filter-bar">
+    <input class="filter-input" type="text" placeholder="// 생물 검색..." id="bestiary-search" oninput="renderBestiary()"/>
+    <button class="filter-btn active" onclick="setBestiaryFilter('all',this)">전체</button>
+    <button class="filter-btn" onclick="setBestiaryFilter('동물',this)">🐾 동물</button>
+    <button class="filter-btn" onclick="setBestiaryFilter('마물',this)">👾 마물</button>
+    <button class="filter-btn" onclick="setBestiaryFilter('종족',this)">👥 종족</button>
+    <button class="filter-btn" onclick="setBestiaryFilter('정령',this)">✨ 정령</button>
+  </div>
+  <div class="neon-line"></div>
+  <div class="bestiary-grid" id="bestiary-grid"></div>
+</div>
 <div class="pw-overlay" id="pw-overlay">
   <div class="pw-box">
     <div class="pw-box-corner tl"></div>
@@ -816,12 +879,68 @@ const GLOSSARY = [
   { id:'GLS-005', term:'정령 조약', category:'역사', short:'건국 시 초대 왕과 정령들이 맺은 공존 협약.', detail:'정령은 인간을 해치지 않고, 왕국은 정령의 영역을 침범하지 않는다는 내용. 현재도 유효하다.', related:['에르나 왕국','정령 조약 기념일'] },
 ];
 
+/* ── 생물도감 ── */
+/* type: '동물' | '마물' | '종족' | '정령'
+   image: 이미지 URL (없으면 null)
+   icon: 이미지 없을 때 표시할 이모지 */
+const BESTIARY = [
+  {
+    id: 'BST-001',
+    name: '마력 늑대',
+    aka: 'Mana Wolf',
+    type: '마물',
+    icon: '🐺',
+    image: null,
+    world: '다단티아',
+    habitat: '에르나 왕국 북방 숲',
+    size: '어깨높이 약 1.2m',
+    danger: '★★★☆☆',
+    tags: ['마력 보유', '군집 행동', '야행성'],
+    desc: '마력 전도석이 매장된 지역에 서식하는 변이종 늑대. 몸 전체에서 희미한 청백색 마력이 흘러나오며, 집단으로 사냥한다. 마력을 압축해 뿜어내는 공격을 구사할 수 있다.',
+    ecology: '번식기에는 암컷이 마력을 대거 흡수해 새끼에게 전달한다. 마력 전도석 광산 인근에서 개체 수가 급증하는 경향이 있다.',
+    note: '왕국 기사단의 주요 토벌 대상 중 하나. 가죽과 마력 결정은 고가에 거래된다.',
+  },
+  {
+    id: 'BST-002',
+    name: '에헬라 잔상체',
+    aka: 'Echo Wraith',
+    type: '정령',
+    icon: '👻',
+    image: null,
+    world: '에헬라',
+    habitat: '기억의 회랑',
+    size: '형태 불정형',
+    danger: '★★★★☆',
+    tags: ['비물질', '기억 조작', '에헬라 고유종'],
+    desc: '에헬라의 기억 회랑에 떠도는 잔상 존재. 봉인된 정령들의 기억 파편이 응집되어 자의식을 갖게 된 것으로 추정된다. 접촉한 자의 기억을 왜곡하거나 빼앗는 능력을 지닌다.',
+    ecology: '실체가 없어 물리 공격이 통하지 않으며, 봉인 마법에 의해서만 제압 가능하다. 에헬라 내에서 자연 발생하며 개체 수를 추산하기 어렵다.',
+    note: '루나 오버는 이 존재들과 의사소통이 가능한 것으로 확인되었다.',
+  },
+  {
+    id: 'BST-003',
+    name: '인간',
+    aka: 'Human',
+    type: '종족',
+    icon: '🧑',
+    image: null,
+    world: '다단티아',
+    habitat: '대륙 전역',
+    size: '평균 신장 165~180cm',
+    danger: '★☆☆☆☆',
+    tags: ['마법 사용 가능', '문명 건설종', '다단티아 주요 종족'],
+    desc: '다단티아 대륙을 지배하는 주요 지적 종족. 마법 적성에 개인차가 크며, 왕국·도시 등 복잡한 문명 체계를 구축하고 있다. 수명은 평균 70~90년이나 마법사는 이를 크게 상회하는 경우도 있다.',
+    ecology: '전 대륙에 분포하며 각 지역별로 문화·언어·풍습이 상이하다. 정령과의 공존 역사를 가지며 마력 전도석을 주요 에너지원으로 활용한다.',
+    note: '이중 속성 보유자는 1만 명 중 1명 비율로 태어나며 사회적으로 특별한 지위를 부여받는다.',
+  },
+];
+
 /* ════════════════════════════════════════
    ████  상태  ████
 ════════════════════════════════════════ */
 let charFilter = 'all';
 let worldFilter = 'all';
 let histFilter = 'all';
+let bestiaryFilter = 'all';
 let selectedWorld = Object.keys(LOCATIONS)[0];
 let glossaryAlpha = 'all';
 let etcUnlocked = false;   // 기타 카테고리 잠금 해제 여부
@@ -833,12 +952,13 @@ function goPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
-  if (id === 'page-chars')    renderChars();
-  if (id === 'page-world')    renderWorld();
-  if (id === 'page-setting')  renderSettings();
-  if (id === 'page-map')      renderMap();
-  if (id === 'page-history')  renderHistory();
-  if (id === 'page-glossary') renderGlossary();
+  if (id === 'page-chars')     renderChars();
+  if (id === 'page-world')     renderWorld();
+  if (id === 'page-setting')   renderSettings();
+  if (id === 'page-map')       renderMap();
+  if (id === 'page-history')   renderHistory();
+  if (id === 'page-glossary')  renderGlossary();
+  if (id === 'page-bestiary')  renderBestiary();
 }
 
 /* ════════════════════════════════════════
@@ -1344,6 +1464,91 @@ function openGlossaryModal(id){
       <div class="gmodal-section">
         <div class="gmodal-section-title">// RELATED</div>
         <div class="gmodal-related">${g.related.map(r=>`<span class="gmodal-rel-tag">${r}</span>`).join('')}</div>
+      </div>
+    </div>`;
+  openModal();
+}
+
+/* ════════════════════════════════════════
+   ████  생물도감  ████
+════════════════════════════════════════ */
+function renderBestiary(){
+  const q=(document.getElementById('bestiary-search')?.value||'').toLowerCase();
+  const grid=document.getElementById('bestiary-grid');
+  const list=BESTIARY.filter(b=>
+    (bestiaryFilter==='all'||b.type===bestiaryFilter)&&
+    (!q||b.name.includes(q)||b.aka.toLowerCase().includes(q)||b.tags.some(t=>t.includes(q)))
+  );
+  grid.innerHTML=list.map(b=>`
+    <div class="bestiary-card" onclick="openBestiaryModal('${b.id}')">
+      <div class="bestiary-card-img">
+        ${b.image
+          ?`<img src="${b.image}" alt="${b.name}"/>`
+          :`<div class="bestiary-card-img-ph">${b.icon}</div>`}
+      </div>
+      <div class="bestiary-card-body">
+        <div class="bestiary-card-top">
+          <span class="bestiary-card-name">${b.name}</span>
+          <span class="bestiary-card-type">${b.type}</span>
+        </div>
+        <div class="bestiary-card-aka">${b.aka}</div>
+        <div class="bestiary-card-desc">${b.desc}</div>
+        <div class="bestiary-card-tags">${b.tags.map(t=>`<span class="bestiary-card-tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>`).join('')+`
+    <div class="bestiary-card" style="border-style:dashed;opacity:.35;cursor:pointer;" onclick="alert('BESTIARY 배열에 항목을 추가하세요!')">
+      <div class="bestiary-card-img-ph" style="height:110px;font-size:2rem;color:rgba(0,255,159,.25);">＋</div>
+      <div class="bestiary-card-body">
+        <div class="bestiary-card-name" style="font-size:.8rem;">NEW CREATURE</div>
+        <div class="bestiary-card-desc">새 생물 항목 추가</div>
+      </div>
+    </div>`;
+}
+function setBestiaryFilter(v,btn){
+  bestiaryFilter=v;
+  document.querySelectorAll('#page-bestiary .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBestiary();
+}
+function openBestiaryModal(id){
+  const b=BESTIARY.find(x=>x.id===id);if(!b)return;
+  document.getElementById('modal-label').textContent=`// ${b.id} — CREATURE FILE`;
+  document.getElementById('modal-content').innerHTML=`
+    <div class="bmodal-body">
+      <div class="bmodal-img-col">
+        ${b.image
+          ?`<img class="bmodal-img" src="${b.image}" alt="${b.name}"/>`
+          :`<div class="bmodal-img-ph">${b.icon}</div>`}
+        <div style="text-align:center">
+          <div class="bmodal-creature-name">${b.name}</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:rgba(0,255,159,.4);margin-top:2px;">${b.aka}</div>
+          <span class="bmodal-type-badge">${b.type}</span>
+        </div>
+      </div>
+      <div class="bmodal-info-col">
+        <div class="bmodal-section">
+          <div class="bmodal-section-title">// 기본 정보</div>
+          <div class="bmodal-field"><span class="bmodal-key">서식지</span><span class="bmodal-val">${b.habitat}</span></div>
+          <div class="bmodal-field"><span class="bmodal-key">출현 세계</span><span class="bmodal-val">${b.world}</span></div>
+          <div class="bmodal-field"><span class="bmodal-key">크기</span><span class="bmodal-val">${b.size}</span></div>
+          <div class="bmodal-field"><span class="bmodal-key">위험도</span><span class="bmodal-val">${b.danger}</span></div>
+        </div>
+        <div class="bmodal-section">
+          <div class="bmodal-section-title">// 설명</div>
+          <p class="bmodal-desc">${b.desc}</p>
+        </div>
+        <div class="bmodal-section">
+          <div class="bmodal-section-title">// 생태</div>
+          <p class="bmodal-desc">${b.ecology}</p>
+        </div>
+        <div class="bmodal-section">
+          <div class="bmodal-section-title">// 비고</div>
+          <p class="bmodal-desc">${b.note}</p>
+        </div>
+        <div class="bmodal-section">
+          <div class="bmodal-section-title">// 태그</div>
+          <div class="bmodal-tag-list">${b.tags.map(t=>`<span class="bmodal-tag">${t}</span>`).join('')}</div>
+        </div>
       </div>
     </div>`;
   openModal();
