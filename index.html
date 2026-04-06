@@ -20,6 +20,18 @@
 }
 body{background:var(--bg);color:#e0f7f7;font-family:'Noto Sans KR',sans-serif;min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);pointer-events:none;z-index:9999;}
+body.modal-open::before{display:none;}
+
+/* ══════════════════════════════════
+   이미지 확대 뷰어
+══════════════════════════════════ */
+.img-viewer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:3000;align-items:center;justify-content:center;cursor:zoom-out;backdrop-filter:blur(4px);}
+.img-viewer.open{display:flex;animation:fadeIn .2s ease;}
+.img-viewer-img{max-width:92vw;max-height:92vh;object-fit:contain;display:block;animation:imgZoomIn .25s cubic-bezier(.34,1.56,.64,1);}
+@keyframes imgZoomIn{from{opacity:0;transform:scale(.85);}to{opacity:1;transform:scale(1);}}
+.img-viewer-close{position:absolute;top:16px;right:16px;background:none;border:1px solid rgba(255,45,120,.4);color:var(--neon-pink);width:32px;height:32px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:1;}
+.img-viewer-close:hover{background:rgba(255,45,120,.15);}
+.img-viewer-hint{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-family:'Share Tech Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.25);letter-spacing:.15em;pointer-events:none;}
 .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,245,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,245,.04) 1px,transparent 1px);background-size:40px 40px;z-index:0;}
 
 /* ══ 페이지 공통 ══ */
@@ -406,7 +418,7 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .char-modal-body{display:grid;grid-template-columns:220px 1fr;gap:0;}
 @media(max-width:560px){.char-modal-body{grid-template-columns:1fr;}}
 .char-modal-img-col{border-right:1px solid var(--border);padding:22px;display:flex;flex-direction:column;align-items:center;gap:14px;background:rgba(0,255,245,.02);}
-.modal-fullbody{width:100%;max-height:340px;object-fit:contain;display:block;}
+.modal-fullbody{width:100%;max-height:340px;object-fit:contain;display:block;position:relative;z-index:1000;}
 .modal-fullbody-placeholder{width:100%;height:260px;display:flex;align-items:center;justify-content:center;font-size:4rem;color:rgba(0,255,245,.15);border:1px dashed rgba(0,255,245,.1);}
 .modal-char-name{font-family:'Orbitron',monospace;font-size:1.15rem;font-weight:900;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;line-height:1.2;}
 .modal-char-gender{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.1em;padding:3px 10px;border:1px solid;display:inline-block;margin-top:4px;}
@@ -447,7 +459,7 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
   <p class="section-label">🗂 // CATEGORIES</p>
   <div class="cat-grid">
     <a class="cat-card" onclick="goPage('page-chars');return false;" href="#">
-      <div class="cat-id">CAT-01</div><div class="cat-name">🧑‍🎨 캐릭터</div>
+      <div class="cat-id">CAT-01</div><div class="cat-name">🎨 캐릭터</div>
       <div class="cat-desc">자작 캐릭터 프로필 DB</div><span class="cat-arrow">›</span>
     </a>
     <a class="cat-card" onclick="goPage('page-world');return false;" href="#">
@@ -470,14 +482,14 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
     </a>
   </div>
   <div class="stats">
-    <div class="stat"><span class="stat-n">03</span><span class="stat-l">🧑‍🎨 CHARACTERS</span></div>
+    <div class="stat"><span class="stat-n">03</span><span class="stat-l">🎨 CHARACTERS</span></div>
     <div class="stat"><span class="stat-n">02</span><span class="stat-l">🌍 WORLD DOCS</span></div>
     <div class="stat"><span class="stat-n">03</span><span class="stat-l">📜 SETTINGS</span></div>
     <div class="stat"><span class="stat-n">00</span><span class="stat-l">📄 TOTAL PAGES</span></div>
   </div>
   <div class="log">
     <div class="log-head">🕰 // RECENT UPDATES</div>
-    <div class="log-row"><span class="log-time">0000-00-00</span><span class="log-tag tag-c">🧑‍🎨 캐릭터</span><span class="log-title">위키 대문 개설</span></div>
+    <div class="log-row"><span class="log-time">0000-00-00</span><span class="log-tag tag-c">🎨 캐릭터</span><span class="log-title">위키 대문 개설</span></div>
     <div class="log-row"><span class="log-time">——</span><span class="log-tag tag-w">🌍 세계관</span><span class="log-title">항목을 추가해보세요</span></div>
     <div class="log-row"><span class="log-time">——</span><span class="log-tag tag-s">📜 설정</span><span class="log-title">업데이트가 여기 표시됩니다</span></div>
   </div>
@@ -490,7 +502,7 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 <div class="page" id="page-chars">
   <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
   <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
-  <h2 class="page-title">🧑‍🎨 CHARACTER DATABASE</h2>
+  <h2 class="page-title">🎨 CHARACTER DATABASE</h2>
   <p class="page-sub">// 등록된 자작 캐릭터 목록 //</p>
   <div class="filter-bar">
     <input class="filter-input" type="text" placeholder="// 캐릭터 검색..." id="char-search" oninput="renderChars()"/>
@@ -665,6 +677,16 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
   <div class="neon-line"></div>
   <div class="bestiary-grid" id="bestiary-grid"></div>
 </div>
+
+<!-- ════════════════════════════════════════
+              이미지 확대 뷰어
+════════════════════════════════════════ -->
+<div class="img-viewer" id="img-viewer" onclick="closeImgViewer()">
+  <button class="img-viewer-close" onclick="event.stopPropagation();closeImgViewer()">✕</button>
+  <img class="img-viewer-img" id="img-viewer-img" src="" alt="확대 이미지"/>
+  <div class="img-viewer-hint">클릭하거나 ESC 키로 닫기</div>
+</div>
+
 <div class="pw-overlay" id="pw-overlay">
   <div class="pw-box">
     <div class="pw-box-corner tl"></div>
@@ -719,31 +741,46 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 ════════════════════════════════════════ */
 
 /* ── 캐릭터 ── */
-/* gender: '여' | '남' | '무' | '기타' | '없음'
-   genderClass: 'gender-f' | 'gender-m' | 'gender-u' | 'gender-n' | 'gender-x'
-   creator: 디자인 원작자 이름 (없으면 null) */
+/* gender: '여' | '남' | '무' | '기타'
+   genderClass: 'gender-f' | 'gender-m' | 'gender-u' | 'gender-n'
+   creator: 디자인 원작자 이름 (없으면 null)
+   nameColor: 이름 그라디언트 (없으면 null → 기본 청록~보라)
+   ── 그라디언트 예시 ──
+   복숭아: 'linear-gradient(90deg, #FA709A, #FEE140)'
+   파랑:   'linear-gradient(90deg, #4FACFE, #00F2FE)'
+   보라:   'linear-gradient(90deg, #C471F5, #FA71CD)'
+   초록:   'linear-gradient(90deg, #B3FFAB, #12FFF7)'
+   붉은:   'linear-gradient(90deg, #66023c, #cd1c18)' */
 const CHARACTERS = [
   { id:'CHR-001', name:'아리엘 레이', gender:'여', genderClass:'gender-f', face:null, fullbody:null,
-    creator: null,
+    creator: null, nameColor: null,
     age:'23세', height:'165cm', role:'마법사 / 왕립 아카데미 수석', world:'에르나 왕국',
     tags:['마법사','주인공','왕족'],
     personality:'차갑고 완벽주의적이지만 내면에 따뜻함을 숨기고 있다. 실수를 용납하지 못하는 성격 탓에 혼자 모든 것을 감당하려 한다.',
     background:'왕립 아카데미 역대 최연소 수석 졸업생. 평민 출신임에도 뛰어난 마법 재능으로 귀족들 사이에서 인정받았다.',
     abilities:'화염·빙결 이중 속성 마법 / 마력 감지 / 고속 주문 발동' },
   { id:'CHR-002', name:'카이 벨트', gender:'남', genderClass:'gender-m', face:null, fullbody:null,
-    creator: null,
+    creator: null, nameColor: null,
     age:'27세', height:'182cm', role:'용병 / 전 왕국 기사단원', world:'에르나 왕국',
     tags:['검사','용병','과거가 있는 인물'],
     personality:'겉으로는 냉정하고 말이 없지만, 의뢰한 사람에게는 끝까지 책임지는 의리파.',
     background:'왕국 최정예 기사단 "철의 날개" 출신. 3년 전 단장 암살 사건에 연루되어 억울하게 축출되었다.',
     abilities:'쌍검술 / 기(氣) 방어막 / 독 저항 체질' },
   { id:'CHR-003', name:'루나 오버', gender:'기타', genderClass:'gender-n', face:null, fullbody:null,
-    creator: null,
+    creator: null, nameColor: null,
     age:'외형 16세 (실제 불명)', height:'158cm', role:'정령 / 고대 유물 수호자', world:'공허의 사원',
     tags:['정령','수수께끼','비인간'],
     personality:'인간 감정에 익숙하지 않아 엉뚱한 행동을 자주 한다. 모든 것을 순수한 호기심으로 대한다.',
     background:'수백 년 전 대마법사가 봉인한 고대 정령. 아리엘이 유적 탐사 중 봉인을 실수로 해제하여 각성했다.',
     abilities:'공간 이동 / 물체 투과 / 과거 감지 / 봉인술' },
+  { id:'CHR-004', name:'나미', gender:'여', genderClass:'gender-f', face:null,
+    fullbody:'https://raw.githubusercontent.com/JiminLeeeeeee/JiminLeeeeeee.github.io/main/%EC%BA%90%EC%A0%95%EB%A6%AC6/%EB%82%98%EB%AF%B8.jpg',
+    creator: null, nameColor: null,
+    age:'—', height:'—', role:'—', world:'—',
+    tags:[],
+    personality:'—',
+    background:'—',
+    abilities:'—' },
 ];
 
 /* ── 세계관 ── */
@@ -1064,9 +1101,9 @@ function openCharModal(id){
   document.getElementById('modal-content').innerHTML=`
     <div class="char-modal-body">
       <div class="char-modal-img-col">
-        ${c.fullbody?`<img class="modal-fullbody" src="${c.fullbody}" alt="${c.name}"/>`:`<div class="modal-fullbody-placeholder">🖼️</div>`}
+        ${c.fullbody?`<img class="modal-fullbody" src="${c.fullbody}" alt="${c.name}" onclick="openImgViewer(this.src)" style="cursor:zoom-in;"/>`:`<div class="modal-fullbody-placeholder">🖼️</div>`}
         <div style="text-align:center">
-          <div class="modal-char-name">${c.name}</div>
+          <div class="modal-char-name" style="${c.nameColor ? `background:${c.nameColor};-webkit-background-clip:text;-webkit-text-fill-color:transparent;` : ''}">${c.name}</div>
           <span class="modal-char-gender ${c.genderClass}">${c.gender}</span>
         </div>
       </div>
@@ -1555,20 +1592,41 @@ function openBestiaryModal(id){
 }
 
 /* ════════════════════════════════════════
+   ████  이미지 확대 뷰어  ████
+════════════════════════════════════════ */
+function openImgViewer(src){
+  document.getElementById('img-viewer-img').src = src;
+  document.getElementById('img-viewer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeImgViewer(){
+  document.getElementById('img-viewer').classList.remove('open');
+  document.getElementById('img-viewer-img').src = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') {
+    closeImgViewer();
+    closeModal();
+  }
+});
+
+/* ════════════════════════════════════════
    ████  모달 공통  ████
 ════════════════════════════════════════ */
 function openModal(){
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow='hidden';
+  document.body.classList.add('modal-open');
 }
 function closeModal(){
   document.getElementById('modal').classList.remove('open');
   document.body.style.overflow='';
+  document.body.classList.remove('modal-open');
 }
 function closeModalOnBg(e){
   if(e.target===document.getElementById('modal'))closeModal();
 }
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 </script>
 </body>
 </html>
