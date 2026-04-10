@@ -122,13 +122,56 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .add-empty-btn span{font-size:1.5rem;}
 
 /* 캐릭터 필터 드롭다운 */
-.char-filter-wrap{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
-.char-dropdowns{display:flex;gap:10px;flex-wrap:wrap;}
-.char-dropdown-group{display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px;}
-.char-dropdown-label{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:rgba(0,255,245,.35);}
-.char-dropdown{background:var(--panel);border:1px solid var(--border);padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--neon-cyan);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(0,255,245,.4)'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
-.char-dropdown:focus{border-color:var(--neon-cyan);box-shadow:0 0 10px rgba(0,255,245,.1);}
-.char-dropdown option{background:#060810;color:#e0f7f7;}
+.char-filter-wrap{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.char-dropdowns{display:flex;gap:12px;flex-wrap:wrap;}
+.char-dropdown-group{display:flex;flex-direction:column;gap:6px;flex:1;min-width:140px;position:relative;}
+.char-dropdown-label{font-family:'Share Tech Mono',monospace;font-size:.73rem;letter-spacing:.25em;color:var(--neon-cyan);opacity:.6;text-transform:uppercase;}
+.char-dropdown{
+  background:linear-gradient(135deg,rgba(0,255,245,.06),rgba(180,79,255,.04));
+  border:1px solid rgba(0,255,245,.25);
+  padding:10px 32px 10px 14px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:.75rem;
+  color:#e0f7f7;
+  outline:none;
+  cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:
+    linear-gradient(135deg,rgba(0,255,245,.06),rgba(180,79,255,.04)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(0,255,245,.5)'/%3E%3C/svg%3E");
+  background-repeat:no-repeat,no-repeat;
+  background-position:0 0,right 12px center;
+  background-size:100% 100%, 10px 6px;
+  transition:all .25s;
+  box-shadow:0 0 0 0 rgba(0,255,245,0);
+}
+.char-dropdown:hover{
+  border-color:var(--neon-cyan);
+  background-image:
+    linear-gradient(135deg,rgba(0,255,245,.1),rgba(180,79,255,.07)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(0,255,245,.8)'/%3E%3C/svg%3E");
+  box-shadow:0 0 12px rgba(0,255,245,.12);
+}
+.char-dropdown:focus{
+  border-color:var(--neon-cyan);
+  box-shadow:0 0 16px rgba(0,255,245,.2),inset 0 0 8px rgba(0,255,245,.04);
+}
+.char-dropdown option{background:#060d18;color:#e0f7f7;}
+.char-dropdown optgroup{background:#060d18;font-style:normal;font-weight:700;letter-spacing:.05em;}
+.char-dropdown optgroup[label^="🏘️"]{color:#ffcc66;}
+.char-dropdown optgroup[label^="⛺"]{color:#ff6b6b;}
+.char-dropdown optgroup[label^="✨"]{color:#c8a8ff;}
+.char-dropdown optgroup[label^="🌐"]{color:#4fc8ff;}
+.char-dropdown optgroup[label^="📦"]{color:#88cc88;}
+.char-dropdown optgroup option{color:#e0f7f7;padding-left:8px;font-weight:400;}
+/* 검색창도 통일 */
+#char-search{
+  background:linear-gradient(135deg,rgba(0,255,245,.05),rgba(0,0,0,.3));
+  border:1px solid rgba(0,255,245,.25);
+  transition:all .25s;
+}
+#char-search:hover{border-color:rgba(0,255,245,.5);box-shadow:0 0 10px rgba(0,255,245,.1);}
+#char-search:focus{border-color:var(--neon-cyan);box-shadow:0 0 16px rgba(0,255,245,.2);}
 
 /* ══════════════════════════════════
    세계관 페이지
@@ -530,29 +573,40 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
         <label class="char-dropdown-label">소속</label>
         <select class="char-dropdown" id="filter-group" onchange="renderChars()">
           <option value="all">전체</option>
-          <option>코즈미언</option><option>엑스플러</option><option>어스피어</option>
-          <option>천계</option><option>해적</option><option>바른 무리</option>
-          <option>캔치 무리</option><option>루버스 무리</option><option>크레먼 무리</option>
-          <option>오아나 무리</option><option>앤마 리바스 무리</option><option>신</option>
-          <option>기타</option><option>하계</option><option>지하던전</option>
-          <option>다른 세계</option><option>결계 수호자</option><option>모르튠 연구소</option>
-          <option>우주</option><option>몬타이나</option><option>사막궁전</option>
-          <option>팩펑크</option><option>던전마을</option><option>머쉬룸</option>
-          <option>아홀로틀스</option><option>검은숲 피신지역</option><option>검은숲</option>
-          <option>바다궁전</option><option>매너스</option><option>심해왕국</option>
-          <option>우리라스</option><option>매그누스</option><option>테라</option>
-          <option>바구스</option><option>세렌치움</option><option>탑</option>
-          <option>낙오자</option><option>방랑자</option><option>야생</option>
+          <optgroup label="🏘️ 마을과 도시">
+            <option>검은숲 피신지역</option><option>던전마을</option><option>머쉬룸</option>
+            <option>매너스</option><option>매그누스</option><option>몬타이나</option>
+            <option>바구스</option><option>바다궁전</option><option>세렌치움</option>
+            <option>심해왕국</option><option>우리라스</option><option>테라</option>
+            <option>팩펑크</option>
+          </optgroup>
+          <optgroup label="⛺ 무리">
+            <option>루버스 무리</option><option>바른 무리</option><option>앤마 리바스 무리</option>
+            <option>오아나 무리</option><option>캔치 무리</option><option>크레먼 무리</option>
+          </optgroup>
+          <optgroup label="✨ 천계와 하계">
+            <option>천계</option><option>하계</option>
+          </optgroup>
+          <optgroup label="🌐 모임">
+            <option>결계 수호자</option><option>아홀로틀스</option><option>어스피어</option>
+            <option>엑스플러</option><option>코즈미언</option><option>해적</option>
+          </optgroup>
+          <optgroup label="📦 기타">
+            <option>검은숲</option><option>기타</option><option>다른 세계</option>
+            <option>낙오자</option><option>모르튠 연구소</option><option>방랑자</option>
+            <option>사막궁전</option><option>신</option><option>야생</option>
+            <option>우주</option><option>지하던전</option><option>탑</option>
+          </optgroup>
         </select>
       </div>
       <div class="char-dropdown-group">
         <label class="char-dropdown-label">직책</label>
         <select class="char-dropdown" id="filter-role" onchange="renderChars()">
           <option value="all">전체</option>
-          <option>수호자</option><option>신의 대리인</option><option>연구자(과학자)</option>
-          <option>몬스터</option><option>없음</option><option>주민</option>
-          <option>귀족</option><option>부관리자</option><option>총관리자</option>
-          <option>경비</option><option>방랑자</option><option>상인</option>
+          <option>경비</option><option>귀족</option><option>몬스터</option>
+          <option>방랑자</option><option>부관리자</option><option>상인</option>
+          <option>수호자</option><option>신의 대리인</option><option>없음</option>
+          <option>연구자(과학자)</option><option>주민</option><option>총관리자</option>
         </select>
       </div>
     </div>
