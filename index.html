@@ -108,8 +108,8 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .char-card{border:1px solid var(--border);background:var(--panel);cursor:pointer;transition:all .28s;position:relative;overflow:hidden;}
 .char-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);pointer-events:none;}
 .char-card:hover{border-color:var(--neon-cyan);transform:translateY(-4px);box-shadow:0 0 24px rgba(0,255,245,.15),0 8px 24px rgba(0,0,0,.4);}
-.char-face{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;filter:brightness(.9) contrast(1.05);}
-.char-face-placeholder{width:100%;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(0,255,245,.05),rgba(180,79,255,.05));font-size:3.5rem;color:rgba(0,255,245,.2);}
+.char-face{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;filter:brightness(.9) contrast(1.05);}
+.char-face-placeholder{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(0,255,245,.05),rgba(180,79,255,.05));font-size:3.5rem;color:rgba(0,255,245,.2);}
 .char-info{position:absolute;bottom:0;left:0;right:0;padding:14px 12px 12px;z-index:2;}
 .char-name{font-family:'Orbitron',monospace;font-size:.85rem;color:var(--neon-cyan);font-weight:700;text-shadow:0 0 10px rgba(0,255,245,.5);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .char-gender-tag{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.1em;padding:2px 7px;border:1px solid;display:inline-block;}
@@ -117,7 +117,7 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .gender-f{border-color:rgba(255,45,120,.6);color:#ff7ab0;}
 .gender-n{border-color:rgba(180,79,255,.6);color:#cc99ff;}
 .gender-u{border-color:rgba(0,200,180,.6);color:#00c8b4;}
-.add-empty-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px dashed rgba(0,255,245,.15);background:transparent;padding:18px 16px;cursor:pointer;transition:all .25s;font-family:'Share Tech Mono',monospace;font-size:.68rem;color:rgba(0,255,245,.25);letter-spacing:.15em;width:100%;aspect-ratio:3/4;}
+.add-empty-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px dashed rgba(0,255,245,.15);background:transparent;padding:18px 16px;cursor:pointer;transition:all .25s;font-family:'Share Tech Mono',monospace;font-size:.68rem;color:rgba(0,255,245,.25);letter-spacing:.15em;width:100%;aspect-ratio:1/1;}
 .add-empty-btn:hover{border-color:rgba(0,255,245,.4);color:rgba(0,255,245,.6);background:rgba(0,255,245,.03);}
 .add-empty-btn span{font-size:1.5rem;}
 
@@ -773,13 +773,14 @@ const CHARACTERS = [
     personality:'인간 감정에 익숙하지 않아 엉뚱한 행동을 자주 한다. 모든 것을 순수한 호기심으로 대한다.',
     background:'수백 년 전 대마법사가 봉인한 고대 정령. 아리엘이 유적 탐사 중 봉인을 실수로 해제하여 각성했다.',
     abilities:'공간 이동 / 물체 투과 / 과거 감지 / 봉인술' },
-  { id:'CHR-004', name:'나미', gender:'여', genderClass:'gender-f', face:null,
-    fullbody:'https://raw.githubusercontent.com/JiminLeeeeeee/JiminLeeeeeee.github.io/main/%EC%BA%90%EC%A0%95%EB%A6%AC6/%EB%82%98%EB%AF%B8.jpg',
-    creator: null, nameColor: null,
-    age:'—', height:'—', role:'—', world:'—',
-    tags:[],
+  { id:'CHR-004', name:'나미', gender:'남', genderClass:'gender-m',
+    face:'https://raw.githubusercontent.com/JiminLeeeeeee/JiminLeeeeeee.github.io/main/%EC%BA%90%EC%A0%95%EB%A6%AC6/%EB%82%98%EB%AF%B8.jpg',
+    fullbody:'https://raw.githubusercontent.com/JiminLeeeeeee/JiminLeeeeeee.github.io/main/wiki/Character/fullbody/1/%EB%82%98%EB%AF%B8.png',
+    creator: '페르님', nameColor: null,
+    age:'?', height:'약 1m', role:'테라마을', world:'다단티아',
+    tags:['주민'],
     personality:'—',
-    background:'—',
+    background:'테라 마을에 살고 있는 살가운 성격의 주민으로, 항상 부유하는 구슬을 타고 다닌다. 놀리기를 좋아하며 한 번 약점을 잡히면 얄밉게 군다.',
     abilities:'—' },
 ];
 
@@ -1112,12 +1113,8 @@ function openCharModal(id){
           <div class="modal-section-title">// 기본 정보</div>
           <div class="modal-field"><span class="modal-field-key">나이</span><span class="modal-field-val">${c.age}</span></div>
           <div class="modal-field"><span class="modal-field-key">신장</span><span class="modal-field-val">${c.height}</span></div>
-          <div class="modal-field"><span class="modal-field-key">역할</span><span class="modal-field-val">${c.role}</span></div>
+          <div class="modal-field"><span class="modal-field-key">소속</span><span class="modal-field-val">${c.role}</span></div>
           <div class="modal-field"><span class="modal-field-key">출신 세계</span><span class="modal-field-val">${c.world}</span></div>
-        </div>
-        <div class="modal-section">
-          <div class="modal-section-title">// 성격</div>
-          <p class="modal-desc">${c.personality}</p>
         </div>
         <div class="modal-section">
           <div class="modal-section-title">// 설정</div>
