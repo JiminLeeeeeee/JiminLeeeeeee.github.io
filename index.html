@@ -121,6 +121,28 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .add-empty-btn:hover{border-color:rgba(0,255,245,.4);color:rgba(0,255,245,.6);background:rgba(0,255,245,.03);}
 .add-empty-btn span{font-size:1.5rem;}
 
+/* 뷰 전환 버튼 */
+.char-view-btns{display:flex;gap:8px;margin-bottom:20px;}
+.char-view-btn{font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.15em;padding:9px 24px;border:1px solid var(--border);background:var(--panel);color:rgba(0,255,245,.4);cursor:pointer;transition:all .2s;}
+.char-view-btn:hover{border-color:var(--neon-cyan);color:rgba(0,255,245,.8);}
+.char-view-btn.active{border-color:var(--neon-cyan);color:var(--neon-cyan);background:rgba(0,255,245,.08);box-shadow:0 0 10px rgba(0,255,245,.1);}
+
+/* 소속별 뷰 */
+.char-group-section{margin-bottom:36px;}
+.char-group-title{font-family:'Orbitron',monospace;font-size:.82rem;color:var(--neon-cyan);letter-spacing:.12em;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(0,255,245,.2);display:flex;align-items:center;gap:10px;}
+.char-group-title::before{content:'';display:inline-block;width:3px;height:1em;background:var(--neon-cyan);border-radius:1px;}
+.char-group-count{font-size:.65rem;color:rgba(0,255,245,.35);font-family:'Share Tech Mono',monospace;}
+/* 소속별 카드 — 작은 정사각형 */
+.char-group-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;}
+.char-group-card{border:1px solid var(--border);background:var(--panel);cursor:pointer;transition:all .22s;position:relative;overflow:hidden;}
+.char-group-card::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 50%);pointer-events:none;}
+.char-group-card:hover{border-color:var(--neon-cyan);transform:translateY(-3px);box-shadow:0 0 16px rgba(0,255,245,.12);}
+.char-group-face{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;}
+.char-group-face-ph{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(0,255,245,.05),rgba(180,79,255,.05));font-size:1.8rem;color:rgba(0,255,245,.2);}
+.char-group-info{position:absolute;bottom:0;left:0;right:0;padding:6px 7px;z-index:2;}
+.char-group-name{font-family:'Orbitron',monospace;font-size:.6rem;color:var(--neon-cyan);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;}
+.char-group-gender{font-family:'Share Tech Mono',monospace;font-size:.52rem;padding:1px 5px;border:1px solid;display:inline-block;}
+
 /* 캐릭터 필터 드롭다운 */
 .char-filter-wrap{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
 .char-dropdowns{display:flex;gap:12px;flex-wrap:wrap;}
@@ -535,7 +557,7 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
   <p class="section-label">🗂 // CATEGORIES</p>
   <div class="cat-grid">
     <a class="cat-card" onclick="goPage('page-chars');return false;" href="#">
-      <div class="cat-id">CAT-01</div><div class="cat-name">🎨 캐릭터</div>
+      <div class="cat-id">CAT-01</div><div class="cat-name">🎨 캐릭터 목록</div>
       <div class="cat-desc">자작 캐릭터 프로필 DB</div><span class="cat-arrow">›</span>
     </a>
     <a class="cat-card" onclick="goPage('page-world');return false;" href="#">
@@ -568,65 +590,81 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 <div class="page" id="page-chars">
   <div class="sys-bar"><span><span class="sys-dot"></span>SYSTEM ONLINE</span><span>WIKI_ARCHIVE v2.0</span><span>NODE: ACTIVE</span></div>
   <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
-  <h2 class="page-title">🎨 CHARACTER DATABASE</h2>
+  <h2 class="page-title">🎨 캐릭터 목록</h2>
   <p class="page-sub">// 등록된 자작 캐릭터 목록 //</p>
-  <div class="char-filter-wrap">
-    <input class="filter-input" type="text" placeholder="// 캐릭터 검색..." id="char-search" oninput="renderChars()"/>
-    <div class="char-dropdowns">
-      <div class="char-dropdown-group">
-        <label class="char-dropdown-label">성별</label>
-        <select class="char-dropdown" id="filter-gender" onchange="renderChars()">
-          <option value="all">전체</option>
-          <option value="남">♂ 남</option>
-          <option value="여">♀ 여</option>
-          <option value="무">◌ 무</option>
-          <option value="기타">◈ 기타</option>
-        </select>
-      </div>
-      <div class="char-dropdown-group">
-        <label class="char-dropdown-label">소속</label>
-        <select class="char-dropdown" id="filter-group" onchange="renderChars()">
-          <option value="all">전체</option>
-          <optgroup label="🏘️ 마을과 도시">
-            <option>검은숲 피신지역</option><option>던전마을</option><option>머쉬룸</option>
-            <option>매너스</option><option>매그누스</option><option>몬타이나</option>
-            <option>바구스</option><option>바다궁전</option><option>세렌치움</option>
-            <option>심해왕국</option><option>우리라스</option><option>테라</option>
-            <option>팩펑크</option>
-          </optgroup>
-          <optgroup label="⛺ 무리">
-            <option>루버스 무리</option><option>바른 무리</option><option>앤마 리바스 무리</option>
-            <option>오아나 무리</option><option>캔치 무리</option><option>크레먼 무리</option>
-          </optgroup>
-          <optgroup label="✨ 천계와 하계">
-            <option>천계</option><option>하계</option>
-          </optgroup>
-          <optgroup label="🌐 모임">
-            <option>결계 수호자</option><option>아홀로틀스</option><option>어스피어</option>
-            <option>엑스플러</option><option>코즈미언</option><option>해적</option>
-          </optgroup>
-          <optgroup label="📦 기타">
-            <option>검은숲</option><option>기타</option><option>다른 세계</option>
-            <option>낙오자</option><option>모르튠 연구소</option><option>방랑자</option>
-            <option>사막궁전</option><option>신</option><option>야생</option>
-            <option>우주</option><option>지하던전</option><option>탑</option>
-          </optgroup>
-        </select>
-      </div>
-      <div class="char-dropdown-group">
-        <label class="char-dropdown-label">직책</label>
-        <select class="char-dropdown" id="filter-role" onchange="renderChars()">
-          <option value="all">전체</option>
-          <option>경비</option><option>귀족</option><option>몬스터</option>
-          <option>방랑자</option><option>부관리자</option><option>상인</option>
-          <option>수호자</option><option>신의 대리인</option><option>없음</option>
-          <option>연구자(과학자)</option><option>주민</option><option>총관리자</option>
-        </select>
+
+  <!-- 뷰 전환 버튼 -->
+  <div class="char-view-btns">
+    <button class="char-view-btn active" id="btn-view-all" onclick="setCharView('all')">전체</button>
+    <button class="char-view-btn" id="btn-view-group" onclick="setCharView('group')">소속별로</button>
+  </div>
+
+  <!-- 전체 뷰 -->
+  <div id="chars-view-all">
+    <div class="char-filter-wrap">
+      <input class="filter-input" type="text" placeholder="// 캐릭터 검색..." id="char-search" oninput="renderChars()"/>
+      <div class="char-dropdowns">
+        <div class="char-dropdown-group">
+          <label class="char-dropdown-label">성별</label>
+          <select class="char-dropdown" id="filter-gender" onchange="renderChars()">
+            <option value="all">전체</option>
+            <option value="남">♂ 남</option>
+            <option value="여">♀ 여</option>
+            <option value="무">◌ 무</option>
+            <option value="기타">◈ 기타</option>
+          </select>
+        </div>
+        <div class="char-dropdown-group">
+          <label class="char-dropdown-label">소속</label>
+          <select class="char-dropdown" id="filter-group" onchange="renderChars()">
+            <option value="all">전체</option>
+            <optgroup label="🏘️ 마을과 도시">
+              <option>검은숲 피신지역</option><option>던전마을</option><option>머쉬룸</option>
+              <option>매너스</option><option>매그누스</option><option>몬타이나</option>
+              <option>바구스</option><option>바다궁전</option><option>세렌치움</option>
+              <option>심해왕국</option><option>우리라스</option><option>테라</option>
+              <option>팩펑크</option>
+            </optgroup>
+            <optgroup label="⛺ 무리">
+              <option>루버스 무리</option><option>바른 무리</option><option>앤마 리바스 무리</option>
+              <option>오아나 무리</option><option>캔치 무리</option><option>크레먼 무리</option>
+            </optgroup>
+            <optgroup label="✨ 천계와 하계">
+              <option>천계</option><option>하계</option>
+            </optgroup>
+            <optgroup label="🌐 모임">
+              <option>결계 수호자</option><option>아홀로틀스</option><option>어스피어</option>
+              <option>엑스플러</option><option>코즈미언</option><option>해적</option>
+            </optgroup>
+            <optgroup label="📦 기타">
+              <option>검은숲</option><option>기타</option><option>다른 세계</option>
+              <option>낙오자</option><option>모르튠 연구소</option><option>방랑자</option>
+              <option>사막궁전</option><option>신</option><option>야생</option>
+              <option>우주</option><option>지하던전</option><option>탑</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="char-dropdown-group">
+          <label class="char-dropdown-label">직책</label>
+          <select class="char-dropdown" id="filter-role" onchange="renderChars()">
+            <option value="all">전체</option>
+            <option>경비</option><option>귀족</option><option>몬스터</option>
+            <option>방랑자</option><option>부관리자</option><option>상인</option>
+            <option>수호자</option><option>신의 대리인</option><option>없음</option>
+            <option>연구자(과학자)</option><option>주민</option><option>총관리자</option>
+          </select>
+        </div>
       </div>
     </div>
+    <div class="neon-line"></div>
+    <div class="char-grid" id="char-grid"></div>
   </div>
-  <div class="neon-line"></div>
-  <div class="char-grid" id="char-grid"></div>
+
+  <!-- 소속별 뷰 -->
+  <div id="chars-view-group" style="display:none;">
+    <div class="neon-line"></div>
+    <div id="char-group-list"></div>
+  </div>
 </div>
 
 <!-- ════════════════════════════════════════
@@ -1123,7 +1161,16 @@ function goPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
-  if (id === 'page-chars')     renderChars();
+  if (id === 'page-chars'){
+    charView = 'all';
+    const allEl = document.getElementById('chars-view-all');
+    const grpEl = document.getElementById('chars-view-group');
+    if(allEl) allEl.style.display = '';
+    if(grpEl) grpEl.style.display = 'none';
+    document.getElementById('btn-view-all')?.classList.add('active');
+    document.getElementById('btn-view-group')?.classList.remove('active');
+    renderChars();
+  }
   if (id === 'page-world')     renderWorld();
   if (id === 'page-links')     renderLinks();
   if (id === 'page-history')   renderHistory();
@@ -1204,6 +1251,16 @@ function checkPw() {
 /* ════════════════════════════════════════
    ████  캐릭터  ████
 ════════════════════════════════════════ */
+let charView = 'all'; // 'all' | 'group'
+
+function setCharView(view){
+  charView = view;
+  document.getElementById('btn-view-all').classList.toggle('active', view==='all');
+  document.getElementById('btn-view-group').classList.toggle('active', view==='group');
+  document.getElementById('chars-view-all').style.display   = view==='all'   ? '' : 'none';
+  document.getElementById('chars-view-group').style.display = view==='group' ? '' : 'none';
+  if(view==='group') renderCharsGroup();
+}
 function renderChars() {
   const q = (document.getElementById('char-search')?.value||'').toLowerCase();
   const fGender = document.getElementById('filter-gender')?.value || 'all';
@@ -1228,6 +1285,58 @@ function renderChars() {
     <button class="add-empty-btn" onclick="alert('CHARACTERS 배열에 항목을 추가하세요!')">
       <span>＋</span>NEW CHARACTER
     </button>`;
+}
+
+function renderCharsGroup(){
+  const container = document.getElementById('char-group-list');
+  if(!container) return;
+
+  // 소속별로 그룹화
+  const groupMap = {};
+  const noGroup = [];
+
+  CHARACTERS.forEach(c => {
+    const role = c.role && c.role !== '—' && c.role.trim() !== '' ? c.role.trim() : null;
+    if(role){
+      if(!groupMap[role]) groupMap[role] = [];
+      groupMap[role].push(c);
+    } else {
+      noGroup.push(c);
+    }
+  });
+
+  const cardHTML = (c) => `
+    <div class="char-group-card" onclick="openCharModal('${c.id}')">
+      ${c.face
+        ? `<img class="char-group-face" src="${c.face}" alt="${c.name}"/>`
+        : `<div class="char-group-face-ph">👤</div>`}
+      <div class="char-group-info">
+        <div class="char-group-name">${c.name}</div>
+        <span class="char-group-gender ${c.genderClass}">${c.gender}</span>
+      </div>
+    </div>`;
+
+  let html = Object.entries(groupMap).map(([role, chars])=>`
+    <div class="char-group-section">
+      <div class="char-group-title">
+        ${role}
+        <span class="char-group-count">${chars.length}명</span>
+      </div>
+      <div class="char-group-grid">${chars.map(cardHTML).join('')}</div>
+    </div>`).join('');
+
+  if(noGroup.length > 0){
+    html += `
+      <div class="char-group-section">
+        <div class="char-group-title" style="color:rgba(0,255,245,.35);border-bottom-color:rgba(0,255,245,.1);">
+          소속없음
+          <span class="char-group-count">${noGroup.length}명</span>
+        </div>
+        <div class="char-group-grid">${noGroup.map(cardHTML).join('')}</div>
+      </div>`;
+  }
+
+  container.innerHTML = html;
 }
 function openCharModal(id){
   const c=CHARACTERS.find(x=>x.id===id); if(!c)return;
