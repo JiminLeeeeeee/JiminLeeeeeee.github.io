@@ -304,6 +304,45 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .wd-group{margin-bottom:32px;}
 .wd-group-title{font-family:'Orbitron',monospace;font-size:.78rem;color:var(--neon-purple);letter-spacing:.15em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(180,79,255,.25);display:flex;align-items:center;gap:8px;}
 .wd-group-title::before{content:'';display:inline-block;width:3px;height:1em;background:var(--neon-purple);border-radius:1px;}
+/* ══ 마을 탭 ══ */
+/* 막대 차트 */
+.town-chart{margin-bottom:32px;border:1px solid var(--border);background:var(--panel);padding:20px 20px 12px;}
+.town-chart-title{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.25em;color:rgba(0,255,245,.5);margin-bottom:16px;}
+.town-chart-bars{display:flex;gap:6px;align-items:flex-end;height:140px;overflow-x:auto;padding-bottom:4px;}
+.town-bar-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:52px;}
+.town-bar-wrap{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:110px;width:100%;}
+.town-bar-count{font-family:'Orbitron',monospace;font-size:.6rem;color:var(--neon-cyan);margin-bottom:3px;}
+.town-bar-fill{width:70%;background:linear-gradient(to top,var(--neon-cyan),rgba(0,255,245,.3));border-radius:2px 2px 0 0;min-height:4px;transition:height .4s ease;}
+.town-bar-label{font-family:'Share Tech Mono',monospace;font-size:.55rem;color:rgba(0,255,245,.45);text-align:center;writing-mode:vertical-rl;transform:rotate(180deg);height:60px;overflow:hidden;line-height:1.2;}
+/* 마을 카드 */
+.town-cards{display:flex;flex-direction:column;gap:20px;}
+.town-card{border:1px solid rgba(180,79,255,.2);background:rgba(180,79,255,.03);}
+.town-card-header{padding:14px 18px 0;border-bottom:1px solid rgba(180,79,255,.15);}
+.town-card-name-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:12px;}
+.town-card-name{font-family:'Orbitron',monospace;font-size:1rem;color:#d4aaff;font-weight:700;}
+.town-card-type{font-family:'Share Tech Mono',monospace;font-size:.6rem;padding:2px 8px;border:1px solid rgba(180,79,255,.35);color:rgba(180,79,255,.7);}
+.town-card-count{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:rgba(0,255,245,.45);margin-left:auto;}
+.town-card-body{display:grid;grid-template-columns:280px 1fr;gap:0;}
+@media(max-width:660px){.town-card-body{grid-template-columns:1fr;}}
+/* 갤러리 */
+.town-gallery{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;padding:14px;border-right:1px solid rgba(180,79,255,.15);}
+.town-gallery-slot{aspect-ratio:1/1;overflow:hidden;cursor:pointer;position:relative;}
+.town-gallery-slot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
+.town-gallery-slot:hover img{transform:scale(1.05);}
+.town-gallery-empty{display:flex;align-items:center;justify-content:center;background:rgba(180,79,255,.04);border:1px dashed rgba(180,79,255,.12);}
+.town-gallery-empty span{font-size:1.2rem;opacity:.3;}
+/* 마을 정보 */
+.town-info{padding:14px 18px;display:flex;flex-direction:column;gap:8px;}
+.town-info-row{display:flex;gap:10px;font-size:.8rem;align-items:flex-start;}
+.town-info-key{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:rgba(180,79,255,.5);min-width:64px;flex-shrink:0;padding-top:1px;}
+.town-info-val{color:rgba(224,247,247,.72);line-height:1.75;}
+/* 주민 */
+.town-residents{margin-top:8px;border-top:1px solid rgba(180,79,255,.1);padding-top:10px;}
+.town-residents-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:rgba(0,255,245,.4);letter-spacing:.15em;margin-bottom:8px;}
+.town-residents-list{display:flex;flex-wrap:wrap;gap:5px;}
+.town-resident-tag{font-family:'Share Tech Mono',monospace;font-size:.65rem;padding:3px 9px;border:1px solid rgba(0,255,245,.18);color:rgba(0,255,245,.65);cursor:pointer;transition:all .15s;}
+.town-resident-tag:hover{border-color:var(--neon-cyan);color:var(--neon-cyan);background:rgba(0,255,245,.06);}
+
 /* 장소 모달 재사용 */
 .pmodal-body{padding:28px;}
 .pmodal-name{font-family:'Orbitron',monospace;font-size:1.3rem;color:var(--neon-purple);margin-bottom:4px;}
@@ -1027,7 +1066,7 @@ const CHARACTERS = [
   { id:'CHR-126', name:"레코", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'파자마빌런님', nameColor:null, age:'—', height:'—', role:"머쉬룸", world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-127', name:"소야", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'다비스님', nameColor:null, age:'—', height:'—', role:"머쉬룸", world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-128', name:"G0-1", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'루나몬님', nameColor:null, age:'—', height:'—', role:"팩펑크", world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-129', name:"크레아 토르", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'단냥이님', nameColor:null, age:'—', height:'—', role:"사막궁전", world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-129', name:"크레아 토르", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'단냥이님', nameColor:null, age:'—', height:'—', role:"야생", world:'다단티아', tags:["주민", "사막궁전(과거)"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-130', name:"리시아 로어", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"우주", world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-131', name:"스페이더스", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'리프라님', nameColor:null, age:'—', height:'—', role:"우주", world:'다단티아', tags:["신의 대리인"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-132', name:"블랙스타", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"우주", world:'다단티아', tags:["신의 대리인", "없음"], personality:'—', background:'—', abilities:'—' },
@@ -1140,7 +1179,7 @@ const CHARACTERS = [
   { id:'CHR-239', name:"팬텀 댈리아", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'라니님', nameColor:null, age:'—', height:'—', role:"던전마을", world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-240', name:"아일리", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'강멍고냥님', nameColor:null, age:'—', height:'—', role:"검은숲 피신지역", world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-241', name:"오뉴츠", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'해시님', nameColor:null, age:'—', height:'—', role:"우주", world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-242', name:"파라네우라", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"사막궁전", world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-242', name:"파라네우라", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"우리라스", world:'다단티아', tags:["주민", "사막궁전(과거)"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-243', name:"카이텔", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"매너스", world:'다단티아', tags:["총관리자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-244', name:"소울체인", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'개다래님', nameColor:null, age:'—', height:'—', role:"결계 수호자", world:'다단티아', tags:["수호자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-245', name:"나이트메어", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'토리우스님', nameColor:null, age:'—', height:'—', role:"검은숲", world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
@@ -1300,7 +1339,25 @@ const LOCATIONS = {
         ]
       },
     ],
-    towns: [],
+    towns: [
+      /* 마을 데이터:
+         roleKey: CHARACTERS.role 매칭 키
+         gallery: 이미지 URL 배열 (4개 슬롯, 없으면 null) */
+      { id:'TWN-01', name:'검은숲 피신지역', roleKey:'검은숲 피신지역', type:'피신지역', desc:'검은 숲이 점점 잠식함에 따라 기존에 살던 주민들이 피신지역을 만들어 주거지를 옮겼다.', climate:'안개로 가려진 작은 섬 위, 바다 밑 땅', feature:'바다쪽에 큰 물방울 같은 결계가 마을을 지키고 산소를 공급해 줌. 섬은 안개로 보호되어 눈에 띄지 않음.', notable:'결계가 있다 해도 바다 속이라 좀 축축하다.', gallery:[null,null,null,null] },
+      { id:'TWN-02', name:'던전마을', roleKey:'던전마을', type:'마을', desc:'던전 입구에 있는 미로를 빠져나오면 보이는 마을. 던전과 이어져 있으며 가끔 던전 몬스터가 올라오기도 한다.', climate:'던전 속에 있어 해를 볼 수 없고 마을 자체도 좀 어둡다.', feature:'다른 마을보다 경비 수가 많음. 입구 미로 안내자 존재. 죽인 몬스터에게서 얻은 소재를 다른 마을에 팔기도 함.', notable:'어쩌다 던전 안에 마을이 생겼는지는 아무도 모른다.', gallery:[null,null,null,null] },
+      { id:'TWN-03', name:'도시 매그누스', roleKey:'매그누스', type:'도시', desc:'다단티아에 있는 유일한 도시이며 규모가 제일 크다. 아파트와 주택이 지어져 있으며 연구소와 훈련장 등 다양한 시설이 있다.', climate:'건조하지만 사막만큼은 아니다. 도시 전체에 결계가 쳐져 자연재해를 막아준다.', feature:'결계의 동력원은 바다신의 심장. 치안 유지를 위한 경비 다수. 과거 계급제도는 현재 폐기됨.', notable:'결계 덕분에 폭풍·화산재·홍수 등 자연재해로부터 보호받는 도시.', gallery:[null,null,null,null] },
+      { id:'TWN-04', name:'매너스', roleKey:'매너스', type:'마을', desc:'온화한 기후의 작은 마을. 늪지 옆에 있어서 살짝 습하다.', climate:'온화하고 습함', feature:'근처 테라 마을·버섯 마을을 제외하면 다른 마을과 교류가 거의 없는 자급자족 스타일.', notable:'', gallery:[null,null,null,null] },
+      { id:'TWN-05', name:'머쉬룸', roleKey:'머쉬룸', type:'마을', desc:'버섯섬에 존재하는 마을. 이름 그대로 버섯이 많고 습하며 비도 자주 온다.', climate:'습하고 비가 잦음', feature:'버섯모양의 집이 많고 큰 버섯 안을 파서 주거지로 삼기도 함. 작물 재배에 부적합해 균류·곤충·열매 등을 먹고 산다.', notable:'', gallery:[null,null,null,null] },
+      { id:'TWN-06', name:'몬타이나', roleKey:'몬타이나', type:'지저도시', desc:'크루톤이 지하에 사는 자들을 위해 건설한 지저도시.', climate:'지하', feature:'', notable:'', gallery:[null,null,null,null] },
+      { id:'TWN-07', name:'바구스', roleKey:'바구스', type:'마을', desc:'추운 지역의 마을. 다른 마을보다 규모가 크지만 도시인 매그누스보단 작은 편. 나무와 돌로 만든 집이 많고 가끔 이글루가 보인다.', climate:'여름이 짧고 겨울이 긴 지역. 가끔 눈폭풍이 붐.', feature:'기상사항 주의 필요.', notable:'', gallery:[null,null,null,null] },
+      { id:'TWN-08', name:'바다궁전', roleKey:'바다궁전', type:'궁전', desc:'바다 속에 건설된 궁전. 궁전과 마을이 성벽으로 둘러싸여 있다.', climate:'햇빛이 들어오는 곳에 위치', feature:'심해왕국과 다르게 햇빛이 들어오며 다른 마을과 교류가 잦다.', notable:'', gallery:[null,null,null,null] },
+      { id:'TWN-09', name:'사막궁전(과거)', roleKey:'사막궁전(과거)', type:'폐허', desc:'사막에 있던 으리으리한 궁전이었지만 신들의 싸움에 휘말려 순식간에 붕괴되었다. 현재는 버려진 상태.', climate:'사막', feature:'궁전에 있던 왕족은 행방불명. 주변 마을도 폐허가 됨. 일부 생명력이 좋은 주민들은 잔해에서 살아가고 있다.', notable:'', gallery:[null,null,null,null] },
+      { id:'TWN-10', name:'세렌치움', roleKey:'세렌치움', type:'마을', desc:'온화한 기후의 마을. 치유사가 다수 살고 있어서 치유의 마을이라고도 불린다.', climate:'온화함', feature:'근처에 꿈의 강이 있으며 마을 자체도 신비로운 분위기. 나무를 많이 사용한 집과 움막이 많다.', notable:'', gallery:[null,null,null,null] },
+      { id:'TWN-11', name:'심해왕국', roleKey:'심해왕국', type:'왕국', desc:'빛이 거의 들지 않는 심해에 있는 왕국. 현재는 왕권이 교체되어 어수선한 상황.', climate:'심해. 빛나는 광석·풀 등을 광원으로 사용해 밝은 편.', feature:'주민 대부분 물 속 호흡 가능. 지상에 나갈 수 있는 주민 수는 적다.', notable:'', gallery:[null,null,null,null] },
+      { id:'TWN-12', name:'우리라스', roleKey:'우리라스', type:'마을', desc:'사막에 위치한 마을. 건조하며 가끔 모래폭풍이 분다.', climate:'건조한 사막', feature:'흙벽돌로 지어진 집이 대부분. 마을 내부에 실험적으로 건설한 온실이 있다.', notable:'', gallery:[null,null,null,null] },
+      { id:'TWN-13', name:'테라', roleKey:'테라', type:'마을', desc:'숲 주변에 자리한 온화한 기후의 마을. 나무가 많아서 나무를 사용한 집이나 가구가 많다.', climate:'온화하고 풍요로운 기후', feature:'풍부한 식물·적당한 기후로 작물·가축 기르기 유용. 마을 주변에 꽃이 많이 피어 좋은 경치를 자랑한다.', notable:'', gallery:[null,null,null,null] },
+      { id:'TWN-14', name:'팩펑크', roleKey:'팩펑크', type:'마을', desc:'절벽 사이에 만들어진 마을. 지각변동으로 생긴 절벽에서 광물·보석이 발견되면서 상인과 광물헌터들이 모여 형성되었다.', climate:'절벽 사이', feature:'철·석탄 등 광물이 풍족. 스팀펑크 풍 기계장치와 로봇이 많다. 집이 절벽 곳곳에 박혀 있고 사이사이에 다리가 놓여져 있다.', notable:'절벽 밑은 보이지 않을 정도로 깊으며 기계 쓰레기가 쌓여있다.', gallery:[null,null,null,null] },
+    ],
     orgs: [],
     misc: [],
   },
@@ -1799,7 +1856,84 @@ function goWorldDetail(id){
       </div>`).join('');
   }
 
-  // 마을 / 조직 탭
+  // 마을 탭 — 차트 + 마을 카드
+  function renderTowns(){
+    const panel = document.getElementById('wdp-towns');
+    const towns = (loc && loc.towns) ? loc.towns : [];
+    if(towns.length === 0){
+      panel.innerHTML = `<div class="wd-empty">// 등록된 마을이 없습니다</div>`; return;
+    }
+
+    // 주민 수 집계 (CHARACTERS.role 기준)
+    const counts = {};
+    towns.forEach(t => {
+      counts[t.roleKey] = CHARACTERS.filter(c => c.role === t.roleKey).length;
+    });
+    const maxCount = Math.max(...Object.values(counts), 1);
+
+    // 막대 차트
+    const chartHTML = `
+      <div class="town-chart">
+        <div class="town-chart-title">🏘️ 마을별 주민 수</div>
+        <div class="town-chart-bars">
+          ${towns.map(t=>{
+            const cnt = counts[t.roleKey]||0;
+            const pct = Math.round((cnt/maxCount)*100);
+            return `
+              <div class="town-bar-item">
+                <div class="town-bar-wrap">
+                  <div class="town-bar-count">${cnt}</div>
+                  <div class="town-bar-fill" style="height:${Math.max(pct,4)}%;"></div>
+                </div>
+                <div class="town-bar-label">${t.name}</div>
+              </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+
+    // 마을 카드
+    const cardsHTML = towns.map(t => {
+      const residents = CHARACTERS.filter(c => c.role === t.roleKey);
+      const cnt = residents.length;
+      const galleryHTML = t.gallery.map((img,i)=>
+        img
+          ? `<div class="town-gallery-slot" onclick="openImgViewer('${img}')"><img src="${img}" alt="사진${i+1}"/></div>`
+          : `<div class="town-gallery-slot town-gallery-empty"><span>📷</span></div>`
+      ).join('');
+      const residentHTML = residents.length > 0
+        ? residents.map(c=>`<span class="town-resident-tag" onclick="openCharModal('${c.id}')">${c.name}</span>`).join('')
+        : `<span style="font-size:.72rem;color:rgba(0,255,245,.2);">등록된 주민 없음</span>`;
+
+      return `
+        <div class="town-card">
+          <div class="town-card-header">
+            <div class="town-card-name-row">
+              <span class="town-card-name">${t.name}</span>
+              <span class="town-card-type">${t.type}</span>
+              <span class="town-card-count">주민 ${cnt}명</span>
+            </div>
+          </div>
+          <div class="town-card-body">
+            <div class="town-gallery">${galleryHTML}</div>
+            <div class="town-info">
+              ${t.climate?`<div class="town-info-row"><span class="town-info-key">기후·환경</span><span class="town-info-val">${t.climate}</span></div>`:''}
+              ${t.desc?`<div class="town-info-row"><span class="town-info-key">설명</span><span class="town-info-val">${t.desc}</span></div>`:''}
+              ${t.feature?`<div class="town-info-row"><span class="town-info-key">특징</span><span class="town-info-val">${t.feature}</span></div>`:''}
+              ${t.notable?`<div class="town-info-row"><span class="town-info-key">비고</span><span class="town-info-val">${t.notable}</span></div>`:''}
+              <div class="town-residents">
+                <div class="town-residents-title">👥 주민 (${cnt}명)</div>
+                <div class="town-residents-list">${residentHTML}</div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    panel.innerHTML = chartHTML + `<div class="town-cards">${cardsHTML}</div>`;
+  }
+  renderTowns();
+
+  // 조직 탭
   function renderWdPlaces(panelId, tab){
     const panel = document.getElementById(panelId);
     if(!loc || !loc[tab] || loc[tab].length===0){
@@ -1816,7 +1950,6 @@ function goWorldDetail(id){
         </div>`).join('')
     }</div>`;
   }
-  renderWdPlaces('wdp-towns','towns');
   renderWdPlaces('wdp-orgs','orgs');
 
   // 기타 설정 패널
