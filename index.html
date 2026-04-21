@@ -325,6 +325,23 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .wd-group{margin-bottom:32px;}
 .wd-group-title{font-family:'Orbitron',monospace;font-size:.88rem;color:var(--neon-purple);letter-spacing:.15em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(180,79,255,.25);display:flex;align-items:center;gap:8px;}
 .wd-group-title::before{content:'';display:inline-block;width:3px;height:1em;background:var(--neon-purple);border-radius:1px;}
+
+/* ══ 조직과 모임 카드형 ══ */
+.org-section{margin-bottom:32px;}
+.org-section-header{margin-bottom:12px;}
+.org-section-title{font-family:'Orbitron',monospace;font-size:.88rem;color:var(--neon-purple);display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid rgba(180,79,255,.2);margin-bottom:10px;}
+.org-section-title::before{content:'';display:inline-block;width:3px;height:1em;background:var(--neon-purple);border-radius:1px;}
+.org-intro{font-size:.8rem;color:rgba(224,247,247,.55);line-height:1.8;padding:10px 14px;background:rgba(180,79,255,.04);border-left:2px solid rgba(180,79,255,.2);margin-bottom:14px;}
+.org-intro-icon{color:rgba(255,220,60,.7);margin-right:6px;}
+.org-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
+.org-card{border:1px solid rgba(180,79,255,.2);background:var(--panel);padding:16px 16px 14px;transition:all .22s;position:relative;overflow:hidden;}
+.org-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(180,79,255,.05),transparent);transition:left .4s;}
+.org-card:hover{border-color:var(--neon-purple);background:rgba(180,79,255,.07);box-shadow:0 0 14px rgba(180,79,255,.1);}
+.org-card:hover::before{left:100%;}
+.org-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.org-card-name{font-family:'Orbitron',monospace;font-size:.85rem;color:#d4aaff;}
+.org-card-badge{font-family:'Share Tech Mono',monospace;font-size:.58rem;padding:2px 7px;border:1px solid rgba(180,79,255,.35);color:rgba(180,79,255,.7);}
+.org-card-desc{font-size:.76rem;color:rgba(224,247,247,.5);line-height:1.7;}
 /* ══ 마을 탭 ══ */
 /* 가로 막대 차트 */
 .town-chart{margin-bottom:32px;border:1px solid var(--border);background:var(--panel);padding:20px 24px;}
@@ -1432,8 +1449,54 @@ const LOCATIONS = {
       { id:'TWN-13', name:'테라', roleKey:'테라', type:'마을', desc:'숲 주변에 자리한 온화한 기후의 마을. 나무가 많아서 나무를 사용한 집이나 가구가 많다.', climate:'온화하고 풍요로운 기후', feature:'풍부한 식물·적당한 기후로 작물·가축 기르기 유용. 마을 주변에 꽃이 많이 피어 좋은 경치를 자랑한다.', notable:'', gallery:[null,null,null,null] },
       { id:'TWN-14', name:'팩펑크', roleKey:'팩펑크', type:'마을', desc:'절벽 사이에 만들어진 마을. 지각변동으로 생긴 절벽에서 광물·보석이 발견되면서 상인과 광물헌터들이 모여 형성되었다.', climate:'절벽 사이', feature:'철·석탄 등 광물이 풍족. 스팀펑크 풍 기계장치와 로봇이 많다. 집이 절벽 곳곳에 박혀 있고 사이사이에 다리가 놓여져 있다.', notable:'절벽 밑은 보이지 않을 정도로 깊으며 기계 쓰레기가 쌓여있다.', gallery:[null,null,null,null] },
     ],
-    orgs: [],
-    misc: [],
+    orgs: [
+      /* 조직과 모임 데이터:
+         group: '조직' | '모임' | '작은무리' | '그 외'
+         groupDesc: 소제목 소개 (💡 아이콘으로 표시)
+         items: 세부 항목 배열 */
+      {
+        group: '조직',
+        groupDesc: '해적, 도적 등 여러 명이 무리를 이루고 활동하며 따로 마을이나 도시에 안착하지 않고 떠돌아 다니거나 특정 장소를 거점으로 삼기도 한다. 대부분의 조직은 계급이 명확하게 구분되어 있으며 부하들은 대장의 명령에 절대적으로 복종한다.',
+        items: [
+          { id:'ORG-001', name:'아홀로틀스', badge:'조직', desc:'바위산에 사는 산적 무리. 호전적이며 행인이나 상인들을 삥뜯으며 연명한다. 총 같은 화기보다 칼이나 발톱을 이용한 전투를 좋아한다. 해적과 사이가 좋지 않다.' },
+          { id:'ORG-002', name:'해적', badge:'조직', desc:'배를 타고 바다를 누비는 무법자들. 무엇이든 약탈하고 빼앗는 해적들도 있는 반면 바다의 균형을 지키는 의적들도 존재한다.' },
+        ]
+      },
+      {
+        group: '모임',
+        groupDesc: '특정한 것을 좋아하거나 마음이 맞는 자들끼리 모인 집단. 마을·도시에 소속되어 있거나 소속이 없는 방랑자 등 다양한 자들이 모임에 가입되어 있으며 모임의 대장은 마음에 드는 자를 스카웃 해갈 수도 있다. 길드와는 다르며 가입과 탈퇴가 대부분 자유롭다.',
+        items: [
+          { id:'ORG-003', name:'어스피어', badge:'모임', desc:"세계를 지키는 자들이 모인 소모임." },
+          { id:'ORG-004', name:'엑스플러', badge:'모임', desc:'탐험을 좋아하는 자들이 모인 모임. 람노서스가 최초로 만들었고 지금은 타그마가 대장으로 활동하고 있다. 단체활동을 하는 일부 단원들을 제외하면 다들 자기 할 일 바빠 서로 만나기 힘들다. 행동대장이 단원 모집에 힘쓰고 있다.' },
+          { id:'ORG-005', name:'코즈미언', badge:'모임', desc:"우주를 주 서식처로 삼거나 우주를 탐험하고 싶은 자들이 가입한 모임. 회장이 우주에서 만나는 사람마다 본인의 의견에 상관없이 닥치는 대로 모임에 넣어버린다는 소문이 있다. 새로 발견한 행성들의 이름은 이들이 짓는다." },
+        ]
+      },
+      {
+        group: '작은무리',
+        groupDesc: '특정 인물을 필두로 만들어진 소규모 무리.',
+        items: [
+          { id:'ORG-006', name:'앤마 리바스 무리', badge:'작은무리', desc:'앤마 리바스를 필두로 만들어진 무리.' },
+          { id:'ORG-007', name:'오아나 무리', badge:'작은무리', desc:'오아나를 필두로 만들어진 무리.' },
+          { id:'ORG-008', name:'크레먼 무리', badge:'작은무리', desc:'크레먼을 필두로 만들어진 무리.' },
+          { id:'ORG-009', name:'루버스 무리', badge:'작은무리', desc:'루버스를 필두로 만들어진 무리.' },
+          { id:'ORG-010', name:'캔치 무리', badge:'작은무리', desc:'캔치를 필두로 만들어진 무리.' },
+          { id:'ORG-011', name:'바른 무리', badge:'작은무리', desc:'바른을 필두로 만들어진 무리.' },
+        ]
+      },
+      {
+        group: '그 외',
+        groupDesc: '',
+        items: [
+          { id:'ORG-012', name:'결계 수호자', badge:'그 외', desc:'다단티아를 수호하는 결계를 지키는 수호자들.' },
+        ]
+      },
+    ],
+    misc: [
+      { title:'대륙', content:'' },
+      { title:'천계와 하계', content:'' },
+      { title:'신', content:'' },
+      { title:'기타 관계도', content:'' },
+    ],
   },
   'WLD-002': {
     placeGroups: [
@@ -2102,7 +2165,32 @@ function goWorldDetail(id){
         </div>`).join('')
     }</div>`;
   }
-  renderWdPlaces('wdp-orgs','orgs');
+  // 조직과 모임 탭 — 카드형 그룹 렌더링
+  function renderOrgs(){
+    const panel = document.getElementById('wdp-orgs');
+    const orgs = (loc && loc.orgs) ? loc.orgs : [];
+    if(orgs.length === 0){
+      panel.innerHTML = `<div class="wd-empty">// 등록된 항목이 없습니다</div>`; return;
+    }
+    panel.innerHTML = orgs.map(g => `
+      <div class="org-section">
+        <div class="org-section-header">
+          <div class="org-section-title">${g.group}</div>
+          ${g.groupDesc ? `<div class="org-intro"><span class="org-intro-icon">💡</span>${g.groupDesc}</div>` : ''}
+        </div>
+        <div class="org-card-grid">
+          ${g.items.map(item => `
+            <div class="org-card">
+              <div class="org-card-top">
+                <span class="org-card-name">${item.name}</span>
+                <span class="org-card-badge">${item.badge}</span>
+              </div>
+              <div class="org-card-desc">${item.desc}</div>
+            </div>`).join('')}
+        </div>
+      </div>`).join('');
+  }
+  renderOrgs();
 
   // 기타 설정 패널
   const misc = (loc && loc.misc) ? loc.misc : [];
