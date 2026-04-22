@@ -321,6 +321,12 @@ footer{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:rgba(0,255
 .wd-place-type{font-family:'Share Tech Mono',monospace;font-size:.58rem;padding:1px 7px;border:1px solid rgba(180,79,255,.3);color:rgba(180,79,255,.7);}
 .wd-place-desc{font-size:.76rem;color:rgba(224,247,247,.42);line-height:1.65;}
 .wd-empty{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(0,255,245,.2);letter-spacing:.15em;padding:32px 0;text-align:center;border:1px dashed rgba(0,255,245,.1);}
+/* misc 갤러리 슬롯 */
+.misc-gallery{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+.misc-gallery-slot{width:200px;height:140px;overflow:hidden;cursor:pointer;border:1px solid rgba(180,79,255,.2);}
+.misc-gallery-slot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
+.misc-gallery-slot:hover img{transform:scale(1.05);}
+.misc-gallery-ph{display:flex;align-items:center;justify-content:center;background:rgba(180,79,255,.04);font-size:1.8rem;color:rgba(180,79,255,.2);}
 /* 장소 그룹 소제목 */
 .wd-group{margin-bottom:32px;}
 .wd-group-title{font-family:'Orbitron',monospace;font-size:.88rem;color:var(--neon-purple);letter-spacing:.15em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(180,79,255,.25);display:flex;align-items:center;gap:8px;}
@@ -1312,8 +1318,8 @@ const WORLDS = [
     name: '다단티아',
     type: '메인세계',
     icon: '🌍',
-    image: 'https://raw.githubusercontent.com/JiminLeeeeeee/JiminLeeeeeee.github.io/main/wiki/Character/World/01.png',
-    mapImage: 'https://raw.githubusercontent.com/JiminLeeeeeee/JiminLeeeeeee.github.io/main/wiki/Character/World/01.png',
+    image: 'https://raw.githubusercontent.com/JiminLeeeeeee/JiminLeeeeeee.github.io/main/wiki/World/01.png',
+    mapImage: 'https://raw.githubusercontent.com/JiminLeeeeeee/JiminLeeeeeee.github.io/main/wiki/World/01.png',
     color: ['#0a1e3a','#0d2e1a','#1a1a0a'],
     tags: ['메인 무대', '대륙', '마법 문명'],
     size: '동서 약 4,000km · 남북 약 2,800km',
@@ -1492,10 +1498,23 @@ const LOCATIONS = {
       },
     ],
     misc: [
-      { title:'대륙', content:'' },
-      { title:'천계와 하계', content:'' },
-      { title:'신', content:'' },
-      { title:'기타 관계도', content:'' },
+      {
+        title: '대륙',
+        content: '<strong>다단티아</strong> — 세계관 대표 대륙. 이 세계관의 모든 주요 사건이 펼쳐지는 무대이다.'
+      },
+      {
+        title: '천계와 하계',
+        content: '<strong>천계 (상계)</strong><br>단절된 차원에 존재하고 있으며 천사들의 허락이 없는 한 상계에 출입할 수 없다. 바닥엔 구름 같은 안개가 퍼져있다. 곳곳에 마치 시계 침 같은 조형물들이 꽃혀 있는 모습이다. 제일 큰 하늘섬 위에 상계의 사당이 존재하며 그 곳에서 천사들이 살고 있다.<br><br><strong>하계 (지옥/마계)</strong><br>단절된 차원에 존재하고 있으며 하계에서 태어난 악마들만이 하계에 자유롭게 출입할 수 있다. 고룡들의 뼈가 곳곳에 널부러져 있다. 가운데 섬에는 서열이 높은 악마들이 사는 악마성이 있으며 성의 북서쪽으로 악마들이 사는 도시가 있다.'
+      },
+      {
+        title: '신',
+        content: '<strong>다단티아 세계의 신</strong><br>다단티아 세계에는 상상을 초월하는 힘을 지닌 신들이 존재한다. 이들은 생명을 창조하거나, 평온한 초원을 단숨에 불타는 화산지대로 바꿔버릴 수 있을 정도로 강력한 권능을 가지고 있다. 하지만 모든 신이 같은 힘을 가진 것은 아니며, 종류 혹은 계층에 따라 행사할 수 있는 권능의 범위도 다르다. 신은 하위신, 중위신, 상위신의 세 계층으로 나뉜다. 이 중에서 세상에 가장 직접적으로 관여하는 존재는 하위신이다.<br><br><strong>🜋 하위신</strong><br>대부분 유기물의 형상, 즉 생물체를 연상시키는 형태를 하고 있다. 부드럽고 유동적인 외형을 가지며, 그 모습은 각 하위신의 성격이나 관할 영역에 따라 달라진다. 때로는 강림체라는 육체를 만들어 몰래 세상에 내려오기도 하고, 아예 본래의 모습 그대로 나타나 큰 혼란을 일으키기도 한다. 정해진 규칙이나 역할에 얽매이지 않고, 매우 자유롭고 변덕스러운 성향을 보인다. 이 때문에 하위신은 예측 불가능한 존재로 여겨지며, 인간들 사이에서는 두려움과 경외의 대상이 되곤 한다.<br><br><strong>🜖 중위신</strong><br>중위신은 하위신들을 감독하고, 신계의 질서를 유지하는 역할을 한다. 하위신들과는 달리 세상에 직접 간섭하지 않으며, 그들의 존재조차도 하위신 중에서 일부만 알고 있다. 총 세 개체가 존재하며 각각 물질, 영혼, 순환의 역할을 맡고 있다.<br><br><strong>🜍 상위신</strong><br>상위신은 구체적인 형체나 개성조차 알 수 없는 존재로, 다단티아 세계 그 자체라고 볼 수 있다. 모든 신의 근원이자 창조주이며, 이 계층에는 오직 단 하나의 존재만 있다. 중위신조차 이 상위신이 실제로 어떤 모습인지, 어디에 존재하는지 알지 못한다. 다만 자신들이 상위신에 의해 만들어졌다는 사실만은 확실하게 인식하고 있다. 상위신은 어떤 구체적인 행동도 하지 않으며, 직접 개입하지도 않는다. 그 존재만으로 세계의 구조와 법칙이 유지되고 있다고 여겨진다. 경외와 신비의 상징으로, 다른 신들 사이에서도 절대적인 위치를 차지한다.'
+      },
+      {
+        title: '기타 관계도',
+        content: '사진을 넣을 예정 / 마인드맵 형식 UI 제작 예정<br><br><span style="font-size:.75rem;color:rgba(0,255,245,.35);">// 이미지 URL을 아래 gallery 배열에 추가하면 표시됩니다</span>',
+        gallery: []
+      },
     ],
   },
   'WLD-002': {
@@ -2199,6 +2218,13 @@ function goWorldDetail(id){
         <div class="wd-section">
           <div class="wd-section-title">// ${m.title}</div>
           <p class="wd-desc">${m.content}</p>
+          ${m.gallery && m.gallery.length > 0 ? `
+          <div class="misc-gallery">
+            ${m.gallery.map((img,i)=> img
+              ? `<div class="misc-gallery-slot" onclick="openImgViewer('${img}')"><img src="${img}" alt="관계도${i+1}"/></div>`
+              : `<div class="misc-gallery-slot misc-gallery-ph"><span>🖼️</span></div>`
+            ).join('')}
+          </div>` : ''}
         </div>`).join('')
     : `<div class="wd-empty">// 등록된 기타 설정이 없습니다</div>`;
 }
