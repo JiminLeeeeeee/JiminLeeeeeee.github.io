@@ -186,8 +186,9 @@ body.modal-open::before{display:none;}
   -webkit-background-clip: unset;
   text-shadow: 1px 0 0 #ea36af, -2px 0 0 #75fa69;
   animation: crt-flicker 0.01s infinite alternate;
+  text-align:center;
 }
-.site-sub{font-size:.82rem;color:var(--text-muted);letter-spacing:.12em;margin-top:10px;}
+.site-sub{font-size:.82rem;color:var(--text-muted);letter-spacing:.12em;margin-top:10px;text-align:center;}
 /* 인트로 패널 - Rebillion 유리 카드 스타일 */
 .terminal{
   border-radius:20px;
@@ -614,7 +615,222 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
 .gmodal-rel-tag{font-size:.64rem;font-weight:700;padding:3px 11px;border-radius:8px;background:rgba(37,99,235,.15);color:#93c5fd;border:1px solid var(--border);cursor:pointer;transition:all .2s;}
 .gmodal-rel-tag:hover{background:rgba(37,99,235,.3);color:#bfdbfe;border-color:var(--border-bright);}
 
-/* 생물·종족 탭 버튼 */
+/* ══ 소태양계 세계관 UI ══ */
+.solar-system{
+  position:relative;
+  width:100%;
+  height:520px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  margin-bottom:0;
+  user-select:none;
+}
+
+/* 동심원 궤도 링 */
+.solar-orbits{
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.solar-orbit-ring{
+  position:absolute;
+  border-radius:50%;
+  border:1px solid rgba(96,165,250,.12);
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+}
+
+/* 행성 공통 */
+.solar-planet{
+  position:absolute;
+  border-radius:50%;
+  cursor:pointer;
+  transition:all .45s cubic-bezier(.34,1.56,.64,1);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  box-shadow:0 0 40px rgba(0,0,0,.5);
+}
+.solar-planet.center{
+  z-index:10;
+  box-shadow:0 0 60px rgba(0,0,0,.6), 0 0 120px rgba(96,165,250,.15);
+}
+.solar-planet.side{
+  z-index:5;
+  filter:brightness(.65) saturate(.7);
+}
+.solar-planet.side:hover{
+  filter:brightness(.85) saturate(.9);
+  transform:translateY(-6px) !important;
+}
+.solar-planet-name{
+  position:absolute;
+  bottom:-28px;
+  left:50%;
+  transform:translateX(-50%);
+  white-space:nowrap;
+  font-size:.75rem;
+  font-weight:700;
+  color:rgba(255,255,255,.7);
+  letter-spacing:.08em;
+  text-align:center;
+}
+.solar-planet.center .solar-planet-name{
+  font-size:.9rem;
+  color:#fff;
+  bottom:-32px;
+}
+.solar-planet-type{
+  position:absolute;
+  top:-24px;
+  left:50%;
+  transform:translateX(-50%);
+  white-space:nowrap;
+  font-size:.6rem;
+  font-weight:700;
+  padding:2px 10px;
+  border-radius:6px;
+  background:rgba(37,99,235,.25);
+  color:#93c5fd;
+  border:1px solid rgba(96,165,250,.3);
+  opacity:0;
+  transition:opacity .3s;
+}
+.solar-planet.center .solar-planet-type{
+  opacity:1;
+}
+
+/* 좌우 화살표 */
+.solar-arrow{
+  position:absolute;
+  top:50%; transform:translateY(-50%);
+  z-index:20;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(96,165,250,.25);
+  border-radius:50%;
+  width:44px; height:44px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  color:rgba(255,255,255,.6);
+  font-size:1.3rem;
+  transition:all .2s;
+  backdrop-filter:blur(6px);
+}
+.solar-arrow:hover{
+  background:rgba(37,99,235,.25);
+  border-color:var(--border-bright);
+  color:#fff;
+  box-shadow:var(--shadow-blue);
+}
+.solar-arrow.left{ left:8px; }
+.solar-arrow.right{ right:8px; }
+.solar-arrow.disabled{
+  opacity:.2;
+  pointer-events:none;
+}
+
+/* 행성 인덱스 도트 */
+.solar-dots{
+  display:flex; justify-content:center; gap:8px;
+  margin-top:52px; margin-bottom:24px;
+}
+.solar-dot{
+  width:7px; height:7px; border-radius:50%;
+  background:rgba(255,255,255,.18);
+  cursor:pointer;
+  transition:all .25s;
+}
+.solar-dot.active{
+  background:var(--blue-glow);
+  box-shadow:0 0 8px rgba(96,165,250,.6);
+  transform:scale(1.3);
+}
+
+/* 행성 정보 패널 */
+.planet-info-panel{
+  display:flex;
+  justify-content:center;
+  margin-bottom:20px;
+  animation:fadeIn .35s ease;
+}
+.pip-top{
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:18px; flex-wrap:wrap;
+}
+.pip-name{
+  font-size:1.6rem; font-weight:800;
+  background:linear-gradient(135deg,#fff,var(--blue-glow));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  letter-spacing:-.02em;
+}
+.pip-type{
+  font-size:.66rem; font-weight:700;
+  padding:4px 12px; border-radius:8px;
+  background:rgba(37,99,235,.22);
+  color:#93c5fd;
+  border:1px solid rgba(96,165,250,.3);
+}
+.pip-id{
+  font-size:.62rem; color:var(--text-muted);
+  letter-spacing:.08em; margin-left:auto;
+}
+.pip-stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:10px; margin-bottom:18px;
+}
+.pip-stat{
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 14px;
+}
+.pip-stat-key{
+  font-size:.62rem; font-weight:700;
+  color:var(--text-muted); letter-spacing:.08em;
+  text-transform:uppercase; margin-bottom:4px;
+}
+.pip-stat-val{
+  font-size:.82rem; font-weight:600;
+  color:var(--text-soft);
+}
+.pip-desc{
+  font-size:.84rem; color:var(--text-soft);
+  line-height:1.9;
+  border-left:2px solid var(--border-bright);
+  padding-left:14px;
+  margin-bottom:18px;
+}
+.pip-tags{
+  display:flex; flex-wrap:wrap; gap:6px;
+  margin-bottom:20px;
+}
+.pip-tag{
+  font-size:.64rem; font-weight:700;
+  padding:3px 10px; border-radius:6px;
+  background:rgba(37,99,235,.15);
+  color:#93c5fd;
+  border:1px solid var(--border);
+}
+.pip-enter-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:.84rem; font-weight:700;
+  color:#fff;
+  background:var(--grad-blue);
+  border:none; border-radius:10px;
+  padding:12px 28px;
+  cursor:pointer;
+  transition:all .25s;
+  box-shadow:var(--shadow-blue);
+  letter-spacing:.04em;
+}
+.pip-enter-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(37,99,235,.45);
+  filter:brightness(1.1);
+}
 .bestiary-tab-row{display:flex;gap:8px;flex-wrap:wrap;}
 .bestiary-tab{
   font-size:.82rem;font-weight:700;letter-spacing:.04em;
@@ -883,23 +1099,14 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
   <button class="back-btn" onclick="goPage('page-home')">← BACK TO HOME</button>
   <h2 class="page-title">🌍 WORLD DATABASE</h2>
   <p class="page-sub">// 메인세계 · 그 외 세계 //</p>
-  <!-- 세계관 필터 버튼 (히어로 위) -->
-  <div class="world-filter-nav">
-    <button class="world-nav-btn active" onclick="setWorldFilter('메인세계',this)" data-filter="메인세계">
-      <span class="wnb-icon">🌍</span>
-      <span class="wnb-label">메인세계</span>
-    </button>
-    <button class="world-nav-btn" onclick="setWorldFilter('그 외 세계',this)" data-filter="그 외 세계">
-      <span class="wnb-icon">🌀</span>
-      <span class="wnb-label">그 외 세계</span>
-    </button>
+
+  <!-- 행성 소태양계 UI -->
+  <div class="solar-system" id="solar-system">
+    <!-- JS로 렌더링 -->
   </div>
 
-  <div class="filter-bar" style="margin-top:0;">
-    <input class="filter-input" type="text" placeholder="// SEARCH WORLD..." id="world-search" oninput="renderWorld()"/>
-  </div>
-  <div class="neon-line"></div>
-  <div class="world-grid" id="world-grid"></div>
+  <!-- 행성 정보 패널 -->
+  <div class="planet-info-panel" id="planet-info-panel"></div>
 </div>
 
 <!-- ════════════════════════════════════════
@@ -1114,36 +1321,36 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
    붉은:   'linear-gradient(90deg, #66023c, #cd1c18)' */
 const CHARACTERS = [
   { id:'CHR-000', name:'나미', gender:'남', genderClass:'gender-m', face:'https://raw.githubusercontent.com/JiminLeeeeeee/JiminLeeeeeee.github.io/main/wiki/Character/face/%EC%BA%90%EC%A0%95%EB%A6%AC6/%EB%82%98%EB%AF%B8.jpg', fullbody:'https://raw.githubusercontent.com/JiminLeeeeeee/JiminLeeeeeee.github.io/main/wiki/Character/fullbody/1/%EB%82%98%EB%AF%B8.png', creator:'페르님', nameColor:null, age:'?', height:'약 1m', role:'테라', role2:null, world:'다단티아', tags:['주민'], personality:'—', background:'테라 마을에 살고 있는 살가운 성격의 주민으로, 항상 부유하는 구슬을 타고 다닌다. 놀리기를 좋아하며 한 번 약점을 잡히면 얄밉게 군다.', abilities:'—' },
-  { id:'CHR-001', name:"리비아", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'용덕님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-001', name:"리비아", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'용덕님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'주로 화산지대 옆에 생활하며 물이 없어도 오랫동안 버틸 수 있다고 한다. 화산지대 옆에서 생활하는지라 평균체온이 28도 정도 된다고 한다.\n\n머리와 가슴팍에 있는 보라색 눈은 실제 눈으로 on/off형식으로 사용가능하지만 시력이 나빠 공격 용도 외에는 사용하지 않는다고 한다.\n\n등에 있는 커다란 눈은 평소에는 등 위에 둥둥 떠있다가 자의로 자신의 앞으로 이동시키거나 뒤로 이동시킬 수 있다.  하지만 내구성이 약해 가시로 몇번 찌르면 터질 수 있다고 한다. 하지만 그만큼 리비아 본인이 소중하게 여긴다고..\n\n꼬리에 있는 불은 항상 타고 있으며 전혀 뜨겁지 않다고 한다.\n\n사교적이고 개방적인 성격이지만 살짝 고집이 있기도 하다. (신체의)눈과 반짝이는 구슬을 좋아하고 모래와 자연재해를 싫어한다.', abilities:'—' },
   { id:'CHR-002', name:"베스커", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'용이님?', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-003', name:"레드킷", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'령초님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-003', name:"레드킷", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'령초님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'치료 하는걸 좋아하지만 그렇다고 남이 다치는 걸 좋아하는게 아니라고 한다.항상 빨간 십자가를 타고 이동하지만 십자가 자체는 그리 높이 날진 못한다. 십가자는 위급할 때 운송수단으로 이용되거나 내구도가 탄탄해 방어막으로도 사용가능하다.머리에 있는 작은 빨간 뿔은 위급할 때 빛을 낼 수 있다. 꽤 밝아서 멀리서도 잘 보인다고 한다.\n\n십자가 모양의 물체를 소환하는 능력이 있다. 레드킷 말고는 이 물체를 부술 수 없으며 소환 시 엄청난 체력을 소모한다고 한다.', abilities:'—' },
   { id:'CHR-004', name:"카르카르마", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'페르님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-005', name:"리퍼러스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-006', name:"나 델라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'파란고양이♡님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-007', name:"나브벨리", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-008', name:"메티오스", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'레시님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-005', name:"리퍼러스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'차분하고 느긋한 성격으로하루 대부분 잠을 자는 것을 시작해서 잠을 자는 것으로 끝나는 ..잠을 좋아하는 드래곤이다.꼬리에 항상 책을 가지고 있고 책 속에는 죽은 자의 이름이 써져 있다는 소문이 있다고 한다..\n\n책과 낫을 좋아하며 잠을 방해받는 것을 엄청 싫어한다.', abilities:'—' },
+  { id:'CHR-006', name:"나 델라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'파란고양이♡님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'피의 드래곤 이라고도 불리우며 피를 조종하는 능력이 있다. 피를 자유자재로 움직여 뽀족한 바늘처럼 만들거나 고리 모양으로도 만들 수 있지만 자신의 피만 사용 가능하다는 단점이 있다.피를 많이 사용하면 빈사상태가 되지만 남의 피를 흡혈해 자신의 피로 만들 수 있다고한다.\n주로 나무 줄기 사이의 그늘에서 휴식하는걸 좋아하지만 금방 화를 잘내는 타입이기도 하다.가끔 자신의 우유부단한 면에 대해서 화를 낼 때도 있다.', abilities:'—' },
+  { id:'CHR-007', name:"나브벨리", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'하고 싶은말 다하는 성격..마음씨는 따쓰하지만 직설적이 말을 잘 해서 의도치 않게 남에게 정신적 데미지를 주기도 한다.\n타오르는 파란색 불꽃은 마치 동물의 털처럼 부드럽게 움직인다.공간을 이동하는 능력이 있어 대륙간 이동이나 더 나아가 항성간 이동도 가능하다그리고 공간이동을 할 때는 꼬리 뒤쪽으로 반짝이는 물체가 우수수 생겨 마치 별동별이 떨어지는 듯한 느낌을 준다.', abilities:'—' },
+  { id:'CHR-008', name:"메티오스", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'레시님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'진실을 관장하는 드래곤이라 불리우며 다른 드래곤들 사이에 주술사 같은 존재로 통하고 있는 편.\n대상이 말하는 문장 한마디 한마디가 진실 혹은 거짓인지 판단할 수 있는 능력이 있다. 하지만 독립적인 성향을 버리지 못하고 지금은 다른 무리와 떨어져 혼자 살고 있다고 한다... 가끔씩 진실을 찾고 싶은 자들이 메티오스를 찾아오는 경우도 있는데, 처음엔 거의 반사적으로 거절을 하긴 하지만 그들이 자신을 찾아오게 된 사정을 들을때면 어쩔 수 없이 진실을 알려준다고..\n\n느긋하게 구름을 보는걸 좋아한다고 한다.하지만 비구름은 싫어한다.', abilities:'—' },
   { id:'CHR-009', name:"바아구스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'판타지용용님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-010', name:"다이아날드", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레시님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-011', name:"리미널", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'에릴님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-010', name:"다이아날드", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레시님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'탄생의 기원이 다이아와 에메랄드가 합쳐서 탄생했다는 전설이 있던 드래곤.모험심이 강해 세계 곳곳을 탐험하길 좋아하고 그 중에 마음에 들었던 장소를 머리속에 마킹해놓고 매년 찾아오는 것을 즐긴다.\n\n보석을 모으는 취미가 있고 그 중에서 푸른빛의 다이아와 초록빛의 에메랄드를 제일 좋아한다고한다.', abilities:'—' },
+  { id:'CHR-011', name:"리미널", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'에릴님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'통칭 \'꿈의 신\'이라고 불리우는 코시마가 만들어낸 창조물. 꿈을 싣을 강 \'드림리버\'의 지키미이자 꿈을 관장하는 신의 하수인 중 한명이였지만 신에 대한 반란을 꿈꾸던 무리에 합류했었고 그 때문에 자격을 박탈당해 지금은 평범한 드래곤1 정도로 살고 있다.\n\n신과의 전쟁 때 많은 동료를 잃었고 그 때문에 트라우마가 생겨 지금은 혼자사는 것을 좋아하고 새로운 동료를 사귀는걸 극도로 싫어한다.\n\n크레아 토르와 안면이 있다고 한다.예전 전쟁이 한창이던 때 치명상을 입은 리미널은 멀리 사막궁전으로 도망쳤었고 크레아 토르는 다친 그를 궁전에 숨겨줬다고 한다.하지만 궁전에 숨은 리미널을 발견한 코시마는 궁전과 그 일대를 잿더미로 만들어버리고 그 과정에서 둘은 어쩔수 없이 궁전을 버리고 피신했어야 했고 그 과정에서 둘은 헤어졌다고 한다.\n\n자신의 창조주를 극도로 싫어한다.', abilities:'—' },
   { id:'CHR-012', name:"베그루스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'랑이님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-013', name:"라턴", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'폽프님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-014', name:"곤고", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'순구름님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-013', name:"라턴", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'폽프님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'두개골뼈를 뒤집어쓴 정체모를 드래곤. 과거에 대한 기억이 모두 지워진 채 묘지에서 깨어났다.\n\n현재는 자신의 과거에 대한 단서를 모으기 위해 세계를 돌아다니고 있다.\n\n여담으로 꼬리가 없다.', abilities:'—' },
+  { id:'CHR-014', name:"곤고", gender:'남', genderClass:'gender-m', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B3%A4%EA%B3%A0/%25EA%25B3%25A4%25EA%25B3%25A0.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B3%A4%EA%B3%A0/1603859174139.png?raw=true', creator:'순구름님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'원혼에게 잠식당해 이중인격적인 모습을 보인다.어릴 적 자신 보다 큰 포식자에게 잡아먹힐 위기에 쳐했었지만 어느 떠돌이 원혼이 구해주었다. 원혼은 곤고에게 팔을 주었고 다리가 없이 반쪽이 된 몸을 일으켜 세워줄 능력을 갖게 해줬다. 하지만 그 대가로 곤고의 몸을 원했기에 곤고는 원혼과의 육체를 향한 치열한 경쟁을 매일 치뤄야 했다. 그 결과 아쉽게도 곤고는 원혼과의 싸움에서 반쯤 졌고 이중인격적인 모습을 보이게 되었다. 곤고의 인격과 원혼의 인격이 깃든 몸이 된 것이다.', abilities:'—' },
   { id:'CHR-015', name:"아우러", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'미캐르님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-016', name:"쿠알푸름", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'Blue_Ring', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-017', name:"티치", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'paming님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-018', name:"버니", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-019', name:"무뉴", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'미루님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-020', name:"레션", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'토리우스님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-019', name:"무뉴", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'미루님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'푸른 불꽃의 꼬리와 붉은 불꽃의 날개를 지니고 있고, 그 불꽃들은 햇빛과 달빛을 받으면 더욱더 불타오른다고 한다.\n\n불꽃 날개를 이용해 하늘을 광속으로 날아다닐 수 있다.\n\n불의를 보면 못 참는 착한 성격이여서 날아다니면서  도움이 필요한 누군가가 없는지 항상 살핀다고 한다.\n상당히 감성적이여서 상대방의 울음에 약하다고 한다.\n\n화나면 발젤리가 빛난다..', abilities:'—' },
+  { id:'CHR-020', name:"레션", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'토리우스님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'마을 이곳저곳을 돌아다니며 특이한 물건을 파는 잡상인이자 마법사.\n\n마을을 돌아다니며 마을주민에게 마법이 담긴 물건이나 조각상, 책 등을 팔고 다닌다. 돈보다는 물물교환을 선호하는 편. \n\n그냥 기념품 정도의 물건부터 불법에 가까운 파괴적인 주술서까지 마음대로 팔기 때문에 마을의 대장들에겐 골치덩이 취급을 받고 있다.\n\n물건은 자신만의 공간마법으로 숨겨다니기 때문에 빼앗기거나 잃어버릴 염려도 없고 꺼내기 전까진 무슨 물건을 가지고 있는지 아무도 모르기에 레션의 공간엔 세계를 멸망시킬 주술서를 가지고 있다는 소문도 돌고 있다.\n\n상인치곤 까불거리는 말투와 의도치않게 남을 평가하는 버릇 덕분에 평이 좋진 않지만 파는 물건의 질이 좋고 종류도 많기엔 상인으로서의 자질은 인정받고 있다.\n\n가끔 마을의 어린이들에게 화려한 마법을 보여주면서 볼거리를 선사해주기도 한다.', abilities:'—' },
   { id:'CHR-021', name:"이천화", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'보도님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-022', name:"콘조 베트", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'비둘기님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["방랑자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-023', name:"라커 킬", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레피오님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-024', name:"나룻 벨", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'레피오님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-023', name:"라커 킬", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레피오님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'낮보다 밤에 활동하는 것을 좋아하며, 주로 낮에 잠을 청한다. 소리에 민감하진 않지만 진동에 민감하다.\n\n꼬리에 지네는 눈만 독자적으로 움직이며 치명적인 독을 가지고 있다. 날개가 작아 비행은 못하지만 활공이나 점프력을 높이는 용도로 사용한다. 옆에 떠다니는 구슬은 구슬에 붙어있는 지네가 뜨게 하는 것이고 그 지네는 라커 킬의 펫이자 본체 자체이기도 하다.또한 쎈 독을 가지고 있다. 라커 킬의 몸에 있는 검은 지네 다리들은 모두 움직일 수 있으며 도구을 짚거나 움반할 수 있다.', abilities:'—' },
+  { id:'CHR-024', name:"나룻 벨", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'레피오님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'맑은 날에 햇빛을 쐬는 것을 좋아한다.\n\n온 몸에 있는 날개를 자유자재로 사용할 수 있으며 날개가 부드러워 밤에 덮고 잘 수 있다.\n\n따스함을 상징하는 머리와 꼬리쪽 날개와 차가움을 상징하는 등쪽 날개가 조화를 이루고 있으며 성격에 영향을 미친다.\n\n꼬리 날개의 한쪽은 과거에 잘못으로 찢어져 버렸다고 한다. 고통에 둔하다.', abilities:'—' },
   { id:'CHR-025', name:"커블 루", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레피오님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-026', name:"아오라우", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'사파이어드래곤님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-027', name:"엘로라샤이", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'페르님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-028', name:"쉐이나", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'달푼님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-029', name:"케슬로", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'무타리님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-030', name:"레반", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'럭시님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-030', name:"레반", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'럭시님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'주로 높은 하늘에서 시간을 많이 보내고 잠도 구름위에서 잔다고 한다..무지개를 만들어내는 능력이 있어 가끔씩 무지개를 여러개 만들고 놀기도 하지만 그렇게 인공적으로 만들어진 무지개는 금세 사라진다는 단점이 있다.팔은 솜사탕이나 뭉게구름 같이 생겼는데, 이 팔은 진짜 팔이 아니고 자신의 마법으로 만들어낸 팔이라고 한다. 하지만 진짜 팔처럼 사용 가능하고 물건을 잡고 던지는 등 동작도 가능하다.\n\n무지개와 보석을 좋아하며 미끌거리는 것을 싫어한다.', abilities:'—' },
   { id:'CHR-031', name:"화이 탄", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'무타리님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-032', name:"퀸 서너비", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'무타리님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-033', name:"톡서", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'galaxy님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
@@ -1151,78 +1358,78 @@ const CHARACTERS = [
   { id:'CHR-035', name:"샤르보니아", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'페르님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-036', name:"칼리스토 번", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'장어님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-037', name:"비비", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'프팅님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-038', name:"더스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'빛나는사파이어님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-038', name:"더스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'빛나는사파이어님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'마치 지구를 연상케하는 무늬와 마치 파도 처럼 출렁이는 뜨거운 꼬리를 가진 드래곤.다른 드래곤들과 어울려 지내기보단 혼자 지내는 것을 좋아해 항상 혼자 생활하고 있다.\n자기가 살고 있는 행성의 대륙이 움직이는 것을 느낄 수 있다.', abilities:'—' },
   { id:'CHR-039', name:"샤마다", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'라임타임님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-040', name:"렛토", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'Nya°Nya님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-040', name:"렛토", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'Nya°Nya님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'특이하게 물 근처에서 사는 전기속성의 드래곤. 주로 호수 주변에서 서식하며 주기적으로 보금자리를 옮겨다닌다. 또 허기질 때마다 호수에 자신의 전류를 흘려보내 호수 내에 있는 물고기들을 기절시켜 먹는 방법을 쓴다. 먹이는 가끔씩 먹지만 한 번에 많은 양을 섭취한다고..', abilities:'—' },
   { id:'CHR-041', name:"프론스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'범물개님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-042', name:"칸레이션", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'블러스트번님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-043', name:"가란티아", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'noon님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-043', name:"가란티아", gender:'기타', genderClass:'gender-n', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B0%80%EB%9E%80%ED%8B%B0%EC%95%84/%25EA%25B0%2580%25EB%259E%2580%25ED%258B%25B0%25EC%2595%2584.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B0%80%EB%9E%80%ED%8B%B0%EC%95%84/1550916472504.png?raw=true', creator:'noon님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'오랜시간동안 자연을 수호하고 있다고 전해지는 요정과 같은 존재.1미터도 채 안되는 작은 몸으로 숲 곳곳을 누비고 다닌다고 한다.', abilities:'—' },
   { id:'CHR-044', name:"포이드릭 게코", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'가뷰앙님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-045', name:"크라오 젠", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-046', name:"워그니스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'LunaSans님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-047', name:"센트피드 블라드 리", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'파란고양이♡님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-048', name:"베놈 사파이어 드래곤", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'횡단보도game님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-049', name:"허니 비", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'콤마님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-050', name:"문 크레센드", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'라니님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-051', name:"네오시아", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'무타리님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-052', name:"도쿠", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'레시님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-053', name:"만티스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'횡단보도님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-054', name:"리리하", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루이짱짱강아지님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-050', name:"문 크레센드", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'라니님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'세계의 균혈을 고치는 역할을 맡은 신의 피조물.초승달이 뜨는 밤에만 나타나 세상에 생긴 균혈과 균형을 맞추고 간다하여 문 크레센드라는 이름이 붙었다.항상 무감정한 표정을 짓고 있고 말을 하지 않아서 도통 무슨 생각을 하는지 알 수 없다고 한다.\n불가피하게 전투가 일어나면 꼬리에 있는 장식을 낫 모양으로 바꿀 수 있고 여차하면 등에 있는 장식을 무기로 사용 가능하다고 한다.', abilities:'—' },
+  { id:'CHR-051', name:"네오시아", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'무타리님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'큰 숲에 살고 있으며 거울 호수를 지키는 수호신 같은 존재.\n\n큰 숲에 있는 생명체가 죽으면 그 혼을 거둬가는 역할을 하고 있다. 거둬간 혼은 거울 호수에 바친다.', abilities:'—' },
+  { id:'CHR-052', name:"도쿠", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'레시님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'바닷가에서 부터 늪지까지 자유분방하게 사는 드래곤.  야행성이여서 주로 밤부터 새벽까지 활동하며 해 뜨는 낮에는 털에 스며든 독이 마른다고 해서 싫어한다.\n\n목부터 꼬리 끝까지 이어진 털 속에는 마비독이 스며들어 있으며 항상 축축하게 유지되고 있다. 털을 건드려 마비독이 묻는 순간 만진 부분은 몇분동안은 움직일 수 없다.\n\n주식은 문어 같은 연체동물류. 잡을 때는 머리에 난 촉수로 휘감아 빠르게 잡아 올린다.', abilities:'—' },
+  { id:'CHR-053', name:"만티스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'횡단보도님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'평원에 살며 뛰어노는걸 좋아한다.보기와는 다르게 튼튼한 몸을 지녀서 왠만한 바위나 나무에 부딫혀도 상처하나 없다고 한다.날개와 홍염의 꼬리는 안그래도 빠른 만티스의 스피드를 더욱 끌어올려주며 목 부분에 난 노란 뿔과 엄지 발톱은 전투시에 쓰인다. 또한 뿔 자체가 작고 날카로워 만티스의 스피드와 함께 사용할 시 평범하게 찌르는 것보다 훨신 더 깊고 치명적인 상처를 남길 수 있다.하지만 싸움 자체를 싫어해서 별로 사용하진 않는다\n\n발랄한 성격으로 친구사귀는걸 좋아하지만 정작 말솜씨와 눈치가 없어 대화 도중에 갑분싸를 만드는 일도 적지 않다고..', abilities:'—' },
+  { id:'CHR-054', name:"리리하", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루이짱짱강아지님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'달빛이 비치면 바다 및 산호가 아름답게 빛나는 달빛산호초 지역에 살고 있으며 낮에는 바다 속에서 밤에는 육지에서 활동한다.혼자 사는 것을 좋아해서 근처에 다른 동료가 오는 것을 꺼려하며 모든 것을 혼자 결정하려 하는 독립적인 성격이다. 그리고 바다 속이 진흙으로 더럽혀지는 것을 무척이나 싫어한다고 한다.\n\n가끔 바다 속을 누비다 베그루스와 마주쳐서 깜짝놀란다고..', abilities:'—' },
   { id:'CHR-055', name:"티어", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'세크럴님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-056', name:"진조 루라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-057', name:"글라디도스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루이님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-057', name:"글라디도스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루이님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'북서쪽 산 절벽에 동굴을 파서 거기서 사는 중이다.하루 종일 아무 것도 안하고 사는게 목표지만 몇년동안 혼자 살다보니 좀 외로움을 타는 듯하다.\n\n과거 연구소에서 얼떨결에 기계날개를 이식받았고, 그 덕에 날개가 없었던 글라디도스는 날 수 있었다.  연구소에선 기계날개에 대해 실험하고 보고서를 작성하려 그의 동의를 받아내려 했지만, 연구소 밑 바닥의 끔찍한 존재들과 우연찮게 마주치는 바람에 뒤도 안돌아보고 도망쳐 지금의 북서쪽 산에서 살게 됐다고 한다.\n\n은근 큰 일에 잘 휘말리는 편이다. 시크하고 차분한 모습을 가졌지만 피와 잔인한 것을 보면 질색한다.\n\n등에 있는 마름모 모양의 기계는 날개를 생성시키는 역할을 하고 햇빛을 쬐서 태양광으로 충전한다.', abilities:'—' },
   { id:'CHR-058', name:"종달", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'크러씌님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-059', name:"이터마우스", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'블러스터번님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-060', name:"펠지아", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-061', name:"모리야", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'블러스트번님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-061', name:"모리야", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'블러스트번님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'입이 있을 자리에 입이 없고, 그 대신 가슴과 꼬리에 입이 달려 있다. 어두운 몸 색을 이용해 주로 밤에 사냥을 하며 자신 보다 작은 생물은 무엇이든지 잡아먹는 식성을 가지고 있다. 몸 곳곳에 난 눈으로 주변을 살피고 빠른 속도로 달려가 먹잇감을 덥친다. 그 후 꼬리와 가슴에 달린 입으로 뼈까지 오도독 씹어먹는다. 먹이를 먹을 수록, 사냥을 하면 할수록 몸을 단련되어 더욱 더 빠르고 민첩한 움직임으로 사냥에 박차를 가한다\n\n왼쪽 팔에 있는 끈은 누군가 그녀가 다쳤을 때 감싸줬던 끈으로 모리야는 그를 기다리며 끈을 풀지않고 지니고 있는 중이다.', abilities:'—' },
   { id:'CHR-062', name:"쿠로바스", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'에릴님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-063', name:"세이렌 몰로", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-064', name:"루커", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'파치레스님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-064', name:"루커", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'파치레스님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'야행성인 그녀는 밤마다 3개의 눈을 빛내면서 먹잇감을 찾는다. 먹잇감이 3개의 붉은 눈을 보는 순간 돌처럼 굳어버리게 만드는 능력을 가지고 있는 것을 보면 무섭고 차가워 보이는 그녀지만 사실 동료들을 살뜰하게 챙기는 엄마 같은 존재이다. 야행성인 탓에 동료들과 많은 대화를 주고 받지 못하지만 동료들은 아침마다 보금자리 앞에 놓인 먹이를 그녀가 놓고 간 것임을 알고있다.', abilities:'—' },
   { id:'CHR-065', name:"벨리제굽", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'용덕이다님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-066', name:"오웨이", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'미캐르님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-067', name:"피어피스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'무파사님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-068', name:"로시렙터", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레시님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-068', name:"로시렙터", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레시님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'특유의 빠른 몸놀림과 날까로운 발톱으로 사냥감을 사냥하는게 주 취미다. 하지만 필요이상으로 재미삼아 사냥을 하는 버릇때문에 주변의 동료들이 골머리를 앓고 있다.\n\n날개는 나는 것에 쓰일 때보다 달릴 때 가속을 돕는 역할로 주로 쓰인다.\n\n앞뒤 생각없이 나서는걸 좋아해서 문제를 자주 일으키지만 어째선지 본인이 다 해결한다고..', abilities:'—' },
   { id:'CHR-069', name:"퍼스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-070', name:"율리아", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'절망숲님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-071', name:"구아", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'페이님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-071', name:"구아", gender:'남', genderClass:'gender-m', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B5%AC%EC%95%84/%25EA%25B5%25AC%25EC%2595%2584.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B5%AC%EC%95%84/export202211082019511870.png?raw=true', creator:'페이님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'심해에 사는 드래곤으로 플랑크톤 같은 작은 생물들을 먹고산다. \n\n먹이 활동 외에는 항상 자고 있으며 잘 때는 머리 끝에 난 촉수의 불이 꺼진다.\n\n소심한 성격으로 누군가의 기척이나 큰 소리를 들으면 놀라서 숨어버린다.\n\n꼬리에 있는 눈은 진짜 눈이며 항상 뒤를 감시하고 있다.', abilities:'—' },
   { id:'CHR-072', name:"소울", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'용기사님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-073', name:"베샤", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'토리우스님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-074', name:"리귤례시아", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-075', name:"리브너", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'엘.X님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-074', name:"리귤례시아", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'평소엔 온화하고 근성있는 성격의 소유자.몸에 여러가지 항체를 지니고 있어 역병이 돌아도 꿋꿋이 살아남을 수 있는 생존력을 지녔다.\n\n예전 마을에 역병이 돌았을 때 자기자신 빼놓고 마을 주민 모두 전멸했었고 그 당시에 충격으로 자신의 항체를 동료들에게 나눠줘야 겠다고 생각했다. 그 후로 자신의 항체가 액상으로 담긴 큰 주사기를 가지고 다닌다고 한다.', abilities:'—' },
+  { id:'CHR-075', name:"리브너", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'엘.X님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'친구의 유품인 분홍 리본을 항상 달고 다니며 더러워지거나 찟어질까 애지중지 한다고 한다.\n\n원랜 매너스 마을에 살고 있었으나 리브너의 몸에서 나는 특유의 피냄새 때문에 자진해서 마을을 나오게 되었다. 현재는 매너스 마을 아랫쪽에 있는 섬에서 혼자 살고 있다.', abilities:'—' },
   { id:'CHR-076', name:"캐이논", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"탑", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-077', name:"구르터스", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"탑", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-077', name:"구르터스", gender:'기타', genderClass:'gender-n', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B5%AC%EB%A5%B4%ED%84%B0%EC%8A%A4/%25EA%25B5%25AC%25EB%25A5%25B4%25ED%2584%25B0%25EC%258A%25A4.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B5%AC%EB%A5%B4%ED%84%B0%EC%8A%A4/1631776729248.png?raw=true', creator:null, nameColor:null, age:'—', height:'—', role:"탑", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'예전에 지어졌던 낡은 첨탑에서 살았던 주인이 그가 임종에 가까워 졌을 때 자신 대신에 첨탑을 지킬 자를 만들었고, 그 것이 구르터스였다.\n\n구르터스가 지키고 있는 첨탑은 낡아서 쓰러지기 직전이지만 자신의 주인이 준 임무를 끝까지 지키기 위해 여전히 첨탑을 지키고 있다.', abilities:'—' },
   { id:'CHR-078', name:"키벨레", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'루샌님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-079', name:"뱅커", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'아르세리아님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-080', name:"불용이", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'용용이7님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-081', name:"글로리", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'꾸릉이와모오기님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-082', name:"돌라플리", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-081', name:"글로리", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'꾸릉이와모오기님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'세렌치움 마을에 거주 중이지만 평소엔 숲에서 나뭇가지에 매달려있기를 즐겨 쉽게 모습을 찾긴 힘들다. \n꼬리 끝에 있는 초록색 발톱을 이용해 고리처럼 나무가지에 걸고 거꾸로 매달릴 수 있다. 이 발톱을 이용해 장시간 나무에 매달려있거나 나무들 사이를 쉽게 넘나들 수 있다. \n\n평소엔 잠이 많아 나무 위에서 자고 있지만 완전히 자고 있는 것이 아닌, 항상 선잠을 자고 있기 때문에 주변에서 이질적인 소리가 들릴 시 바로 깨어서 마을에 알리는 보초역할을 하기도 한다.\n\n특이하게도 체구는 작은데 목청은 엄청 크다고 한다.\n팔에 날개가 돋아있어 날수는 있지만 지구력이 좋지 않아 쉽게 지친다.', abilities:'—' },
+  { id:'CHR-082', name:"돌라플리", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'본래 천기사 였으나 천사와 악마와의 전쟁 때 전사하여 육체를 잃고 영혼은 누군가에 의해 인형으로 옮겨진 상태로 깨어났다.\n\n목에 있는 뱀 같은 크리쳐는 돌라플리의 펫으로 처음 인형의 몸 안에서 깨어났을 때 반겨줬다고 하며 돌라플리도 그 크리쳐가 나쁘지 않은 듯 지금까지도 몸에 감고 대리고 다니고 있다. 펫의 이름은 임시로 \'꼬기\'라고 지어 부르고 있다.\n\n자만심이 가득한 성격이지만 의외로 상대로 잘 분석하며 약점을 잘 파악한다. \n\n하지만 인형이라는 한계 때문에 날붙이에 약하며 그도 그걸 알기에 인형이 된 후로 싸움은 자중하고 대신 펫인 꼬기를 내보내서 싸움을 피하고 있다.\n\n현재는 세렌치움에서 살고 있다.', abilities:'—' },
   { id:'CHR-083', name:"아마샤리스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-084', name:"코이칸", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-085', name:"아루", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'라니님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-086', name:"샤라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'구름이님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-087', name:"랄더", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'열일열매님', nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-088', name:"라니아", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'세크럴님', nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-089', name:"밍큐", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루이님?', nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-087', name:"랄더", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'열일열매님', nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'장난끼가 많아서 다른 동료들에게 장난을 치고 금세 사라진다고 한다. 그 때문에 얼굴도 안보인채 장난만 치고 가는 랄더를 동료들은 골칫거리로 여긴다. \n\n땅에 발을 딛여 걸어다니기보단 날아다니는 것을 좋아하고 바다 옆 절벽을 날아다니면서 산책하는 것을 좋아한다고 한다.', abilities:'—' },
+  { id:'CHR-088', name:"라니아", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'세크럴님', nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'머리에 달려있는 뱀꼬리 같은 머리카락은 총 6가닥이고\n등에 달려있는 회색 날개는 2쌍이다. 그리고 꼬리가 달려있어야 할 부분에 파란불이 달려있다.\n\n 어떤 상황이든 상항 파트너인 초록뱀과 같이 다닌다. 참고로 초록뱀의 이름은 \'초로\'..\n초로는 머리에 올라가 있는걸 좋아한다고 한다.\n\n특수한 능력이 있는데, 꼬리에 있는 파란불에서 마치 거미가 꽁무니에서 실을 발싸하듯 파란 실이 나와 상대를 포박하거나 진짜 거미줄처럼 벽에 붙여놓을 수 있다고 한다. 그리고 떨어져나온 파란 실은 금방 식으면서 점성이 생긴다고 한다.\n\n현재 테라마을 소속이다.', abilities:'—' },
+  { id:'CHR-089', name:"밍큐", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루이님?', nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'주변 동료들에게서 귀엽다는 소리를 자주 듣지만 본인은 귀엽다는 말을 매우 싫어한다. 작고 소중해보이는 외모와 다르게 까칠한 성격이며 자주 투덜된다. 하지만 약속은 꼭 지키는 성격이고 동료애를 중요하게 여긴다.\n\n추운날씨를 매우 싫어하기 때문에 따뜻한 테라마을에 거주하고 있다. 주변 동료들에게 항상 투덜거리지만 동료들은  그 때마다 귀여운 막내아기를 보는 눈으로 얘기를 듣는둥 마는둥 미소를 지으며 자신만 바라보고 있다고 한다. 그리고 밍큐는 그런 시선을 받는 것이 고민라고..\n\n두 쌍의 날개로 제 빠르게 날 수 있고, 위력은 약하지만 브레스를 뿜을 수 있다고 한다.', abilities:'—' },
   { id:'CHR-090', name:"스콜 벤", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루나님', nameColor:null, age:'—', height:'—', role:"우리라스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-091', name:"스콜 페어", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루나님', nameColor:null, age:'—', height:'—', role:"우리라스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-092', name:"네온 무시카", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'피닉님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-093', name:"그리시", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'Blue_Ring님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-092', name:"네온 무시카", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'피닉님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'몸의 반이 야광인 덕분에 밤에도 네온 무시카 주변엔 빛이 환하게 밝혀진다. \n꼬리가 없으며 그 대신 꼬리 역할을 하는 부유물 5개가 꽁무니를 따라 다닌다. 부유물은 자기 마음대로 조종할 수 있으며 몸에 있는 모든 고리들은 기분에 따라서 빛의 밝기를 조정할 수 있다고 한다.\n\n여담으로 파티광이다. \n낮에는 존재감이 별로 없다시피 하지만 밤만 되면 존재감이 극에 달하여 맘만 먹으면 동료들을 모조리 모아올 수 있을 정도다.\n\n현재 매그누스 소속이다.', abilities:'—' },
+  { id:'CHR-093', name:"그리시", gender:'남', genderClass:'gender-m', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B7%B8%EB%A6%AC%EC%8B%9C/%25EA%25B7%25B8%25EB%25A6%25AC%25EC%258B%259C.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B7%B8%EB%A6%AC%EC%8B%9C/%25EA%25B7%25B8%25EB%25A6%25AC%25EC%258B%259C.jpg?raw=true', creator:'Blue_Ring님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'도시 매그누스에서 살고 있으며 은근히 검소한 면이 있어서 도시 모퉁이에 작은 집을 짓고 살고 있다. 광장 공포증이 있다고 하며 그 때문에 안이 넓은 집을 별로 좋아하지 않는다.\n\n친한 동료인 이시우스는 그리시가 충분히 넓은 집을 확보할 수 있음에도 불구하고 외소하고 허름한 집에서 사는 것에 불만이 있는 듯하다. 하지만 그리시는 끝까지 현재의 집을 고집하며 살고 있다고..\n\n돌을 깎아 동료모양 조각상을 만드는 취미가 있으며 그 취미에 하루 대부분의 시간을 투자한다고 한다.\n그리시의 집 안에도 돌조각상으로 가득하다.\n\n2쌍의 날개로 빠른 비행이 가능하며 무겁고 큰 돌을 운반할 정도로 팔과 날개 힘이 쌔다고 한다.', abilities:'—' },
   { id:'CHR-094', name:"홀로", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루나몬님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-095', name:"스콜리몬", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'Hyper_천하태평님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-096', name:"테케아-02", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'리프라님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-097', name:"노커-R01", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'비둘기님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-097', name:"노커-R01", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'비둘기님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'과학자 글라둔의 조수 리본이 만든 걸작으로 전투와 감시를 중심으로 만든 기존의 인공생물들과 다르게 쓰레기 청소와 시체처리 등 폐기물처리 역할로 만들어졌다. \n 전투는 못하나 가벼운 위협 정도는 할 수 있다.\n\n애교많고 겁많은 성격으로 주인인 리본 옆에 항상 붙어 다닌다. 기분이 좋을땐 상대의 얼굴을 입 안에 넣는 버릇이 있다. 그 때마다 주인은 기겁하는 편.\n\n꼬리는 혀와 비슷한 느낌으로, 물체에 꼬리를 대서 물체가 쓰레기인지 시체인지 살아있는 생물인지 구분한다.', abilities:'—' },
   { id:'CHR-098', name:"아낙", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-099', name:"올로토", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'softfoxy님', nameColor:null, age:'—', height:'—', role:"우리라스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-100', name:"레이닉 퍼블루", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레시님', nameColor:null, age:'—', height:'—', role:"심해왕국", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-101', name:"덤뵤", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'_라노 _님', nameColor:null, age:'—', height:'—', role:"심해왕국", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-102', name:"로이", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-103', name:"리니라", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루이님?', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-100', name:"레이닉 퍼블루", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레시님', nameColor:null, age:'—', height:'—', role:"심해왕국", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'화려한 몸 색과 상반된 뾰족한 가시와 손톱을 지닌 레이닉은 과거 심해왕국의 신하들 중 한 명이였으나 왕국의 왕권이 교체된 이후 왕의 압력으로 신하의 자리를 자진해서 내려놓았고 지금은 왕국의 근처의 은신처에서 다른 동료들과 평화롭게 지내고 있는 중이다.\n\n왕권의 교체가 마냥 평화롭게만 되진 않았는지라 그 후유증으로 왕국 건물에 대한 공포증이 생겼다고 한다. \n\n신하의 자리까지 오를 정도의 똑똑한 머리와 특유의 말센스 덕분에 위기모면에 뛰어난 면모를 보인다. \n\n자신 주면의 물의 색을 바꿀 수 있는 능력이 있으며 가끔 동료들을 놀래킬려고 자신의 주변을 피와 같은 붉은색으로 바꾼다고 한다. 하지만 너무 자주 써먹었는지 동료들은 안속아준다.', abilities:'—' },
+  { id:'CHR-101', name:"덤뵤", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'_라노 _님', nameColor:null, age:'—', height:'—', role:"심해왕국", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'원래 이름은 덤보였지만 특유의 \'뵤뵤\'하는 울음소리에 별명으로 덤뵤로 불렸고 나중에는 별명이 본명이 되었다..\n\n물 속, 주로 깊은 심해의 땅부분에 살며 주식으로 작은 물고기나 플랑크톤을 먹지만 고급진 음식도 좋아한다.\n\n말랑한 몸과 작은 몸집 때문에 포식자들에게 잡아먹힐 위험이 커서 보디가드를 여럿 대리고 다닌다.\n\n심해왕국의 귀족과도 같은 위치에 있으며 의외로 돈이 많다.\n\n말 끝에 \'뵤\'를 붙이는게 특징이며 어린아이 같은 말투를 구사한다.', abilities:'—' },
+  { id:'CHR-102', name:"로이", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'탐험하기를 좋아하고 무리에서 항상 앞장서 주변을 밝히는 역할을 도맡아 할 정도로 활동력이 좋고 리더십 또한 좋다고 한다.다른 마을들 보다 비교적 사는 주민의 수가 적은 테라 마을에 살고 있다. 최근 물 부족으로 고민이 많다카더라..\n하늘을 맘껏 비행하는걸 좋아하고 반대로 날지 못하는 비오늘 날을 별로 좋아하지 않는다고 한다.\n머리에 있는 보석은 앞을 밝히는 역할로, 밤이 되었을 때 주변을 밝히는 용도나 자신의 주변을 일정 거리 탐지할 수 있다고 한다.', abilities:'—' },
+  { id:'CHR-103', name:"리니라", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루이님?', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'매너스 마을에 살고 있으며 요리를 잘해서 마을의 주방장 역할을 도맡아 하고 있다. 음식에 누가 독을 타놨을까봐 자신의 만든 요리를 잘 맛보지 않을 정도로 의심 많은 성격이지만 어째선지 요리는 항상 맛있다고 한다.\n\n밤하늘을 날면서 구경하는걸 좋아한다고 한다.\n\n머리에 있는 더듬이는 주변에 비세한 움직임이나 온도를 감지할 수 있다고 한다. 또 작은 물건들을 휘감아 들어올릴 수 있는 약간의 힘도 있다.', abilities:'—' },
   { id:'CHR-104', name:"크로타스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'파자마빌런님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-105', name:"플러드", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'판타지용용님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-106', name:"랜시", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-106', name:"랜시", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'원래는 크고 호기심 많은 드래곤이였지만 시간 폭발에 휘말려 작은 어린아이로 변해버렸다. 작고 힘없어진 랜시였지만 많은 상황을 겪어 보았던 경험과 지혜는 그대로여서 지금은 마을 구석에 아지트를 만들고 동료들과 시간 폭발에 대해 연구하고 있는 중이다. \n\n현재 매너스 마을 소속이다.', abilities:'—' },
   { id:'CHR-107', name:"쿠마", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'라니s님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-108', name:"쏘니루비", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레이립님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-109', name:"릴리얀", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'피핀님?', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-109', name:"릴리얀", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'피핀님?', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'매너스 마을에 친구 쏘니루비, 쿠니와 함께 살고 있으며 마을의 잡일을 솔선수범해서 처리하는 등 친절하기로 소문난 아이다.\n\n아직 어린아이지만 깊이 생각할 줄 알고, 화도 잘 안내지만 몸이 더럽혀지는 것을 싫어해 진흙탕에서 진흙을 잔뜩 묻히고 온 친구들에게 잔소리하기도 한다.\n\n하지만 그 외에는 친구들과 사이좋게 지낼뿐더러 친구 사이에 문제가 나면 주로 릴리얀이 해결해 준다고.\n\n어릴 적 거미 몬스터에게 물린 적 있어 거미와 거미 같은 걸 싫어한다.', abilities:'—' },
   { id:'CHR-110', name:"바실", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'신화님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-111', name:"테미스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'하르님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-112', name:"아이시어", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'무타리님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
@@ -1231,22 +1438,22 @@ const CHARACTERS = [
   { id:'CHR-115', name:"툼", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'절망숲님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-116', name:"슈라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"검은숲 피신지역", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-117', name:"쥬논", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'리프라님', nameColor:null, age:'—', height:'—', role:"검은숲 피신지역", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-118', name:"미로", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-118', name:"미로", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'원래는 눈도 양쪽에 달려있었고 다리도 2쌍이였지만 저주를 받아 현재 모습으로 변했다. \n느긋한 성격이지만 충동적으로 일을 행할 때가 가끔있고 저주를 받은 것도 그가 충동적으로 저주에 관심을 가졌기 때문이다.\n\n오른쪽 눈이 없어진 후로 부족한 시야로 인해 언제 적에게 공격당할지 모르므로 항상 우측통행하는 버릇이 있다.\n\n왼쪽 눈은 총 3개로 상대방에게 미약한 저주를 거는 능력이 있고, 입에서 하얀불을 뿜을 수 있다고 한다.\n여담으로 꼬리가 푹신해서 잘 때면 늘 꼬리를 베고 잔다고 한다.', abilities:'—' },
   { id:'CHR-119', name:"스컬델리", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'solid님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-120', name:"그라들리", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'용용이7님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-120', name:"그라들리", gender:'남', genderClass:'gender-m', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B7%B8%EB%9D%BC%EB%93%A4%EB%A6%AC/%25EA%25B7%25B8%25EB%259D%25BC%25EB%2593%25A4%25EB%25A6%25AC.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B7%B8%EB%9D%BC%EB%93%A4%EB%A6%AC/export202206251533086180.png?raw=true', creator:'용용이7님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'단단한 회색갑옷을 두르고 있고 싸움을 좋아한다.\n\n과거 멋도모르고 검은숲에 들어갔다 괴물에게 죽을뻔했지만 같이 들어갔던 동료가 구출해 검은숲 옆에 있는 지하던전마을에서 치료를 해준 덕에 살아갈 수 있었다.\n\n그 이후로 자신을 지켜주였던 동료와 자신의 갑옷을 소중히 여기게 되었다.  때문에 자기 전엔 항상 갑옷을 닦고 잔다.\n\n언젠간 검은숲을 정복하겠다는 일념으로 던전마을에서 일을 도와주며 매일 수련하고 있다고 한다.\n\n몸 곳곳에 있는 푸른 불꽃은 실제불꽃보다 온도가 낮아서 화상 위험은 없지만, 분노하면 할수록 온도가 높아져 주변의 것을 녹이기 시작한다.\n\n여담으로 불꽃과 함께 눈도 빛이 나는데, 밤에 보면 눈만 빛나는게 좀 무섭다는 동료의 증언이 있다.', abilities:'—' },
   { id:'CHR-121', name:"본스트", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'에쑹님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-122', name:"하이로틀", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'부용냥쓰님', nameColor:null, age:'—', height:'—', role:"아홀로틀스", role2:null, world:'다단티아', tags:["총관리자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-123', name:"벨로론", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'크앙님', nameColor:null, age:'—', height:'—', role:"아홀로틀스", role2:null, world:'다단티아', tags:["부관리자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-124', name:"켐터", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'우주고양이님', nameColor:null, age:'—', height:'—', role:"아홀로틀스", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-125', name:"밋시", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'용냥부님', nameColor:null, age:'—', height:'—', role:"머쉬룸", role2:null, world:'다단티아', tags:["총관리자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-126', name:"레코", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'파자마빌런님', nameColor:null, age:'—', height:'—', role:"머쉬룸", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-125', name:"밋시", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'용냥부님', nameColor:null, age:'—', height:'—', role:"머쉬룸", role2:null, world:'다단티아', tags:["총관리자"], personality:'—', background:'늪에 위치해 있는 버섯마을의 총장이자 분위기 메이커.\n쾌활한 성격이지만 지혜가 많아 많은 자들이 의지한다. 본인은 마을의 총장의 위치를 갖는걸 거부했지만 주변의 애원으로 어쩔 수 없이 총장 역할을 맞았다. 빨리 총장의 자리를 넘길 후계자를 찾고 있는 듯하다.\n\n 양쪽 귀에서 수면가루가 담긴 비누방울을 만들어 낼 수 있다. 방울이 터지면 수면가루가 터져나오는 식.\n하지만 본인도 이 가루에 면역을 아니라서 공격용으로 적극적으로 사용하기 보다는, 비누방울을 제자리에 위치시켜 지뢰를 깔아두는 식으로 사용한다.\n\n어두워지면 낮에 모아놓은 빛을 뿜어 몸의 파란 부분과 발톱에서 빛을 낸다. 야광처럼 보이기도 하지만 낮에 모아두었던 빛이 떨어지면 빛이 나지 않는다.\n\n필살기로 몸을 작은 밋시들로 분리할 수 있다. 죽을 것 같은 치명적인 공격을 받을 때, 자연스럽게 분리된다. 대신 자잘한 공격은 분리가 진행되지 않고 본체 그대로 상처를 입는다. 분리된 작은 밋시들은 다시 모여서 군집을 이루는 것으로 원래대로 돌아갈 수 있다. 작은 밋시 몇마리 없어지는 걸로 본체에 영향을 끼치지 않지만 너무 개체수가 적으면 합쳐지지 않는다.\n밋시가 장수하여 지혜를 모을 수 있게 해주는 필살기로, 밋시가 불사자로 불리는 것도 이 것 때문이다.\n\n\n참고로 버섯가루에 약간 면역이 있다. 재채기를 안하는 정도(...)\n주식은 당연히 버섯. 그 외에도 생선이나 고기, 과일 등 먹을 수 있는건 다 잘먹고 심지어 썩은 음식도 잘 먹는다..\n\n체력이 좋지 못하다. 특히 달리기를 잘 못해서 금방 헥헥거리고 먼 길을 이동할 때 탈 것을 이용하거나 아예 본인은 빠지는 식으로 잘 안움직일려는 성향이 있다.', abilities:'—' },
+  { id:'CHR-126', name:"레코", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'파자마빌런님', nameColor:null, age:'—', height:'—', role:"머쉬룸", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'본래 따뜻한 매너스 마을에 살았다가 습한 곳을 찾아 버섯섬에 있는 버섯마을에 이주해 살고 있다. \n비가 자주 오는 습한 곳을 좋아하며 비가 많이 올수록 기분이 좋아진다고 한다. \n\n항상 공중에 낮게 떠다니고 있어 습지 특유의 질퍽한 바닥을 밟을 일이 없어 동료의 부러움을 사고 있고, 밤이 되면 바다 쪽에서 달을 바라보는 것을 즐긴다고 한다.\n\n머리 위에 있는 갓은 자신의 마법으로 만든 것으로 평소엔 뒤통수랑 연결되어 있지만 원하는 때에 벗고 쓸 수 있다.\n\n갓 맨 위에 연결되어 있는 관은 거의 투명하며 관을 통해 별이 상시로 흘러내리고 있고 관을 빠져나간 별은 서서히 빛을 내다 사라진다. 본인 말로는 대코레이션(?)이라는 모양.', abilities:'—' },
   { id:'CHR-127', name:"소야", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'다비스님', nameColor:null, age:'—', height:'—', role:"머쉬룸", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-128', name:"G0-1", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'루나몬님', nameColor:null, age:'—', height:'—', role:"팩펑크", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-128', name:"G0-1", gender:'기타', genderClass:'gender-n', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/G0-1/G0-1.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/G0-1/export202303181530558820.png?raw=true', creator:'루나몬님', nameColor:null, age:'—', height:'—', role:"팩펑크", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'스팀펑크의 도시라고도 불리는 절벽도시 \'팩펑크\'의 영광스러운 첫번째 인공체로 여기저기 톱니바퀴가 보이는 몸체가 특징이다.\n\n로봇 좀 만든다는 기계공이나 과학자들이 모여 만드었으며, \'완성\'이라는 목표로 만들었기 때문에 움직이는거 외에 다른 특별한 기능이 없다.\n\n하지만 전체적인 외형은 총책임자의 취향이 가미된 듯하다..\n\n입이 없어 말을 할 수 없으나 체스쳐나 글자를 써 자신의 의견을 전달한다.\n\n평소엔 주인으로 선정된 자, 즉 현주인과 같이 생활하고 있으며 심부름을 하는 등 주인의 생활을 도우며 살아가고 있다.\n\n주인의 말에 의하면 기차장난감을 아낀다고 한다. 그 외에도 자동차 장난감류라면 다 좋아하는 것 같으며 어린아이 같은 성향을 보인다.\n\n비가 올 때면 관절이 녹슬까봐 못나가게 하는데, 집에만 있으면 시무룩해진다고 한다.', abilities:'—' },
   { id:'CHR-129', name:"크레아 토르", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'단냥이님', nameColor:null, age:'—', height:'—', role:"야생", role2:"사막궁전(과거)", world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-130', name:"리시아 로어", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-130', name:"리시아 로어", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'리시아의 진짜 우주를 옮겨놓은 것 같은 표피는 많은 이들의 환심을 사기엔 충분했지만 그 특이한 아름다움 때문에 일부 사냥꾼들에게 노려지기도 했다.\n\n사냥꾼들은 리시아의 가죽을 원했고 매일 사냥꾼들에게 가죽을 뜯겨나갈 수 있다는 공포에 잠못이루던 그녀는 신에게 사냥꾼들에게서 벗어날 수 있는, 아무런 공포가 없는 우주로 보내달라고 빌었고, 그 기도가 십년을 넘은 날 신은 진짜로 그녀의 소원을 들어주었다.\n신은 그녀를 우주에서 살아남을 수 있는 능력을 주었고, 그녀를 우주로 보내버렸다. 하지만 신은 기도를 들어주어 우주로 보내주는 대신 우주에서만 살 수 있게 저주 또한 걸었다. \n\n때문에 그녀는 이제 사냥꾼의 걱정 없이 살 수 있는 우주에서 살 수 있게 되었지만 우주에서밖에 살 수 없었다. \n\n지금까지도 그녀는 항상 우주를 떠돌며 우주에서 사귈 새로운 친구를 찾아 헤매고 있을 것이다.', abilities:'—' },
   { id:'CHR-131', name:"스페이더스", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'리프라님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["신의 대리인"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-132', name:"블랙스타", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["신의 대리인", "없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-133', name:"가니메데", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'커피새우님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-133', name:"가니메데", gender:'남', genderClass:'gender-m', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B0%80%EB%8B%88%EB%A9%94%EB%8D%B0/%25EA%25B0%2580%25EB%258B%2588%25EB%25A9%2594%25EB%258D%25B0.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B0%80%EB%8B%88%EB%A9%94%EB%8D%B0/export202307102037568360.png?raw=true', creator:'커피새우님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'주 서식지는 우주이며, 우주의 일부분을 몸에 담고 다닌다. 배 부분은 마치 4차원 주머니처럼 여러가지 물건을 담을 수 있다.\n\n참견을 좋아하는 참견쟁이기 때문에 우주 여기저기를 돌아다니며 소문이나 정보를 나르는 역할을 하고 있다.', abilities:'—' },
   { id:'CHR-134', name:"킬러바트", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"모르튠 연구소", role2:null, world:'다단티아', tags:["연구자(과학자)"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-135', name:"글러트니 박사", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"모르튠 연구소", role2:null, world:'다단티아', tags:["연구자(과학자)"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-136', name:"스펠", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"모르튠 연구소", role2:null, world:'다단티아', tags:["연구자(과학자)"], personality:'—', background:'—', abilities:'—' },
@@ -1255,8 +1462,8 @@ const CHARACTERS = [
   { id:'CHR-139', name:"오아나", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"오아나 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-140', name:"세이란", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'시로네코님', nameColor:null, age:'—', height:'—', role:"오아나 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-141', name:"크레먼", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'미캐르님', nameColor:null, age:'—', height:'—', role:"크레먼 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-142', name:"리나르", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'연냥님', nameColor:null, age:'—', height:'—', role:"크레먼 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-143', name:"루버스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"루버스 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-142', name:"리나르", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'연냥님', nameColor:null, age:'—', height:'—', role:"크레먼 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'동료들과 같이 있는 시간을 좋아하지만 혼자있는 것도 좋아해서 동료들과 이야기 꽃을 피우다 어느샌가 동료들 사이를 빠져나가 혼자만의 시간을 갖는다.호기심 많고 지식을 쌓는 것을 좋아하여 은근 잡다한 지식이 많지만 호기심을 이겨내지 못하고 혼자 독단적으로 움직일 때가 많다고 한다.\n\n여담으로 겁이 많아서 밤이 될 땐 집 밖이 무서워 나오지 않는다고 한다.\n\n불을 다루는 능력이 있고 상시 자신의 주변에 불을 두르고 다닌다. 불의 온도도 자유자재로 조절 가능해 주변에 동료들있을 땐 불의 온도를 낮춰 주변에 피해가 가지 않도록 조절하고 있다.', abilities:'—' },
+  { id:'CHR-143', name:"루버스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"루버스 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'몸 곳곳에 밝고 맑은 루비가 박혀있는 보석 드래곤. 루버스는 자신의 몸에 나있는 보석을 자신의 자랑거리로 생각하며 뽐내고 다닌다. \n\n쾌활하며 나서기 좋아하는 성격이지만 종종 무리하게 행동하는 경우가 있어 동료를 걱정시키기도 하지만 자기가 말한 공약을 꼭 지키는 책임감 있는 면모를 보인다. \n\n동료를 아끼고 동료를 지키고자 하는 마음이 크지만 정작 감정표현이 서툴어 동료에게 자신의 마음을 잘 전하지 못할 때가 많다.\n장기는 몸의 딱딱한 부분을 부딪혀 바위 부수기.', abilities:'—' },
   { id:'CHR-144', name:"캔치", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"캔치 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-145', name:"우송", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'비둘기pigeon님', nameColor:null, age:'—', height:'—', role:"캔치 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-146', name:"바른", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"바른 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
@@ -1268,89 +1475,89 @@ const CHARACTERS = [
   { id:'CHR-152', name:"충수신", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"신", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-153', name:"생성의 신 오로", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"신", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-154', name:"붕괴의 신 보루스", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"신", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-155', name:"글라둔", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'우주냥님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["연구자(과학자)", "주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-156', name:"라시아그", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-155', name:"글라둔", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'우주냥님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["연구자(과학자)", "주민"], personality:'—', background:'도시 매그누스에 거주하고 있는 천재 과학자.\n매그누스에 자신을 위한 실험시설을 건축해주는 대가로 매그누스를 위해 여러가지 발명품들을 창조해내고 있다.\n\n기계도 잘 다루지만 생물실험도 잘하고 생물을 좋아한다.\n실험을 위해서라면 자신을 몸도 기꺼이 희생하며 몸에 있는 식물 줄기들은 전부 실험 부작용이다.\n\n항상 시설 안에만 쳐박혀 있어서 매그누스의 관리자나 과학시설에 있는 과학자들을 빼면 얼굴 보기도 어렵다.\n\n자신의 제자들을 아낀다고 하며 자신을 도와줄 제자 육성에도 힘쓴다고 한다. 의외로 말솜씨가 좋다.\n\n성격은 살짝 엉뚱한 면이 있고 상대의 말을 잘 듣지 않고 자신의 말만 늘어놓는 경우가 많다고 한다.', abilities:'—' },
+  { id:'CHR-156', name:"라시아그", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'지하던전의 입구부분, 작은 인공 물웅덩이에서 살고 있다. 물웅덩이는 옆에 있는 바다와 연결되어 있어 자유롭게 바다와 던전을 오갈 수 있다.\n\n던전 입구에서 문지기겸 안내역을 강제로 맡고 있는데, 보통 손님이 오면 물속에서 튀어나와 손님이 적의를 가지고 있는지 없는지 확인해본다. 적의를 가지고 있을 시 경고를 주며, 적의가 없거나 던전에 볼일이 있다는 경우 친절하게 던전 밑 마을로 가는 길을 알려준다.\n\n그녀의 푸른색 눈은 상대가 적의를 가지고 있는지 없는지를 단번에 알 수 있다고 한다.\n\n던전의 안내역은 그녀가 자선한 것은 아니고 모종의 계약에 의해 이루어진 임무이며, 가슴에 파인 문양도 계약의 여파로 생긴 문양이라고 한다.\n\n상대가 적의를 가지고 있는지 판단할 수 있는 능력을 가지고 있지만 전투력은 거의 전무하며 전투가 시작되면 싸우기보단 뒤어서 서포트하는 역할을 한다.', abilities:'—' },
   { id:'CHR-157', name:"우넛", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"바다궁전", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-158', name:"수어", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'우주냥님', nameColor:null, age:'—', height:'—', role:"심해왕국", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-159', name:"밀리우", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'머큐탐님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-160', name:"가론", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'미캐르님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-159', name:"밀리우", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'머큐탐님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'항상 자신의 몸에 갑옷을 두르고 있는 드래곤.\n\n더운 것을 싫어하여 주로 시원한 동굴 깊은 곳에서 하루하루 자신의 갑옷을 닦고 있는다고 한다.\n\n갑옷을 입은 모습과 다르게 돌격보다는 멀리서 원거리 공격을 주로 사용 하며 갑옷은 물리 공격보다는 브레스나 다른 마법공격에 의한 데미지를 더 잘 막아준다고 한다. 그래서 그런지 마법을 사용하는 상대를 만나면 기세등등하지만 칼이나 격투를 하는 상대는 꺼려한다고 한다. \n\n참고로 농담을 잘 한다고 한다.', abilities:'—' },
+  { id:'CHR-160', name:"가론", gender:'남', genderClass:'gender-m', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B0%80%EB%A1%A0/%25EA%25B0%2580%25EB%25A1%25A0.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B0%80%EB%A1%A0/1629624650809.png?raw=true', creator:'미캐르님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'여러 마을과 도시를 오가며 돈을 받고 전기를 공급해주는 역할을 하고 있다. 먹을 것만 있으면 무한한 전기를 생산할 수 있는, 누구나 눈독들이는 능력을 가지고 있으며 실제로 뇌물을 줄테니 마을에 안착해달라고 부탁받은 적이 꽤 있다.하지만 가론 본인은 한 곳에 안착해 살기보단 나그네처럼 정처없이 떠돌이다니는 것을 더 좋아하고 혼자 있는 것을 선호하는 성격이다.\n\n뭉툭한 꼬리엔 항상 전기를 저장하고 있다. 전기를 방출할 땐 손이나 몸 전체에서 방출할 수도 있지만 낭비가 심하고 아군적군 구분없이 피해를 입힐 수 있어서 주로 머리에 달린 뱀들을 이용해 전기를 주고 싶은 부분만 주는 경우가 많다.\n\n요즘엔 숲에서 발견한 유령인 아우러가 신경쓰여 혼자다니는 성격에도 불구하고 대리고 다니고 있다고, 자의식없던 아우러는 그 덕분에 의식을 조금씩 되찾고 있다.', abilities:'—' },
   { id:'CHR-161', name:"쿨라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'레이립님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-162', name:"스노운", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'감마님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-163', name:"노네임", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'우주냥님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-164', name:"모지", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-163', name:"노네임", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'우주냥님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'도시 매그누스에 잠들어있던 또 의문의 실험체이며, 합성이나 연금을 통해 태어난 다른 실험체들과는 다르게 특정한 생물 한마리를 개조한 듯한 모습을 보인다.\n\n개조되기 전의 기억이 없는 듯하며 깨어난 이후 마치 약속했다는 듯이 매그누스의 수호를 자청했다.\n\n무뚝뚝한 성격이며 매그누스에 해가 된다고 판단되지만 않으면 처음보는 자에게도 공격적인 모습을 보이진 않는다. 일이 없을 때는 가만히 앉아있거나 몸을 말고 자고 있을 때도 있다.\n\n발톱은 항상 붉게 달아올라 있고 공격할땐 앞발을 후려갈려 깊은 상처를 남긴다. 완력이 강하여 그냥 후려치는 정도로 왠만한 강도는 제압가능하다. \n\n그 외에 장식들의 용도는 알려지지 않았으며 노네임 또한 자신 대한 정보를 입 밖에 잘 내지 않는다.\n\n완력 외에도 청력이나 시력 등 신체능력이 좋다.', abilities:'—' },
+  { id:'CHR-164', name:"모지", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'바위산 꼭대기에 살고 있으며 산의 신령이라고 불린다.\n\n약간의 예지능력이 있어 바위산 꼭대기로 자신을 찾아오는 자들에게 미래를 알려주고 있다.\n\n항상 구름을 타고 다니며 주변에 안개를 생성해내는 능력이 있다.\n\n과거 천사였다는 소문이 있지만 본인은 미래를 알려주는 것 말고는 자신에 대해 얘기해 주는 바 없어 정확한 정보인지는 아무도 모른다.', abilities:'—' },
   { id:'CHR-165', name:"아이쉬", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'절망숲님', nameColor:null, age:'—', height:'—', role:"다른 세계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-166', name:"콘조라", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'웁타웁님', nameColor:null, age:'—', height:'—', role:"심해왕국", role2:null, world:'다단티아', tags:["귀족"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-167', name:"마칼리아", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'FNA님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-167', name:"마칼리아", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'FNA님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'세상을 관찰하고 떠돌아다니며 지혜를 전파하고 있다. \n\n머리가 좋으나 몸이 연약해서 항상 보디가드들을 데리고 다니며 잘 걸어다니지 않고 항상 가마를 타고 이동한다.\n\n생각이 깊고 사려심이 많은 성격이다.\n\n눈이 많아서 그런지 시야각이 상당히 넓다.', abilities:'—' },
   { id:'CHR-168', name:"프리브레", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'리나몬님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-169', name:"울린", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'커피새우님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-170', name:"냐코", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'용용이7님', nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-170', name:"냐코", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'용용이7님', nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'호기심 많은 크리쳐로 테라 마을에 거주하고 있다.\n항상 마을 이곳저곳 돌아다니며 주민들의 안부를 묻는다.\n\n항상 금화를 들고 다니고 있다. 들고다니면 운이 좋아질거라고 믿는 모양이다.\n\n꼬리와 날개는 항상 일렁이며 바치 영혼의 불꽃 같은 형상을 띈다고 한다.', abilities:'—' },
   { id:'CHR-171', name:"하미", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'Un님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-172', name:"프루슈어", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'감마님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-173', name:"라우드", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'개다래님', nameColor:null, age:'—', height:'—', role:"아홀로틀스", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-173', name:"라우드", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'개다래님', nameColor:null, age:'—', height:'—', role:"아홀로틀스", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'아홀로틀스의 단원 중 한 명이며, 암살대장으로 활동하고 있다. 작은 몸집과 빠른 스피드로 적진에 숨어들고 팔에 난 칼날으로 적의 목을 벤다.\n\n평소엔 사냥담당으로 활동하며 사냥 또한 잘한다.\n\n능글맞은 성격이고 자주 웃는 모습을 보인다. 다만 말이 많은 성격이라 작전 중일 때 잡담을 하는 바람에 대장한테 자주 지적받고 있다.', abilities:'—' },
   { id:'CHR-174', name:"엘마", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'늑돌이누어어님', nameColor:null, age:'—', height:'—', role:"천계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-175', name:"루머너스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-176', name:"매그넷", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'루나몬', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-175', name:"루머너스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'던전마을에 살고 있으며 누구에게나 친절한 성격이다.\n큰 몸집과 근력으로 몸 쓰는 일을 주로 도와준다. 짐 옮기는 알바도 자주 한다고..\n\n몸에 초록 부분은 마치 야광처럼 항상 빛나며 햇빛을 받을 땐 빛을 덜 내지만 햇빛이 안드는 던전마을에 사므로 항상 빛나고 있다고 보면 된다.\n\n악력도 쎄지만 다리도 튼튼해서 발차기도 잘 한다. 또한 꼬리 힘도 나무를 감아 뿌술 수 있을 정도로 좋다.\n\n목에 있는 털은 미약하게 빛나며, 햇빛을 받은 민들레 홀씨처럼 보들보들하다고 한다.', abilities:'—' },
+  { id:'CHR-176', name:"매그넷", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'루나몬', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'도시 매그누스에 사는 주민.\n밖에서 활동하는 것을 좋아하며 명량한 성격이다.\n\n3m 안에 있는 물체에 자성을 부여할 수 있고 자신을 기준으로 물체를 끌어당기거나 밀어낼 수 있다.\n\n매그넷의 몸은 차갑다고 한다.', abilities:'—' },
   { id:'CHR-177', name:"야타난", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-178', name:"클라웨어", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'Un님', nameColor:null, age:'—', height:'—', role:"바다궁전", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-179', name:"미러보시", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'Un님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-179', name:"미러보시", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'Un님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'검은숲에 사는 겁많은 크리쳐.\n검은숲에서 죽은 자들의 영혼이 뭉쳐 태어났다. 자신을 지키기 위해 가시가 돋은 덩굴을 몸에 두르고 있다. 항상 눈물이 그렁그렁한 모습이 포인트지만 진짜 눈물은 아니다.\n\n항상 유령처럼 떠다니며 햇빛을 싫어해 항상 그림자 안에서만 휴식한다. 가지고 다니는 거울에 상대를 비추면 상대는 환각 상태가 된다. 환각 상태에 대해 알려진 바가 거의 없지만 미러보시는 상태가 환각에 빠진 틈에 도망하는 등 자기 방어 수단으로 쓰고 있다.', abilities:'—' },
   { id:'CHR-180', name:"발리우스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'하스님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-181', name:"호긴", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'용용이7님', nameColor:null, age:'—', height:'—', role:"하계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-182', name:"아름", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'모브2님', nameColor:null, age:'—', height:'—', role:"테라", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-183', name:"로우즈", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'모브2님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["부관리자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-184', name:"누엘라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'모브2님', nameColor:null, age:'—', height:'—', role:"검은숲 피신지역", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-183', name:"로우즈", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'모브2님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["부관리자"], personality:'—', background:'매너스 마을의 부총장으로 그의 걸맞은 지혜를 가지고 있으며 어떤 상황이라도 항상 평정심을 유지하는 모습을 보인다.\n\n마을에 영입되어 부총장이 되기 전에는 남을 못 믿고 의심이 많은 성격이였으나 마을에 오고 나서 주민들의 친절과 배려를 받은 후로는 성격이 많이 유순해졌다.\n몸에 난 가시 또한 과거에는 뾰족하며 아무나 가까이 갈 수 없었지만 지금은 만져도 아프지 않게 둥근 모양으로 변형시켰다고 한다.\n\n가까이 가면 은은한 장미향이 감돈다고 한다. 때문에 부총장이 주변에 오면 장미향 때문에 다들 오는걸 알아차린다.\n\n총장과는 의외로 서먹서먹하다. 로우즈만 살갑게 구는 모양.\n총장은 매너스 마을의 교역이나 재정문제를, 부총장인 로우즈는 마을 내의 건의사항을 들어주는 식으로 역할을 분담했다.', abilities:'—' },
+  { id:'CHR-184', name:"누엘라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'모브2님', nameColor:null, age:'—', height:'—', role:"검은숲 피신지역", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'검은 숲 피신지역의 안내자.\n안개 숲이 검은 숲으로 변하자 숲에서의 삶을 포기하고 숲에 사는 자들을 모아 피신지역에 이주시켰다.\n피신지역의 관리를 맡은 것은 아니지만 피신지역이 눈에 띄지 않도록 지역 주변에 환각을 걸어주고 있다.\n\n분홍색 안개를 뿜어내어 환각을 만들어낼 수 있는 능력이 있다. 한 번 만든 환각은 한두달간 유지된다.\n\n피신지역을 덮을만큼의 안개를 만들어낼려면 많은 힘이 필요해 한 번 환각을 만들고나면 환각이 없어질 때까지 잠에 든다. \n\n참고로 크기는 가로 6미터 정도로 꽤 큰 편이며, 안개 숲에 있을 땐 환각과 안개로 자신의 모습을 감추고 다녔다.', abilities:'—' },
   { id:'CHR-185', name:"아우레스콜", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'용용이7님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-186', name:"슬라비온", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'oı부자ㄹı님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-187', name:"알가우레", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'악어거북님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-188', name:"테라제", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'용용이7님', nameColor:null, age:'—', height:'—', role:"천계", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-189', name:"라이버", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'스리에아님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-189', name:"라이버", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'스리에아님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'도시 매그누스에 있는 도서관을 관리하는 사서.\n\n책을 모으는 것을 좋아해서 사서가 되었다.\n기억력도 좋아서 수 많은 책들 중에 원하는 책이 어디있는지 단번에 찾아낸다.', abilities:'—' },
   { id:'CHR-190', name:"콘그라베", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'우주냥님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-191', name:"골드이터", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'파자마빌런님', nameColor:null, age:'—', height:'—', role:"팩펑크", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-191', name:"골드이터", gender:'기타', genderClass:'gender-n', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B3%A8%EB%93%9C%EC%9D%B4%ED%84%B0/%25EA%25B3%25A8%25EB%2593%259C%25EC%259D%25B4%25ED%2584%25B0.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B3%A8%EB%93%9C%EC%9D%B4%ED%84%B0/export202306071319456700.png?raw=true', creator:'파자마빌런님', nameColor:null, age:'—', height:'—', role:"팩펑크", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'금을 먹고 금색 실을 뿜는 거미형 크리쳐.\n\n금이 주식이나 금 자체가 귀해져서 야생에서 살아가기 보단 반려동물로 키워지기를 선택했다.\n\n현재는 팩펑크에서 마을공동으로 키워지는 반려동물이다.\n말을 잘 따르나 가끔 배고플 때 금을 조금씩 갉아먹어 골칫거리가 되고 있다.', abilities:'—' },
   { id:'CHR-192', name:"쥬크샤볼라스", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'블랙빗님', nameColor:null, age:'—', height:'—', role:"다른 세계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-193', name:"무수화", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'청량님?', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-193', name:"무수화", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'청량님?', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'세렌치움에 사는 주민으로 항상 몸에서 꽃향기가 난다고 한다.', abilities:'—' },
   { id:'CHR-194', name:"하드셸", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-195', name:"케미첼-07", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'체리님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-196', name:"케아케리스-04", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'체리님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-197', name:"그리슬", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'보도님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-197', name:"그리슬", gender:'남', genderClass:'gender-m', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B7%B8%EB%A6%AC%EC%8A%AC/%25EA%25B7%25B8%25EB%25A6%25AC%25EC%258A%25AC.jpg?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B7%B8%EB%A6%AC%EC%8A%AC/export202302041356153351.png?raw=true', creator:'보도님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'눈숲에 사는 크리쳐로, 토끼같은 작은생물을 먹고산다.\n자신의 영역 안에만 침범하지 않으면 어떠한 위협에도 너그럽게 용서해준다. 하지만 영역을 침범한 순간 돌변하여 상대가 죽거나 영역 밖으로 나갈 때까지 공격을 멈추지 않는다고 한다.\n\n추위에 적응하기 위해 얼음과 하나가된 몸은 주변을 얼릴 수 있는 얼음 그 자체가 되었다. 빠르게 날아서 상대를 발톱으로 붙잡고 얼음을 뿜어 상대를 얼린다.\n\n숨결조차 얼음이여서 온도와 상관없이 말할 때마다 입김이 나온다고 한다.\n\n꼬리에 있는 얼음침은 발사할 수 있다.', abilities:'—' },
   { id:'CHR-198', name:"케라킨", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'우주냥님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-199', name:"퍼플딕", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'얼음음료수님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-200', name:"워스래쉬", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'용기사님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-201', name:"워그래곤", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'Splesty님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-202', name:"커넌", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"바다궁전", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-203', name:"바르드러", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'리프라님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-204', name:"네오울프", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'우주냥님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-205', name:"돌리에나", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'크레스티드와랄랍님', nameColor:null, age:'—', height:'—', role:"머쉬룸", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-206', name:"가드펭", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'긔름님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-207', name:"게팅키", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'김마룡님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-203', name:"바르드러", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'리프라님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'밤낮으로 바다속을 누비며 먹이감을 찾는다.\n먹이감은 바르드러의 몸에 있는 검고 붉은 눈을 보면 공포로 경직된다고 한다.\n\n그 외에도 전방으로 초음파를 발사하여 상대의 방향감각 교란시킬 수 있다.\n\n과거, 바다궁전의 신하가 바다궁전에 주민으로 영입시킬려고 했다가 그녀의 흉포함 때문에 포기했다고 한다.', abilities:'—' },
+  { id:'CHR-204', name:"네오울프", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'우주냥님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'도시 매그누스 슬럼가에 사는 주민.\n타인에게 의뢰를 받고 잡다한 심부름을 해주는 일을 한다.\n\n호쾌한 성격이며 생각나는 말은 곧이곧대로 뱉는 성격이기 때문에 가끔 말싸움이 일어나는 것만 빼면 같은 일을 하는 동료들과 사이가 좋은 편이다.\n\n그 밖에도 싸움을 좋아해서 슬럼가에서 몰래 주최하는 결투장에도 가끔 나간다.\n\n온 몸이 야광이라 의뢰 일을 할 때는 큰 후드를 뒤집어 쓰고 다닌다.\n\n두 다리를 사용한 민첩함과 날카로운 발톱, 팔의 칼날로 상대를 빠르거 제압한다. \n슬럼가에 정착한 그녀지만, 그녀의 신체능력은 도망치는 범죄자 등을 잡는대에 탁월하여 기사단의 제의를 받기도 했다.', abilities:'—' },
+  { id:'CHR-205', name:"돌리에나", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'크레스티드와랄랍님', nameColor:null, age:'—', height:'—', role:"머쉬룸", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'머쉬룸 마을에 살고 있으며 인형을 좋아한다.\n\n본래 손재주가 좋지 않았지만 인형을 직접 만들고 싶어 노력한 결과 어느정도 완성도 있는 인형을 만들 수 있게 되었다.\n\n인형 만들기에 한번 꽂히면 하루종일 집안에서 인형을 만들고 있으며 인형을 만드는 중엔 밥도 먹지 않을 정도로 집중한다.\n\n돌리에나의 집안에는 자신이 만든 인형으로 가득 차 있다.\n다 만든 인형이여도 하나하나를 아끼며 항상 인형 한두개를 가지고 다닌다. \n친한 친구들 한정으로 맘에드는 인형을 나눠주기도 한다. \n\n인형을 만들지 않을 때는 늪에서 수영하며 몸을 식히며 인형을 만들 때를 위해 곤충이나 물고기 등을 먹으며 배를 두둑하게 채워둔다.\n\n여담으로 숨을 오랫동안 참을 수 있다. 늪 속에서 쉴 때는 진흙물에 몸을 반쯤 파뭍고 있기 때문에 잘 안보인다.\n\n바닷물에도 들어간 적은 있으나 따갑다고 싫어한다.', abilities:'—' },
+  { id:'CHR-206', name:"가드펭", gender:'남', genderClass:'gender-m', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B0%80%EB%93%9C%ED%8E%AD/export202412222120502823.png?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B0%80%EB%93%9C%ED%8E%AD/export202407051210598326.png?raw=true', creator:'긔름님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'바구스마을에 사는 경비 겸 마을주민.\n\n크기는 작지만 날개의 방패는 단단해서 물리적 공격 뿐만 아니라 대부분의 마법공격까지 튕겨낸다.\n\n마을에 위협이 생기면 짧은 다리로 제일먼저 뽈뽈 달려간다.', abilities:'—' },
+  { id:'CHR-207', name:"게팅키", gender:'기타', genderClass:'gender-n', face:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B2%8C%ED%8C%85%ED%82%A4/export202412222121189771.png?raw=true', fullbody:'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/Character_/all_01/%EA%B2%8C%ED%8C%85%ED%82%A4/export202406282006099513.png?raw=true', creator:'김마룡님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'바위산 근처를 배회하는 거대한 크기의 크리쳐.\n\n마치 잉크의 촉 같이 생긴 단단한 발톱으로 바위산을 오르며 지나간 길로는 잉크 같은 검은 액체를 남긴다.\n\n몸에서 분비하는 액체는 약간의 산성을 띄며 바위를 녹인다. 때문에 게팅키가 지나간 자리의 지반은 약해지기 때문에 지나갈 때 조심해야 한다.\n\n다행히 성격은 유순하고 다른 생물에 별로 관심을 가지지 않는 모습을 보인다.\n\n게팅키의 주식은 알려지지 않았다.', abilities:'—' },
   { id:'CHR-208', name:"크루톤", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'Ancylaini3065님', nameColor:null, age:'—', height:'—', role:"몬타이나", role2:null, world:'다단티아', tags:["총관리자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-209', name:"벨레파르", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'카다진님', nameColor:null, age:'—', height:'—', role:"하계", role2:null, world:'다단티아', tags:["부관리자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-210', name:"알락토르트", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'모브2님', nameColor:null, age:'—', height:'—', role:"하계", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-211', name:"랑오", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-211', name:"랑오", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'바구스 마을에 살고 있으며 고민상담을 취미로 하는 쾌활한 성격의 주민.\n\n작은 집이 있지만 돌아다니길 좋아해서 집은 잘 때를 빼면 항상 비어있다.\n\n마법에 능하며 흰색 무늬가 있는 분홍색 방망이를 소환하여 마법을 부린다. 주로 썩은 음식을 싱싱하게 되돌려주거나 하나였던 빵을 열개로 늘리는 등 음식관련 마법을 잘 쓴다.\n\n마을과 마을 밖을 돌아다니며 곤란한 자가 있으면 돕는 것을 좋아한다. 하지만 전투능력이 거의 없기에 혼자 돌아다니다가 위험에 처할 때도 가끔 있다.\n\n본인은 항상 운이 좋다고 생각하고 있기 때문에 위험을 방지하는 일에 별로 힘쓰고 있진 않다.', abilities:'—' },
   { id:'CHR-212', name:"밸런스", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'Ancylaini3065님', nameColor:null, age:'—', height:'—', role:"천계", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-213', name:"도루루페라", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'DINOSAUR님', nameColor:null, age:'—', height:'—', role:"하계", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-214', name:"덴드로우", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'뇽님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-213', name:"도루루페라", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'DINOSAUR님', nameColor:null, age:'—', height:'—', role:"하계", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'하계 뼈감옥의 경비로 활동하고 있고 하계에 대한 충성심이 높다. 때문에 같은 감옥경비지만 자유분방한 성격의 카론과 자주 다툰다.\n\n경비로서의 자부심을 가지고 있으며 자신이 하는 일은 항상 완벽하게 시작해서 완벽하게 끝내야 된다고 생각한다. 탈옥하는 죄수를 발견하면 자신의 압도적인 체구로 짓눌러버린다. 조금이라도 저항의지가 보이면 무력을 서슴없이 쓴다.\n\n2쌍의 다리로 빠르게 달릴 수 있다. 다만 자리를 지키고 있는 경비를 특성상 별로 활용할 일은 없지만 그 듬직한 체형에서 오는 압력이 있으므로 항상 감옥 입구에서 들어오고 나가는 죄수들을 감시하고 있다.\n\n잘 사용하는 무기는 \'창\'이다.\n\n여담으로 군주들 한정 머리를 쓰다듬어주면 좋아한다.', abilities:'—' },
+  { id:'CHR-214', name:"덴드로우", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'뇽님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'가볍고 호전적인 성격의 주민으로 매그누스에 있는 슬럼가에 거주하고 있다. \n\n같은 슬럼가에 살고 있는 네오울프와 친한 사이며 가끔 결투장에서 선수로 만나기도 한다.\n\n싸울 때 3쌍의 다리로 빠르게 상대의 뒤는 치는 전법이 특기다. 결투장에서의 승률은 좋은 편이지만 의외로 맘이 약해 자비를 구하는 상대방을 봐주다 뒤통수를 맞기도 한다.\n\n결투장에 나가는건 싸움에 재능이 있어서 나가는거지 싸우는 것 자체는 별로 좋아하지 않는다고 한다. \n\n하지만 술은 좋아한다. 친구인 네오울프는 이 점을 이용해서 술을 사준다는 핑계로 자신의 의외에 동참시키기도 한다.', abilities:'—' },
   { id:'CHR-215', name:"스이호", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'splesty님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-216', name:"아라키두사", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'방사능감자님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-217', name:"디오웨", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'감마님', nameColor:null, age:'—', height:'—', role:"천계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-217', name:"디오웨", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'감마님', nameColor:null, age:'—', height:'—', role:"천계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'천계에 있는 구름의 바다에서 서식하는 거대 크리쳐로, 지성은 없으나 모든 것을 삼킬 수 있는 능력을 지녔다.\n\n과거에는 하계의 붉은 바다 속에서 추방당하는 악마들을 먹어치웠으나 천계와 하계의 전쟁에서 하계의 대군주들이 힘을모아 디오웨를 천계로 워프시켰다.\n\n그 후로 얼떨결에 천계의 바다에서 살게 되면서 천계의 천사의 골칫거리가 되었다.\n\n과거 악마들도, 천사들도 디오웨를 길들이려는 시도가 있었으나 둘 다 실패했다. 하계는 포기했지만 길들일 수만 있으면 큰 전력이 될 수 있어 천계에선 디오웨를 길들이는 방법을 찾고 있다.', abilities:'—' },
   { id:'CHR-218', name:"아하마", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'강멍고냥님', nameColor:null, age:'—', height:'—', role:"우리라스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-219', name:"란텔리바란", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'민양갱님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["총관리자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-220', name:"루니에르", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'라니님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-221', name:"디스마", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'우주고양이님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-219', name:"란텔리바란", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'민양갱님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["총관리자"], personality:'—', background:'도시 매그누스를 창립한 초기 맴버 중 한 명이며, 과거 시간폭발에 휘말려 종적을 감췄다가 최근에 나타나 던전마을을 설립했다.\n\n시간폭발에 휘말리기 전에는 작고 외소한 몸집이였지만 어째선지 근육질에 우람한 몸으로 돌아왔다. 본인이 말하기로는 자신이 믿는 신이 도와줘서 시간폭발의 여파에서 돌아올 수 있었다고 한다.\n\n현재는 자신이 설립한 던전마을의 촌장자리를 맡고 있다. 잘 때를 빼면 항상 던전으로 들어가기에 마을주민들은 촌장을 잘 만날 기회가 없다고 한다. 하지만 마을이 위험에 빠지면 아무도 말하지 않아도 금방 나타나 해결해준다고..\n\n\n천사와 악마 사이에서 태어났다는 소문이 있지만 사실 본인도 잘 모른다.', abilities:'—' },
+  { id:'CHR-220', name:"루니에르", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'라니님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["경비"], personality:'—', background:'매너스 마을에 살고 있는 쾌활한 주민.\n주로 마을 정찰이나 잡일을 돕는다.\n\n마을 주민들에게는 친절하지만 처음보는 자에게는 경계심을 가지고 잘 풀지 않는다. \n\n호기심이 많지만 마을경비 일을 하는 것에 자부심을 가지고 있어서 잘 들어내진 않는다. 궁금한게 있으면 그냥 뚫어져라 쳐다본다..\n\n실크처럼 부드러운 꼬리와 단단한 뿔을 가지고 있다. 꼬리는 유연하지만 불이나 바람을 잘 막아주어 다친 주민들이 있을땐 꼬리로 감싸준다.\n\n특출난 전투능력이 없음에도 불구하고 경비일을 하고 있는 이유는 본인이 원해서기도 하고 루니에르의 몸집 덕분이기도 하다. 높이 4미터에 달하는 몸집 덕분에 그 존재만으로도 경비가 되기에 마을의 촌장도 흔쾌히 경비로 임명해주었다.', abilities:'—' },
+  { id:'CHR-221', name:"디스마", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'우주고양이님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'검은숲에 살고 있으며 \'생기를 먹는 자\'라고도 불린다.\n\n누군가가 저주받은 뒤 죽어서 이러한 형태가 된걸로 추측된다. 잠을 자지 않고 항상 생기를 먹을 산 자들을 찾아다닌다.', abilities:'—' },
   { id:'CHR-222', name:"아르게스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"머쉬룸", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-223', name:"체피크", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'블랙빗님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-224', name:"이름 짓는 자", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"기타", role2:null, world:'다단티아', tags:["신의 대리인"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-225', name:"더지", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'테스님', nameColor:null, age:'—', height:'—', role:"몬타이나", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-225', name:"더지", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'테스님', nameColor:null, age:'—', height:'—', role:"몬타이나", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'지하세계에서 채굴 노예로 살고 있다가 노예 시설을 급습한 크루톤 일행에 의해 구조되었다.\n\n구조된 이후 지하 도시인 몬타이나에 거주하고 있다.\n\n크루톤 덕분에 노예생활에서 벗어났지만 오랜 노예 생활의 여파와 시설을 탈출할 때 자신을 탈출 시키기 위해 희생된 동료들에 대한 충격 때문에 아직 정신을 차리고 있지 못한 모습이다.\n\n구속구를 아직 차고 있지만 시설을 나올 때부터 작동하지 않기 때문에 자신의 손으로 쉽게 벗을 수 있다. 하지만 아직 준비가 덜 된 듯하다.', abilities:'—' },
   { id:'CHR-226', name:"바이오라클", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'라니님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-227', name:"슈미트", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'키위앵무님', nameColor:null, age:'—', height:'—', role:"천계", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-228', name:"카비아비카", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'_Rang_님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-229', name:"오라고", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'루이짱짱강아지님?', nameColor:null, age:'—', height:'—', role:"심해왕국", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-230', name:"덴고", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'델타Delta님', nameColor:null, age:'—', height:'—', role:"하계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-230', name:"덴고", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'델타Delta님', nameColor:null, age:'—', height:'—', role:"하계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'하계에 살고 있는 악마 중에 하나로, 큰 덩치와 위협적인 집게발이 특징이다.\n\n게으른 성격이며 하루하루를 뒹굴거리며 살아가고 있다. 하지만 단장의 명령을 이행하는 순간 만큼은 누구보다 민첩하다고 한다.\n\n전갈처럼 생긴 생김새와 달리 독은 가지고 있지 않지만 힘이 어마무시하여 꼬리 끝에 찔린 순간 관통된다고 한다.', abilities:'—' },
   { id:'CHR-231', name:"프로서더", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'프팅님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-232', name:"샤캔", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'블랙빗님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-233', name:"셸디문", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-234', name:"아반", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-235', name:"비안지", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'감마님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-236', name:"딥 씨퍼", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레이립님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-237', name:"미드나이트", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"결계 수호자", role2:null, world:'다단티아', tags:["수호자"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-236', name:"딥 씨퍼", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'레이립님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'심해에 살며 몸 곳곳을 칼날로 무장한 사나운 크리쳐.\n\n눈에 띄는 자신보다 작은 모든 것을 먹잇감으로 보며 발견 즉시 달려들 정도로 호전적이다.\n\n다행인 점은 햇빛을 싫어하여 심해 밖으로는 나오지 못한다는 것이다.\n\n교섭을 좋아하며 결과적으로 더 많은 먹잇감을 손에 넣는 쪽으로 교섭을 진행한다. 의외로 참을성이 많다.\n\n먹잇감이라고 생각되면 바로 달려들지만 조금이라도 상대가 자신보다 우세한 것 같을 때면 빠르게 도망친다.', abilities:'—' },
+  { id:'CHR-237', name:"미드나이트", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"결계 수호자", role2:null, world:'다단티아', tags:["수호자"], personality:'—', background:'결계 수호자 중에 한 명이며 \'자주빛 칼날\'이라는 이명을 가지고 있다.\n\n6명의 결계 수호자 중 가장 과묵하지만 수호자로서 의무를 수행하는데 있어서 가장 적극적이다.\n\n전투 시엔 마력을 실체화시켜 손에 두른 후에 칼처럼 휘두른다. 또한 빠른 스피드로 상대의 뒤에서 허를 찌르는 암살이 특기다.', abilities:'—' },
   { id:'CHR-238', name:"붉은 눈", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"결계 수호자", role2:null, world:'다단티아', tags:["수호자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-239', name:"팬텀 댈리아", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'라니님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-240', name:"아일리", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'강멍고냥님', nameColor:null, age:'—', height:'—', role:"검은숲 피신지역", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
@@ -1358,11 +1565,11 @@ const CHARACTERS = [
   { id:'CHR-242', name:"파라네우라", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"우리라스", role2:"사막궁전(과거)", world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-243', name:"카이텔", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["총관리자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-244', name:"소울체인", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'개다래님', nameColor:null, age:'—', height:'—', role:"결계 수호자", role2:null, world:'다단티아', tags:["수호자"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-245', name:"나이트메어", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'토리우스님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-245', name:"나이트메어", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'토리우스님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'검은 숲에 살고 있다. 잠자는 자들에게 악몽을 선사하며 악몽을 먹는다. 그 대상을 가리지 않아 오린티안 같은 사나운 괴수들에게도 서슴지 않고 능력을 쓴다.\n\n선한 자를 증오하고 뭐든지 부탁한 것에 반대로 행동하는 등 배배꼬인 성격이다.\n이름인 \'나이트메어\'도 본명이 아니며 이름 짓는 자가 준 이름을 버리고 자신이 좋아하는 이름을 쓰고 있다.\n\n예전에 몰래 던전 마을에 출입하려고 시도했으나 문지기이자 안내자인 아시아그에 의해 출입을 거부당했다. \n그 이후 던전 마을 주변을 배회하면서 던전 마을로 오는 방문자들을 덮쳐 잠에 빠지게 만들기에 마을 입장에선 골칫덩이로 여겨지고 있다.\n\n강약약강인지 가끔 던전마을을 방문하는 신의 대리자인 스페이더스를 보면 덮치기는 커녕 몸을 급하게 숨긴다고 한다.\n\n\n후드 속에 얼굴이 가려져 눈과 입들만 보이는 상태며 그의 가려진 얼굴을 본 자는 영원히 악몽에 빠진다는 소문이 있다.\n\n평소엔 담요같이 생긴 날개로 몸을 감싸 어둠 속에 몸을 숨기고 있는다. 날개 안쪽을 본 자는 잠에 빠져든다.', abilities:'—' },
   { id:'CHR-246', name:"카이디오라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'비둘기님', nameColor:null, age:'—', height:'—', role:"천계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-247', name:"아스라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'델타Delta님', nameColor:null, age:'—', height:'—', role:"검은숲 피신지역", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-248', name:"앤트라", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'닌님', nameColor:null, age:'—', height:'—', role:"몬타이나", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-249', name:"네란티", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"검은숲 피신지역", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-249', name:"네란티", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"검은숲 피신지역", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'순백의 용이라고 불렸던 용이였지만 저주를 받아 하반신이 검게 물들게 되었다.\n\n현재는 검은숲 피신지대에 살고 있으며 혼자 있는 것을 좋아한다. 허락없이는 네란티의 집에 아무도 들어갈 수 없을정도.\n\n검은 숲에서 저주를 받아서 검은 숲을 매우 싫어한다.\n항상 집에서 검은 숲이 없어지길 소원하며 지낸다.\n\n유일하게 들이대는 아스라랑 친구이며 아스라의 꾸준한 구애(?) 끝에 마음을 열었다.', abilities:'—' },
   { id:'CHR-250', name:"베시두즈", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'포스포르님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-251', name:"인드리에", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'키위앵무님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-252', name:"알로리아", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'쇼팽', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
@@ -1372,25 +1579,25 @@ const CHARACTERS = [
   { id:'CHR-256', name:"폴 디어", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'엘.X님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-257', name:"시루케", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'잉기니밍기니밍기님', nameColor:null, age:'—', height:'—', role:"해적", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-258', name:"코랄", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"바다궁전", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-259', name:"글라누", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'소르아님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-259', name:"글라누", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'소르아님', nameColor:null, age:'—', height:'—', role:"매너스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'매너스 마을에 살고 있는 주민..이지만 마을에 잘 오지 않는다. 집만 있는 수준.\n\n상대의 빛 공격을 반사하는 능력을 지닌 이질적인 유리팔을 가지고 있으며 몸 곳곳에 날개가 돋아나 있다.\n\n상대가 공격의사를 보이면 큰 유리손을 앞으로 모아서 방어한다. 투명하기 때문에 방어할 때도 상대방의 모습을 볼 수 있다.\n\n상대의 공격을 반사하는 것 뿐만 아니라 햇빛을 모아 레이저를 쏘는 등 직접 공격을 할 수 있다.\n\n유리같이 보이고 실제로 촉감도 유리와 차이가 없지만 강도는 뼈 같이 단단하다.\n\n일정 강도를 넘은 충격을 받으면 균혈이 생기며 그 균혈이 커지면 유리가 깨지듯이 그 부위가 깨지고 날개깃이 붙어있는 부분이면 날개깃도 같이 떨어진다.\n\n한쌍의 꼬리는 상대나 물건을 휘감을 수도 있고 꼬리 끝에 있는 손으로 물건을 집을 수도 있다.\n\n쿨해 보이는 인상이지만 사실 겁이 많고 눈물도 많다.\n\n낯가림이 있진 않으나 상대가 조금이라도 무섭게 보이면 덜컥 겁을 먹는다.\n\n주 업무는 야생이나 방랑하는 크리쳐들을 마을로 영입하는 일을 하고 있다.\n\n영입에 적합하지 않은 성격이지만 마을에서 제일 빠르고 멀리 날 수 있는 주민 있기 때문에 어쩔 수 없이 일을 하고 있다고 한다.\n\n여담으로 멋있는걸 좋아하고 귀여운 것엔 관심이 없다.\n\n같은 마을 주민이자 경비인 크로타스를 멋있게 생각하고 있다고 한다.', abilities:'—' },
   { id:'CHR-260', name:"아치", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'뇽님', nameColor:null, age:'—', height:'—', role:"몬타이나", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-261', name:"랙소", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'이든님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-261', name:"랙소", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'이든님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'장난끼 많은 성격이며 평소에도 촉수로 주민들을 방해하며 즐거워한다.\n\n과거, 장난의 도를 넘는 바람에 촌장에게 크게 혼난 이후로는 뒤에서 놀래키는 등 자잘한 장난만 치게 되었다.\n\n날개 끝과 꼬리 끝 부분에는 털이 아닌 딱딱한 부리 같은 기관이 자리잡고 있는데, 이 부분에서 촉수를 꺼낸다.\n\n촉수는 점성이 있으며 항상 촉촉하다. 오래꺼내고 있으면 점점 말라가면서 유연성이 떨어지므로 평소에는 집어넣고 필요할 때만 꺼낸다.\n\n털을 털면 포자가 나온다.\n\n이 포자를 들이마시면 환각을 일으키며 망상에 빠진다.\n\n자신의 촉수에 포자를 묻혀 상대에게 직접 접촉시킬 수도 있다.', abilities:'—' },
   { id:'CHR-262', name:"쉬퍼", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-263', name:"오로간 패리터스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'도롱이님', nameColor:null, age:'—', height:'—', role:"바다궁전", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-264', name:"둔지", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'크앙애플님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-264', name:"둔지", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'크앙애플님', nameColor:null, age:'—', height:'—', role:"바구스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'바구스마을에 살고 있는 주민으로 친구인 울티마와 함께 옷 가게를 운영하고 있다.\n\n쓰고 있는 후드는 울티마에게 선물 받은 것이다. 그 밖에도 천과 옷을 좋아해서 천들을 몸에 두르고 다닌다.\n\n옷은 주로 친구인 울티마가 만들고 둔지는 가게의 영업담당이다. 좋은 청력을 이용하여 옷이 필요한 손님을 귀신같이 캐치해낸다.', abilities:'—' },
   { id:'CHR-265', name:"언더문", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'소르아님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-266', name:"네뷸레이스콜", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-266', name:"네뷸레이스콜", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'다니아님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'아우레스콜, 베시두스의 증조할머니쯤 되는 위치에 있는 스페이스콜족으로 성운과 맞먹는 크기를 지녔다.\n\n우주공간에서 가장 춥고 어두운 곳에 자리잡고 있다고 전해지며 가슴과 꼬리 끝 부분에 있는 검은구멍에서 자신의 종족을 창조해낸다.\n\n머리의 고리와 깃날개를 보아 천사와 관련이 있다고는 하지만 그녀와 접촉한 천사는 이 세상에 없으므로 그 진실은 아무도 모른다.', abilities:'—' },
   { id:'CHR-267', name:"프폰", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'개굴님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-268', name:"베비콜", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'뇽님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-269', name:"앙시엘", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'미미미님', nameColor:null, age:'—', height:'—', role:"세렌치움", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-270', name:"말돔", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'토리우스님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-270', name:"말돔", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'토리우스님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'검은 숲에 서식하는 이 크리쳐는 평소 대부분의 시간을 잠든 채 보낸다. 수면 여부는 머리에 있는 눈으로 확인할 수 있는데, 눈이 사라지면 잠든 상태이고 눈이 있으면 깨어 있는 상태다.\n\n말돔의 몸에서는 미량의 방사능이 나오기 때문에, 그 주변은 식물조차 살 수 없는 땅이 된다. 다행히 말돔은 활동성이 낮아 거의 움직이지 않는다.\n\n자유자재로 늘어나는 여러 개의 꼬리를 가지고 있으며, 이 꼬리들을 채찍처럼 휘두르거나 물건을 감아 올리는 데 사용한다. 식성도 무척 좋아 과일부터 석탄 같은 광석까지 무엇이든 먹고 소화할 수 있다.\n\n이 크리쳐에 대해서는 누군가의 실패한 실험체라는 소문이 돌고 있다.', abilities:'—' },
   { id:'CHR-271', name:"앙골", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'늑래님', nameColor:null, age:'—', height:'—', role:"검은숲 피신지역", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-272', name:"아로스 패리터스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'Hyeryn0301님', nameColor:null, age:'—', height:'—', role:"바다궁전", role2:null, world:'다단티아', tags:["총관리자"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-273', name:"카누테", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'참퐘참님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["연구자(과학자)", "주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-274', name:"이글루스", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'유키루키페이님', nameColor:null, age:'—', height:'—', role:"야생", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-275', name:"아카시", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'호랭님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-276', name:"아낙크니스", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'토리우스님', nameColor:null, age:'—', height:'—', role:"오아나 무리", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
-  { id:'CHR-277', name:"드롱", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'카제님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-277', name:"드롱", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'카제님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'도시 매그누스에 거주하는 이 화가는 자신의 가게에서 직접 그린 그림을 판매하며 생활한다. 가게 내부는 항상 물감 자국과 각종 얼룩으로 어수선하고 지저분한 상태다.\n\n드롱은 특이하게도 꼬리 끝에 달린 붓을 이용해 그림을 그리는데, 한 번 작업에 몰입하면 12시간 넘게 식사도 거른 채 엄청난 집중력을 발휘한다.\n\n성격은 마치 장난꾸러기 아이 같아서, 길을 지나가는 주민들에게 대뜸 액자를 들이밀며 자신의 그림을 사달라고 조르기도 한다. 또한 과자 같은 단것을 무척 좋아해서, 때로는 그림값으로 돈 대신 과자를 받기도 한다.\n\n자신의 가게 옆 가게 주인인 브루와 친구 사이다.', abilities:'—' },
   { id:'CHR-278', name:"브루", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-279', name:"아르게논", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'세인트릴리님', nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-280', name:"사파이어", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'라니님', nameColor:null, age:'—', height:'—', role:"바다궁전", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
@@ -1400,6 +1607,15 @@ const CHARACTERS = [
   { id:'CHR-284', name:"아윤", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:null, nameColor:null, age:'—', height:'—', role:"매그누스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-285', name:"오우라베", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'유키루키페이님', nameColor:null, age:'—', height:'—', role:"방랑자", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
   { id:'CHR-286', name:"카토그라", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'쇼팽님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-287', name:"레드웨어", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'체리님', nameColor:null, age:'—', height:'—', role:"우주", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'우주에 사는 붉은 고래형태의 크리쳐로, 우주를 유영할 땐 3키로 쯤 되는 거대한 크기가 되었다가 잠깐 행성에 안착할 땐 10미터 정도 되는 크기로 줄어드는 등 크기를 자유자재로 조정할 수 있는 능력을 지녔다.\n\n생물이랑 절대 대화를 하지 않아서 지각력있는 존재인지 그냥 야생 크리쳐인지는 비밀에 부쳐져 있다.', abilities:'—' },
+  { id:'CHR-288', name:"리올드", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'무타리님', nameColor:null, age:'—', height:'—', role:"던전마을", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'던전 마을에 사는 특이한 생김새의 크리쳐 주민으로 자신을 고칠 수 있는 무언가를 찾으러 던전 마을에 왔다고 한다.\n\n항상 눈을 감고 있으며 능력을 사용할 때만 눈을 뜬다.\n\n4개의 꼬리는 유연하여 자신의 수발처럼 자유롭게 움직일 수 있다. 빨판 덕분에 물건을 한번 잡으면 놓치지 않으며 채찍처럼 휘두룰 수 있다.\n\n세계의 몇 없는 저주술사이다.\n\n하지만 제약 때문에 잘 쓰지 못하는 듯하다.\n\n초반엔 마을에 살면서 던전탐험을 자주 나갔었지만 자신이 원하는 것을 계속 발견하지 못하자 어느순간 던전탐험은 나가지 않게 되었다.\n\n이제는 마을에서 버프를 걸어주는 버프술사 역할을 하며 돈을 벌고 있다.\n\n비유법을 좋아하며 말을 빙 둘러서 하는 버릇이 있다.', abilities:'—' },
+  { id:'CHR-289', name:"몰레라", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'해시님', nameColor:null, age:'—', height:'—', role:"하계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'하계에서 태어난 존재로, 군단장 중에 하나인 옥을 따르고 있다.\n\n눈구멍에 뿔이 돋아있는 것이 특징이며 그곳에서 항상 검은 액체가 흐르고 있다. 시야는 팔에 있는 눈과 꼬리 시작 부분에 달려있는 눈들로 확보한다.\n\n전투에는 소질이 없으나 지혜롭다고 한다. 때문에 많은 하계의 존재들이 그녀에게 조언을 구하러 온다.\n\n전투 시엔 몸에 있는 검은 불꽃들을 넓게 퍼트려 적들의 시야를 가릴 수 있으며 검은 불꽃 안에 오랫동안 있으면 다른 불꽃처럼 화상을 입지는 않지만 피부부터 점점 부식된다.', abilities:'—' },
+  { id:'CHR-290', name:"세게트", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'티티님', nameColor:null, age:'—', height:'—', role:"사막궁전, 우리라스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-291', name:"스크렌시", gender:'여', genderClass:'gender-f', face:null, fullbody:null, creator:'라니님', nameColor:null, age:'—', height:'—', role:"아홀로틀스", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-292', name:"아우스타", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'크앙애플님', nameColor:null, age:'—', height:'—', role:"우리라스", role2:null, world:'다단티아', tags:["주민"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-293', name:"애치", gender:'기타', genderClass:'gender-n', face:null, fullbody:null, creator:'휴안님', nameColor:null, age:'—', height:'—', role:"다른 세계", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-294', name:"카시라", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'루나몬님', nameColor:null, age:'—', height:'—', role:"검은숲", role2:null, world:'다단티아', tags:["없음"], personality:'—', background:'—', abilities:'—' },
+  { id:'CHR-295', name:"하팔로", gender:'남', genderClass:'gender-m', face:null, fullbody:null, creator:'Ancylaini3065님', nameColor:null, age:'—', height:'—', role:"해적", role2:null, world:'다단티아', tags:["총관리자"], personality:'—', background:'—', abilities:'—' },
 ];
 
 /* ── 세계관 ── */
@@ -1997,77 +2213,230 @@ function worldPlaceholderSVG(w, size='large'){
 
 let heroActiveIdx = 0;
 
-function renderWorldHero(idx){
-  heroActiveIdx = idx;
-  const w = WORLDS[idx];
-  if(!w) return;
-  const heroEl = document.getElementById('world-hero');
-  if(!heroEl) return;
-
-  heroEl.innerHTML = w.image
-    ? `<img class="world-hero-img" src="${w.image}" alt="${w.name}"/>
-       <div class="world-hero-overlay"></div>`
-    : `<div class="world-hero-placeholder">${worldPlaceholderSVG(w,'large')}</div>
-       <div class="world-hero-overlay"></div>`;
-
-  heroEl.innerHTML += `
-    <div class="world-hero-scan"></div>
-    <div class="world-hero-corner tl"></div>
-    <div class="world-hero-corner tr"></div>
-    <div class="world-hero-corner bl"></div>
-    <div class="world-hero-corner br"></div>
-    <div class="world-hero-label">
-      <div class="world-hero-label-id">${w.id}</div>
-      <div class="world-hero-label-name">${w.name}</div>
-      <span class="world-hero-label-type">${w.type}</span>
-    </div>`;
+/* ── 행성 그라디언트 팔레트 ── */
+const PLANET_GRADIENTS = {
+  'WLD-001': ['#DFFFCD','#90F9C4','#39F3BB'],   // 다단티아
+  'WLD-002': ['#22E1FF','#1D8FE1','#625EB1'],   // 에헬라
+  'WLD-003': ['#F27121','#E94057','#8A2387'],   // 슈단티아
+};
+function getPlanetGrad(w){
+  const g = PLANET_GRADIENTS[w.id] || ['#60a5fa','#3b82f6','#1e3a8a'];
+  return `radial-gradient(circle at 30% 28%, ${g[0]} 0%, ${g[1]} 50%, ${g[2]} 100%)`;
+}
+function getPlanetGlow(w){
+  const glows = {
+    'WLD-001':'rgba(57,243,187,.6)',
+    'WLD-002':'rgba(34,225,255,.6)',
+    'WLD-003':'rgba(242,113,33,.6)',
+  };
+  return glows[w.id] || 'rgba(96,165,250,.5)';
 }
 
-function renderWorld(){
-  const q=(document.getElementById('world-search')?.value||'').toLowerCase();
-  const grid=document.getElementById('world-grid');
+/* ── 소태양계 렌더러 ── */
+let solarIdx = 0;
+let solarAnimating = false;
 
-  // 히어로 배너: 현재 필터에 맞는 첫 번째 세계 표시
-  const visible = WORLDS.filter(w=>worldFilter==='all'||w.type===worldFilter);
-  if(visible.length > 0){
-    const heroTarget = WORLDS.indexOf(visible[0]);
-    renderWorldHero(heroTarget);
+function getSolarLayout(container){
+  const W = container.offsetWidth || 700;
+  const CX = W / 2;
+  const CY = 240;
+  const centerSize = 190, sideSize = 100, farSize = 70;
+
+  function pos(offset){
+    if(offset === 0) return { size:centerSize, x:CX-centerSize/2, y:CY-centerSize/2, cls:'center', opacity:1, scale:1 };
+    const sign = offset > 0 ? 1 : -1;
+    const abs  = Math.abs(offset);
+    const size = abs===1 ? sideSize : farSize;
+    const xOff = abs===1 ? 220 : 360;
+    const yOff = abs===1 ? 40  : 85;
+    const opacity = abs===1 ? 0.7 : 0.4;
+    return { size, x:CX+sign*xOff-size/2, y:CY+yOff-size/2, cls:'side', opacity, scale:1 };
+  }
+  // 화면 밖 대기 위치 (왼쪽/오른쪽)
+  function offscreen(side){ // side: 'left'|'right'
+    const x = side==='left' ? -200 : W+200;
+    return { size:farSize, x:x-farSize/2, y:CY+85-farSize/2, cls:'side', opacity:0, scale:0.6 };
+  }
+  return { W, CX, CY, pos, offscreen };
+}
+
+function initSolarSystem(){
+  const container = document.getElementById('solar-system');
+  if(!container) return;
+  const { W, CX, CY, pos } = getSolarLayout(container);
+
+  // SVG 궤도 링
+  const rings = [320, 240, 180, 130];
+  let svgEl = container.querySelector('.solar-orbits-svg');
+  if(!svgEl){
+    svgEl = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svgEl.setAttribute('class','solar-orbits-svg');
+    svgEl.style.cssText=`position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;`;
+    rings.forEach(r=>{
+      const el = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+      el.setAttribute('cx', CX); el.setAttribute('cy', CY);
+      el.setAttribute('rx', r); el.setAttribute('ry', r*0.28);
+      el.setAttribute('fill','none');
+      el.setAttribute('stroke','rgba(96,165,250,.1)');
+      el.setAttribute('stroke-width','1');
+      svgEl.appendChild(el);
+    });
+    container.appendChild(svgEl);
   }
 
-  const list=WORLDS.filter(w=>
-    (worldFilter==='all'||w.type===worldFilter)&&
-    (!q||w.name.includes(q)||w.tags.some(t=>t.includes(q)))
-  );
-  grid.innerHTML=list.map((w,i)=>`
-    <div class="world-card" onclick="goWorldDetail('${w.id}')">
-      <div class="world-card-thumb">
-        ${w.image
-          ? `<img src="${w.image}" alt="${w.name}"/>`
-          : `<div class="world-card-thumb-ph">${worldPlaceholderSVG(w,'small')}</div>`}
-      </div>
-      <div class="world-card-body">
-        <div class="world-card-top">
-          <span class="world-card-id">${w.id}</span>
-          <span class="world-card-type">${w.type}</span>
-        </div>
-        <div class="world-card-name">${w.icon||''} ${w.name}</div>
-        <div class="world-card-desc">${w.desc}</div>
-        <div class="world-card-meta">${w.tags.map(t=>`<span class="world-meta-chip">${t}</span>`).join('')}</div>
-      </div>
-    </div>`).join('')+`
-    <div class="world-card" style="cursor:pointer;border-style:dashed;opacity:.4;" onclick="alert('항목 추가중입니다!')">
-      <div class="world-card-thumb-ph" style="height:120px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:rgba(180,79,255,.3);">＋</div>
-      <div class="world-card-body">
-        <div class="world-card-name" style="font-size:.85rem;">NEW WORLD</div>
-        <div class="world-card-desc">새 세계관·세력 추가</div>
-      </div>
-    </div>`;
+  // 화살표
+  if(!container.querySelector('.solar-arrow.left')){
+    ['left','right'].forEach(dir=>{
+      const btn = document.createElement('button');
+      btn.className = `solar-arrow ${dir}`;
+      btn.textContent = dir==='left' ? '‹' : '›';
+      btn.onclick = ()=> moveSolar(dir==='left'?-1:1);
+      container.appendChild(btn);
+    });
+  }
+
+  // 행성 DOM 생성 (한 번만)
+  WORLDS.forEach((w,i)=>{
+    if(container.querySelector(`[data-planet="${w.id}"]`)) return;
+    const p = pos(i - solarIdx);
+    const grad = getPlanetGrad(w);
+    const glow = getPlanetGlow(w);
+    const div = document.createElement('div');
+    div.className = `solar-planet ${p.cls}`;
+    div.dataset.planet = w.id;
+    div.dataset.idx = i;
+    div.innerHTML = `<span class="solar-planet-type">${w.type}</span><span class="solar-planet-name">${w.name}</span>`;
+    div.style.cssText = `
+      width:${p.size}px; height:${p.size}px;
+      left:${p.x}px; top:${p.y}px;
+      background:${grad};
+      opacity:${p.opacity};
+      box-shadow: 0 0 ${p.cls==='center'?60:30}px ${glow},
+        inset -${p.size*0.08}px -${p.size*0.08}px ${p.size*0.2}px rgba(0,0,0,.5),
+        inset ${p.size*0.05}px ${p.size*0.05}px ${p.size*0.12}px rgba(255,255,255,.08);
+      transition: left .55s cubic-bezier(.4,0,.2,1),
+                  top .55s cubic-bezier(.4,0,.2,1),
+                  width .55s cubic-bezier(.4,0,.2,1),
+                  height .55s cubic-bezier(.4,0,.2,1),
+                  opacity .45s ease,
+                  box-shadow .55s ease;
+    `;
+    div.onclick = ()=>{
+      if(solarAnimating) return;
+      if(parseInt(div.dataset.idx) === solarIdx) goWorldDetail(w.id);
+      else moveSolarTo(parseInt(div.dataset.idx));
+    };
+    container.appendChild(div);
+  });
+
+  updateSolarArrows();
+  renderSolarDots();
+  renderPlanetInfo();
 }
+
+function updateSolarPlanets(){
+  const container = document.getElementById('solar-system');
+  if(!container) return;
+  const { W, CX, CY, pos, offscreen } = getSolarLayout(container);
+
+  WORLDS.forEach((w,i)=>{
+    const div = container.querySelector(`[data-planet="${w.id}"]`);
+    if(!div) return;
+    const offset = i - solarIdx;
+    const visible = Math.abs(offset) <= 2;
+    let p;
+    if(!visible){
+      p = offscreen(offset < 0 ? 'left' : 'right');
+    } else {
+      p = pos(offset);
+    }
+
+    const glow = getPlanetGlow(w);
+    const isCenter = offset === 0;
+
+    div.style.left    = p.x + 'px';
+    div.style.top     = p.y + 'px';
+    div.style.width   = p.size + 'px';
+    div.style.height  = p.size + 'px';
+    div.style.opacity = p.opacity;
+    div.style.zIndex  = isCenter ? 10 : Math.max(1, 5 - Math.abs(offset));
+    div.style.boxShadow = `0 0 ${isCenter?60:30}px ${glow},
+      inset -${p.size*0.08}px -${p.size*0.08}px ${p.size*0.25}px rgba(0,0,0,.6),
+      inset ${p.size*0.06}px ${p.size*0.06}px ${p.size*0.18}px rgba(255,255,255,.18)`;
+    div.className = `solar-planet ${isCenter?'center':'side'}`;
+  });
+}
+
+function updateSolarArrows(){
+  const container = document.getElementById('solar-system');
+  if(!container) return;
+  const lBtn = container.querySelector('.solar-arrow.left');
+  const rBtn = container.querySelector('.solar-arrow.right');
+  if(lBtn) lBtn.classList.toggle('disabled', solarIdx===0);
+  if(rBtn) rBtn.classList.toggle('disabled', solarIdx===WORLDS.length-1);
+}
+
+function moveSolar(dir){
+  if(solarAnimating) return;
+  const next = solarIdx + dir;
+  if(next < 0 || next >= WORLDS.length) return;
+  solarAnimating = true;
+  solarIdx = next;
+  updateSolarPlanets();
+  updateSolarArrows();
+  renderSolarDots();
+  setTimeout(()=>{ solarAnimating=false; }, 580);
+  setTimeout(()=>renderPlanetInfo(), 300);
+}
+
+function moveSolarTo(i){
+  if(solarAnimating || i===solarIdx) return;
+  solarAnimating = true;
+  solarIdx = i;
+  updateSolarPlanets();
+  updateSolarArrows();
+  renderSolarDots();
+  setTimeout(()=>{ solarAnimating=false; }, 580);
+  setTimeout(()=>renderPlanetInfo(), 300);
+}
+
+function renderSolarSystem(){ initSolarSystem(); updateSolarPlanets(); }
+
+function renderSolarDots(){
+  let el = document.getElementById('solar-dots');
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'solar-dots';
+    el.className = 'solar-dots';
+    document.getElementById('solar-system').after(el);
+  }
+  el.innerHTML = WORLDS.map((w,i)=>
+    `<div class="solar-dot ${i===solarIdx?'active':''}" onclick="moveSolarTo(${i})"></div>`
+  ).join('');
+}
+
+function renderPlanetInfo(){
+  const w = WORLDS[solarIdx];
+  const panel = document.getElementById('planet-info-panel');
+  if(!w || !panel) return;
+  panel.innerHTML = `
+    <button class="pip-enter-btn" onclick="goWorldDetail('${w.id}')">${w.name} 들어가기 →</button>
+  `;
+}
+
+function moveSolar(dir){
+  solarIdx = Math.max(0, Math.min(WORLDS.length-1, solarIdx+dir));
+  renderSolarSystem();
+}
+function moveSolarTo(i){
+  solarIdx = i;
+  renderSolarSystem();
+}
+function renderWorld(){ renderSolarSystem(); }
 function setWorldFilter(v,btn){
-  worldFilter=v;
   document.querySelectorAll('.world-nav-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderWorld();
+  btn?.classList.add('active');
+  renderSolarSystem();
 }
 function goWorldDetail(id){
   const w = WORLDS.find(x=>x.id===id); if(!w) return;
@@ -2726,6 +3095,21 @@ function closeModal(){
 function closeModalOnBg(e){
   if(e.target===document.getElementById('modal'))closeModal();
 }
+</script>
+<script>
+document.addEventListener('keydown', function(e){
+  // Ctrl+U (소스 보기)
+  if(e.ctrlKey && e.key === 'u'){
+    e.preventDefault(); return false;
+  }
+  // Ctrl+Shift+J (콘솔)
+  if(e.ctrlKey && e.shiftKey && e.key === 'J'){
+    e.preventDefault(); return false;
+  }
+  if(e.ctrlKey && e.shiftKey && e.key === 'j'){
+    e.preventDefault(); return false;
+  }
+});
 </script>
 </body>
 </html>
