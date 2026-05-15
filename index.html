@@ -4,9 +4,9 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>WORLD ARCHIVE</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Black+Han+Sans&family=Do+Hyeon&family=Hahmlet:wght@300;400;500;700&display=swap" rel="stylesheet"/>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Black+Han+Sans&family=Do+Hyeon&family=Hahmlet:wght@300;400;500;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   /* Rebillion 스타일 팔레트 */
@@ -854,6 +854,48 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
 }
 .bestiary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:14px;margin-bottom:36px;}
 .bestiary-card{border-radius:16px;border:1px solid var(--border);background:linear-gradient(160deg,rgba(37,99,235,.07),rgba(124,58,237,.05));cursor:pointer;transition:all .25s;position:relative;overflow:hidden;display:flex;flex-direction:column;backdrop-filter:blur(8px);}
+.bestiary-card--race{overflow:hidden;}
+.bestiary-card-img--square{width:100%;aspect-ratio:1/1;overflow:hidden;position:relative;flex-shrink:0;}
+.bestiary-card-img--square img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+.bestiary-card-img--square .bestiary-card-img-ph{position:absolute;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
+.bestiary-card-race-name{font-size:.88rem;font-weight:700;color:var(--text-soft);padding:10px 12px;text-align:center;letter-spacing:.03em;}
+
+/* 종족 카드 */
+.race-card{
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:var(--card-dark);
+  cursor:pointer;
+  transition:all .28s;
+  position:relative;
+  overflow:hidden;
+  box-shadow:var(--shadow-card);
+}
+.race-card:hover{border-color:rgba(167,139,250,.5);transform:translateY(-5px);box-shadow:0 8px 32px rgba(124,58,237,.25);}
+.race-card-thumb{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  display:block;
+}
+.race-card-thumb--ph{
+  width:100%;
+  aspect-ratio:1/1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:3rem;
+  background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(79,46,220,.06));
+}
+.race-card-name{
+  padding:10px 12px;
+  font-size:.9rem;
+  font-weight:700;
+  color:var(--text-soft);
+  text-align:center;
+  letter-spacing:.03em;
+  background:linear-gradient(to top,rgba(6,12,26,.95),rgba(6,12,26,.7));
+}
 .bestiary-card:hover{border-color:rgba(52,211,153,.4);background:linear-gradient(160deg,rgba(52,211,153,.1),rgba(37,99,235,.08));box-shadow:0 8px 32px rgba(52,211,153,.15);transform:translateY(-3px);}
 .bestiary-card-img{width:100%;height:115px;overflow:hidden;position:relative;flex-shrink:0;border-radius:16px 16px 0 0;}
 .bestiary-card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s;}
@@ -886,6 +928,223 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
 .bmodal-desc{font-size:.8rem;color:var(--text-soft);line-height:1.9;border-left:2px solid rgba(52,211,153,.3);padding-left:12px;}
 .bmodal-tag-list{display:flex;flex-wrap:wrap;gap:5px;}
 .bmodal-tag{font-size:.6rem;font-weight:700;padding:2px 9px;border-radius:6px;background:rgba(52,211,153,.12);color:rgba(110,231,183,.8);border:1px solid rgba(52,211,153,.2);}
+
+/* ── 종족 전용 모달 ── */
+.rmodal-wrap{position:relative;display:flex;align-items:flex-start;gap:16px;}
+.rmodal-mini-card{
+  position:sticky;top:0;
+  width:200px;flex-shrink:0;
+  border-radius:14px;
+  border:1px solid rgba(167,139,250,.3);
+  background:linear-gradient(160deg,rgba(124,58,237,.12),rgba(79,46,220,.06));
+  padding:16px;
+  box-shadow:0 0 30px rgba(124,58,237,.15);
+  animation:miniCardIn .25s ease;
+  display:none;
+}
+.rmodal-mini-card.show{display:block;}
+@keyframes miniCardIn{from{opacity:0;transform:translateX(12px);}to{opacity:1;transform:translateX(0);}}
+.rmodal-mini-face{
+  width:100%;aspect-ratio:1;border-radius:10px;object-fit:cover;
+  border:1px solid rgba(167,139,250,.2);margin-bottom:10px;
+}
+.rmodal-mini-face-ph{
+  width:100%;aspect-ratio:1;border-radius:10px;
+  border:1.5px dashed rgba(167,139,250,.2);
+  background:rgba(124,58,237,.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.5rem;margin-bottom:10px;
+}
+.rmodal-mini-name{font-size:.88rem;font-weight:700;color:#c4b5fd;margin-bottom:3px;}
+.rmodal-mini-role{font-size:.68rem;color:rgba(167,139,250,.5);}
+.rmodal-mini-close{
+  position:absolute;top:8px;right:8px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(167,139,250,.2);
+  border-radius:50%;color:rgba(167,139,250,.5);
+  width:20px;height:20px;font-size:.65rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.rmodal-main{flex:1;min-width:0;}
+.rmodal-banner{
+  width:100%;height:150px;
+  background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(79,46,220,.1));
+  display:flex;align-items:center;justify-content:center;
+  font-size:5.5rem;position:relative;overflow:hidden;
+}
+.rmodal-banner img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.rmodal-banner-icon{position:relative;z-index:1;}
+.rmodal-banner-overlay{
+  position:absolute;inset:0;z-index:2;
+  background:linear-gradient(to bottom,rgba(12,17,40,.1) 0%,rgba(12,17,40,.95) 100%);
+}
+.rmodal-header{padding:0 26px 16px;margin-top:-28px;position:relative;z-index:3;}
+.rmodal-name{font-family:'Do Hyeon','Noto Sans KR',sans-serif;font-size:2.3rem;font-weight:500;color:#c4b5fd;letter-spacing:.03em;}
+.rmodal-aka{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:rgba(167,139,250,.4);margin-top:3px;}
+.rmodal-body{padding:0 26px 26px;}
+.rmodal-sec-title{
+  font-family:'Do Hyeon','Noto Sans KR',sans-serif;font-size:1.4rem;
+  font-weight:100;
+  color:rgba(167,139,250,1);letter-spacing:.12em;
+  margin:22px 0 10px;
+  display:flex;align-items:center;gap:8px;
+}
+.rmodal-sec-title::after{content:'';flex:1;height:1px;background:rgba(167,139,250,.12);}
+.rmodal-desc{font-family:'Hahmlet','Noto Sans KR',serif;font-size:.92rem;color:rgba(200,210,255,.72);line-height:2.0;}
+.rmodal-img2-ph{
+  width:100%;height:120px;border-radius:10px;margin-top:12px;
+  border:1.5px dashed rgba(167,139,250,.18);
+  background:rgba(124,58,237,.04);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;color:rgba(167,139,250,.28);
+  font-family:'Share Tech Mono',monospace;letter-spacing:.08em;
+}
+.rmodal-img1{
+  width:100%;border-radius:12px;
+  object-fit:cover;
+  margin-bottom:16px;
+  border:1px solid rgba(167,139,250,.15);
+  display:block;
+}
+/* 슬라이더 */
+.rslider{
+  position:relative;width:100%;
+  border-radius:12px;overflow:hidden;
+  margin-top:12px;
+  border:1px solid rgba(167,139,250,.15);
+  background:rgba(124,58,237,.04);
+}
+.rslider-track{
+  display:flex;
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+.rslide-item{
+  min-width:100%;flex-shrink:0;
+}
+.rslide-item img{
+  width:100%;display:block;
+  object-fit:cover;
+}
+.rslide-ph{
+  height:140px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;color:rgba(167,139,250,.28);
+  font-family:'Share Tech Mono',monospace;letter-spacing:.08em;
+}
+.rslider-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(12,17,40,.7);border:1px solid rgba(167,139,250,.3);
+  color:#c4b5fd;font-size:1.4rem;line-height:1;
+  width:32px;height:32px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;z-index:10;
+}
+.rslider-btn:hover{background:rgba(124,58,237,.4);border-color:rgba(167,139,250,.6);}
+.rslider-btn--prev{left:8px;}
+.rslider-btn--next{right:8px;}
+.rslider-dots{
+  position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  display:flex;gap:5px;z-index:10;
+}
+.rslider-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(167,139,250,.3);cursor:pointer;transition:all .2s;
+}
+.rslider-dot.active{background:#c4b5fd;transform:scale(1.3);}
+
+/* 종족 카드 썸네일 — 정사각형 강제 */
+.bestiary-card--race{align-items:center;padding-bottom:12px;}
+.bestiary-card-img--square{
+  width:100%;
+  aspect-ratio:1/1;
+  overflow:hidden;
+  flex-shrink:0;
+  position:relative;
+}
+.bestiary-card-img--square img{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+}
+.bestiary-card-img--square .bestiary-card-img-ph{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.5rem;
+}
+.bestiary-card-race-name{font-size:.88rem;font-weight:700;color:var(--text-soft);margin-top:10px;text-align:center;letter-spacing:.03em;}
+.rmodal-member-chip{
+  padding:5px 14px;border-radius:16px;font-size:.75rem;
+  color:rgba(196,181,253,.7);
+  background:rgba(124,58,237,.1);
+  border:1px solid rgba(167,139,250,.2);
+  cursor:pointer;
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  position:relative;overflow:hidden;
+}
+.rmodal-member-chip::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at center,rgba(167,139,250,.3),transparent 70%);
+  opacity:0;transition:opacity .2s;
+}
+.rmodal-member-chip:hover{
+  background:rgba(124,58,237,.22);
+  border-color:rgba(167,139,250,.55);
+  color:#e9d5ff;
+  transform:translateY(-2px) scale(1.05);
+  box-shadow:0 6px 20px rgba(124,58,237,.3);
+}
+.rmodal-member-chip:hover::before{opacity:1;}
+.rmodal-member-chip.active{
+  background:rgba(124,58,237,.3);
+  border-color:rgba(167,139,250,.7);
+  color:#e9d5ff;
+  box-shadow:0 0 0 2px rgba(167,139,250,.2);
+}
+.rmodal-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.rmodal-tag{
+  font-size:.68rem;font-weight:600;
+  padding:3px 11px;border-radius:12px;
+  background:rgba(124,58,237,.15);
+  border:1px solid rgba(167,139,250,.3);
+  color:rgba(196,181,253,.85);
+  letter-spacing:.04em;
+}
+.rmodal-members{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+.rmodal-rainbow-link{
+  display:inline-block;
+  margin-bottom:12px;
+  font-size:.85rem;
+  font-weight:700;
+  text-decoration:none;
+  padding:7px 18px;
+  border-radius:20px;
+  border:1.5px solid rgba(167,139,250,.3);
+  color:#e9d5ff;
+  transition:all .3s;
+}
+.rmodal-rainbow-link:hover{
+  border-color:transparent;
+  animation:rainbowBorder 1.5s linear infinite, rainbowText 1.5s linear infinite;
+}
+@keyframes rainbowBorder{
+  0%  {box-shadow:0 0 8px 2px #f87171, inset 0 0 0 1.5px #f87171;}
+  16% {box-shadow:0 0 8px 2px #fb923c, inset 0 0 0 1.5px #fb923c;}
+  33% {box-shadow:0 0 8px 2px #facc15, inset 0 0 0 1.5px #facc15;}
+  50% {box-shadow:0 0 8px 2px #4ade80, inset 0 0 0 1.5px #4ade80;}
+  66% {box-shadow:0 0 8px 2px #38bdf8, inset 0 0 0 1.5px #38bdf8;}
+  83% {box-shadow:0 0 8px 2px #818cf8, inset 0 0 0 1.5px #818cf8;}
+  100%{box-shadow:0 0 8px 2px #e879f9, inset 0 0 0 1.5px #e879f9;}
+}
+@keyframes rainbowText{
+  0%  {color:#f87171;}
+  16% {color:#fb923c;}
+  33% {color:#facc15;}
+  50% {color:#4ade80;}
+  66% {color:#38bdf8;}
+  83% {color:#818cf8;}
+  100%{color:#e879f9;}
+}
 @media(max-width:540px){.bmodal-img-col{border-right:none;border-bottom:1px solid var(--border);}}
 
 /* 캐릭터 로그 */
@@ -1241,8 +1500,8 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
   <p class="page-sub">// 세계관 생물 · 종족 데이터베이스 //</p>
   <div class="filter-bar">
     <div class="bestiary-tab-row">
-      <button class="bestiary-tab active" id="btab-creature" onclick="setBestiaryTab('creature',this)">🦎 생물</button>
-      <button class="bestiary-tab" id="btab-race" onclick="setBestiaryTab('race',this)">👥 종족</button>
+      <button class="bestiary-tab" id="btab-creature" onclick="setBestiaryTab('creature',this)">🦎 생물</button>
+      <button class="bestiary-tab active" id="btab-race" onclick="setBestiaryTab('race',this)">👥 종족</button>
     </div>
     <input class="filter-input" type="text" placeholder="// 검색..." id="bestiary-search" oninput="renderBestiary()"/>
     <div id="bestiary-subfilter-wrap" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
@@ -1880,53 +2139,177 @@ const GLOSSARY = [
    image: 이미지 URL (없으면 null)
    icon: 이미지 없을 때 표시할 이모지 */
 const BESTIARY = [
-  {
-    id: 'BST-001',
-    name: '마력 늑대',
-    aka: 'Mana Wolf',
-    type: '마물',
-    icon: '🐺',
-    image: null,
-    world: '다단티아',
-    habitat: '에르나 왕국 북방 숲',
-    size: '어깨높이 약 1.2m',
-    danger: '★★★☆☆',
-    tags: ['마력 보유', '군집 행동', '야행성'],
-    desc: '마력 전도석이 매장된 지역에 서식하는 변이종 늑대. 몸 전체에서 희미한 청백색 마력이 흘러나오며, 집단으로 사냥한다. 마력을 압축해 뿜어내는 공격을 구사할 수 있다.',
-    ecology: '번식기에는 암컷이 마력을 대거 흡수해 새끼에게 전달한다. 마력 전도석 광산 인근에서 개체 수가 급증하는 경향이 있다.',
-    note: '왕국 기사단의 주요 토벌 대상 중 하나. 가죽과 마력 결정은 고가에 거래된다.',
-  },
-  {
-    id: 'BST-002',
-    name: '에헬라 잔상체',
-    aka: 'Echo Wraith',
-    type: '정령',
-    icon: '👻',
-    image: null,
-    world: '에헬라',
-    habitat: '기억의 회랑',
-    size: '형태 불정형',
-    danger: '★★★★☆',
-    tags: ['비물질', '기억 조작', '에헬라 고유종'],
-    desc: '에헬라의 기억 회랑에 떠도는 잔상 존재. 봉인된 정령들의 기억 파편이 응집되어 자의식을 갖게 된 것으로 추정된다. 접촉한 자의 기억을 왜곡하거나 빼앗는 능력을 지닌다.',
-    ecology: '실체가 없어 물리 공격이 통하지 않으며, 봉인 마법에 의해서만 제압 가능하다. 에헬라 내에서 자연 발생하며 개체 수를 추산하기 어렵다.',
-    note: '루나 오버는 이 존재들과 의사소통이 가능한 것으로 확인되었다.',
-  },
-  {
+  
+  
+  
+    {
     id: 'BST-003',
-    name: '인간',
-    aka: 'Human',
+    name: '컷페이스',
+    aka: '컷페이스',
     type: '종족',
-    icon: '🧑',
+    icon: '❓',
+    image: 'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/species/%EC%BB%B7%ED%8E%98%EC%9D%B4%EC%8A%A4/%EC%BB%B7%ED%8E%98%EB%A1%9C%EA%B3%A0.png?raw=true',
+    images2: ['https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/species/%EC%BB%B7%ED%8E%98%EC%9D%B4%EC%8A%A4/%EC%BB%B7%ED%8E%98%EC%99%B8%ED%98%951.png?raw=true', 'https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/species/%EC%BB%B7%ED%8E%98%EC%9D%B4%EC%8A%A4/%EC%BB%B7%ED%8E%98%EC%99%B8%ED%98%952.png?raw=true'],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '본래 지상에 내려올 수 없는 신 대신 신의 전언을 전달해주는 목적으로 만들어진 종족이였으나 어떠한 계기로 창조된 바로 직후 신의 죽음으로 불완전하게 완성된 종족이다.<br><br>종족의 주인이자 탄생의 목적이였던 신의 죽음으로 목적을 잃고 떠돌아다니던 컷페이스들은 각자 살 곳을 찾아 터를 잡았다.<br><br>목적의 상실은 곧 자유의 몸이 되었다는 증거였지만 딱 한가지 컷페이스의 영생에 방해되는 한 가지, 점점 소멸해가는 불완전한 몸. 뿔 끝부터 점점 소멸하다 마지막엔 영혼까지 소멸하는 저주 같은 운명이였지만 완전한 소멸까지 200년이나 걸리기 때문에 다들 \'늙어죽는 것\'정도로 생각하고 있는 듯하다.<br><br>신의 전언을 전하는 종족이니만큼 원하는 곳에 순간이동하는 능력을 지녔지만 아는 곳에 한정해서 이동가능하다. 이 아는 곳은 \'보는 곳\'에 한정하는 것이 아닌 \'듣는 것\'까지 치므로 장소에 대한 얘기를 듣는 것 만으로도 이동조건이 만족된다.<br><br>그 외에도 개인 차원(공간)이 존재한다. 무한하지 않지만 각자 취향대로 꾸며져 있는 듯하다. 이 개인 차원은 주인의 허락이 있어야 들어갈 수 있고 같은 컷페이스가 아닌 한 주인의 도움이 있어야 나올 수 있다.',
+    desc2: '[일반개채]<br>크기-160~260cm<br><br>뿔-컷페이스는 대표 특징이라고 할 수 있는 \'끝으로 갈수록 점점 갈라지고 분해되는 듯한 뿔모양\'은 개채 전부 가지고 있으며 어린 개채일수록 갈라짐이 적고 늙은 개채일수록 뿔에 갈라짐이 많고 희미해진다. 개채마다 모양, 색, 갯수는 천차만별.<br><br>머리-몸에 비해 조금 크다. 동그란 두상에 짤막하게 튀어나온 주둥이가 있다. 머리의 옆에는 1~2쌍의 귀가 존재하고 역안이다.<br><br>꼬리날개-꼬리가 있을자리에 날개가 돋아있으며 일반개채는 1쌍만 나있는게 전부다. 날개 끝은 마치 꼬리처럼 길쭉하게 뻗어있고 꼬리처럼 자유자재로 조종가능하다.<br><br>[특수개채]<br>일반개채에 없던 특징이 발현된 개채 (예: 눈 두쌍, 꼬리날개 두쌍, 손모양 변형 등)<br><br>[장로]<br>200살 이상 산 개채. 종족 특성상 외부의 개입 없이는 200살 이상 사는게 불가능하므로 장로종이 진짜로 있는지는 불명이다.<br><br>식성- 잡식이나 식물성음식을 먹는 경우는 거의 없고 육식 위주다.<br>수명- 200살. 20살 전까진 유년기, 그 이후로는 성인기, 190년 이후로는 노년기.<br>성별- 자웅동체. 교배는 성인기의 개채 두마리만 있으면 언제든지 가능하다.<br>팔다리- 몸에 비해 큼직한 손발 한 쌍. 손과 발 둘 다 육구가 존재하며 손발가락은 4개.',
+    ecology: '—',
+    note: '—',
+    members: [],
+    memberLink: {url:'https://moonnelno.tistory.com/3', label:'📖 개체 정보 보러가기'},
+  },
+    {
+    id: 'BST-004',
+    name: '크렙터',
+    aka: '크렙터',
+    type: '종족',
+    icon: '❓',
+    image: null,
+    images2: ['https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/species/%ED%81%AC%EB%A0%99%ED%84%B0/%ED%81%AC%EB%A0%99%ED%84%B0%EC%99%B8%ED%98%951.png?raw=true'],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '작은 연못부터 바다까지 물이 있는 곳에 서식하는 종족. 게, 가재와 랩터를 합친듯한 모습이다.<br><br>튼튼한 다리로 빠르게 달릴 수 있으며 딱딱한 갑피는 천적들로부터 크랩터를 보호해준다.<br><br>폐로 호흡하지만 숨을 오랫동안 참을 수 있다. 물 속에 오래 있을 때는 갑피 속에 산소를 보관하면서 조금씩 사용한다.<br><br>보금자리는 땅이나 바위 속에 작은 굴을 파서 만든다.',
+    desc2: '[식성]<br>작은 벌레나 물고기, 플랑크톤을 주로 먹지만 밀가루 음식이나 풀, 고기 등 가리지 않고 다 잘 먹는다.<br><br>[성격]<br>대체로 온순하며 먼저 공격하지 않는한 도망가거나 경계하지 않는다. 공격받으면 빠르게 도망가며 자신을 공격한 생물의 모습을 오랫동안 기억하고 피해다닌다. 자신에게 먹이를 준 사람을 잘 따르는 경향이 있다.<br><br>[외형]<br>동글동글한 얼굴에 집게발 한쌍, 수각류의 다리 한쌍, 긴 꼬리가 달린 외형이 대체적이며 서식지에 따라 외형이 조금씩 다르다.<br><br>[크기와 수명]<br>크기는 대체로 20cm이상 40cm이하며, 일정 크기 커질 때마다 탈피를 한다. 수명은 이론상 불멸가능하지만 대체로 10년 전에 천적에게 잡아먹히거나 병에걸려 죽는게 대부분이다.',
+    ecology: '—',
+    note: '—',
+    members: [],
+  },
+    {
+    id: 'BST-005',
+    name: '드라한',
+    aka: '드라한',
+    type: '종족',
+    icon: '❓',
+    image: null,
+    images2: ['https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/species/%EB%93%9C%EB%9D%BC%ED%95%9C/%EB%93%9C%EB%9D%BC%ED%95%9C1.png?raw=true'],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '사람의 꿈과 무의식에서 태어나는 정령. 태어나자마자 본능적으로 꿈을 먹으러 다닌다. 보통의 드라한이라면 꿈의 일부만 먹기 때문에 사람에게 해를 끼치지 않는다.<br><br>꿈을 먹기 전의 드라한은 작은 도깨비불 같이 생겼다. 꿈을 먹기 시작하면 몸통과 얼굴이 생기기 시작한다.',
+    desc2: '1. 특징<br>제일 큰 특징으로는 목이 없는 형태로 몸과 머리가 분리되어 있는 외형이다. 머리의 모양은 개체마다 차이가 있다.<br><br>다리가 2쌍이라는 점과 발굽과 용의 다리 형태가 섞여있다는 점, 꼬리가 2쌍 이상이라는 것도 특징이다.<br><br>드라한은 먹은 꿈에 따라서 모습과 형태가 바뀐다.<br><br>2. 성격<br>드라한은 겁이 많고 사람이나 생물이 많이 있는 곳을 꺼려한다. 먹는 꿈의 종류에 따라 성격은 달라질 수 있다.<br><br>3. 특이개체<br>쌍두개체: 하나의 몸에 두개 이상의 머리가 있는 개체.<br>상잔개체: 종족상잔을 하여 외형이 특이하게 변한 개체.',
+    ecology: '—',
+    note: '—',
+    members: [],
+  },
+    {
+    id: 'BST-006',
+    name: '세기살이',
+    aka: '세기살이',
+    type: '종족',
+    icon: '❓',
+    image: null,
+    images2: [],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '기원: 한 하이브마인드 어미로부터 떨어져 나온 것이 기원이다. 본래 어미의 세포에서 탄생한 세기살이는 살아평생 어미에게 충성을 다하며 살다 죽는 것이 일생이지만, 몇천년전 어미가 무기물의 형태로 봉인당한 후 세기살이들은 충성이라는 본능에서 벗어나 자유롭게 살아갈 수 있게 되었다.<br><br>성장: 세기살이들은 포자의 형태로 태어나 자신이 기생할 것을 찾는다. 기생하는 것은 생물이나 무생물을 가리지 않는다. 기생할 곳을 찾으면 표면에 붙어 뿌리를 내린 후 점점 성장하면서 본래 자신의 형태를 찾아간다.<br><br>평균 수명은 100년 정도이며, 수명이 다 하면 점점 몸이 갈라지면서 세포 포자들을 뿌리면서 죽는다.',
+    desc2: '핵의 역할을 하는 이마의 큰 눈과 발가락 없는 길게 뻗은 다리가 특징이다. 그 외에 외적인 특징은 개체마다 천차만별이기 때문에 다른 종족과 헷갈리지 않게 주의해야 한다.',
+    ecology: '—',
+    note: '—',
+    members: [],
+  },
+    {
+    id: 'BST-007',
+    name: '블러드래곤',
+    aka: '블러드래곤',
+    type: '종족',
+    icon: '❓',
+    image: null,
+    images2: ['https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/species/%EB%B8%94%EB%9F%AC%EB%93%9C%EB%9E%98%EA%B3%A4/%EB%B8%94%EB%9F%AC%EB%93%9C%EB%9E%98%EA%B3%A4%EC%99%B8%ED%98%951.webp?raw=true'],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '신체의 특정부위에서 흐르는 액체가 마치 피가 흐르는 것처럼 보여 \'블러드래곤\'이라는 이름이 붙여졌다.<br><br>주요 특징으로는 통통한 손과 빈약해보이는 다리, 통통한 꼬리와 특이한 입, 그리고 몸에서 끊임없이 흐르는 끈적한 액체이다.',
+    desc2: '1. 특성과 능력<br>몸에서 흘러나오는 액체는 연약한 피부를 보호해주는 동시에 약간의 독성을 띄고 있어 천적이 함부로 먹이로 삼지 못하게 한다.<br><br>독성은 독을 가진 식물을 먹음으로서 체내에 저장해 액체에 섞어넣는 식이다. 식성은 잡식성으로 주식은 독성식물을 포함한 연한 식물들.<br><br>2. 사회문화<br>미약한 지성을 가진 존재지만 학습능력이 뛰어나 다른 지성체들과 같은 지성을 획득할 수 있다. 보통 무리를 지어 살아가는데, 성별 상관없이 제일 크고 강한 개체가 리더가 된다.',
+    ecology: '—',
+    note: '—',
+    members: [],
+  },
+    {
+    id: 'BST-008',
+    name: '꿈충',
+    aka: '꿈충',
+    type: '종족',
+    icon: '❓',
+    image: null,
+    images2: ['https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/species/%EA%BF%88%EC%B6%A9/%EA%BF%88%EC%B6%A9%EC%99%B8%ED%98%951.webp?raw=true'],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '꿈을 먹는 벌레. 머리, 가슴, 배로 이루어진 신체가 특징이며 다리는 총 3쌍이다. 초롱초롱한 눈망울과 달리 2쌍의 매서운 송곳니가 발달되어 밖으로 나와있다.<br><br>크기는 30cm부터 1미터까지 다양하다.',
+    desc2: '주식은 다른 지성생명체가 꾸는 \'꿈\'이며 상대가 잠을 잘 때 몰래 꿈 속에 접촉해 꿈의 일부분을 송곳니로 뜯어 먹는다.<br><br>꿈충은 자신이 먹는 꿈의 종류에 따라서 외형이 바뀌기도 한다. 검은 괴물이 나오는 악몽을 먹으면 자신도 검은색 괴물 같은 외형으로 바뀌고, 반대로 환하고 평화로운 꿈을 먹으면 자신도 희고 화려하게 바뀐다.',
+    ecology: '—',
+    note: '—',
+    members: [],
+  },
+    {
+    id: 'BST-009',
+    name: '셰이킹',
+    aka: '셰이킹',
+    type: '종족',
+    icon: '❓',
+    image: null,
+    images2: ['https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/species/%EC%85%B0%EC%9D%B4%ED%82%B9/%EC%85%B0%EC%9D%B4%ED%82%B91.webp?raw=true'],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '비정상적으로 큰 팔과 2.5등신의 작은 몸을 지닌 종족. 나무가 많은 숲에서 살며 지성이 확실히 있으며 이타적인 모습을 보인다. 다만 종족 특징으로 센스와 눈치가 결여된 모습을 보이고, 화를 잘 안내고 꼬마같은 모습을 보인다고 한다.',
+    desc2: '1. 종족 특징<br>주로 나무껍질이나 질긴 풀을 먹는데, 나무껍질을 벗겨내기 위해 발톱을 마구잡이로 휘두르는 모습을 보고 셰이킹(흔들다)라는 이름이 붙었다.<br><br>공통적인 외적 특징으론 큰 팔과 발톱, 큰 귀, 크고 뾰족한 눈썹, 짧고 길쭉한 꼬리 등이 있다.<br><br>특별한 능력으로 자신이 점찍어논 대상이 어디에 있든 찾아낸다고 한다.<br><br>2. 사회문화<br>셰이킹들은 무리지어 살며 \'무리\'라는 개념을 중요시 여긴다. 다른 종족들과도 대립하기보다는 친화적으로 동맹을 맺는 것을 선호하며 종족자체의 성격도 친화적으로 진화했다.',
+    ecology: '—',
+    note: '—',
+    members: [],
+  },
+    {
+    id: 'BST-010',
+    name: '쿠루쿠우',
+    aka: '쿠루쿠우',
+    type: '종족',
+    icon: '❓',
+    image: null,
+    images2: ['https://github.com/JiminLeeeeeee/JiminLeeeeeee.github.io/blob/main/wiki/species/%EC%BF%A0%EB%A3%A8%EC%BF%A0%EC%9A%B0/KakaoTalk_20260514_130212190.png?raw=true'],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '—',
+    desc2: '—',
+    ecology: '—',
+    note: '—',
+    members: [],
+  },
+  {
+    id: 'BST-011',
+    name: '우드버드',
+    aka: 'Woodbird',
+    type: '마물',
+    icon: '🦅',
     image: null,
     world: '다단티아',
-    habitat: '대륙 전역',
-    size: '평균 신장 165~180cm',
-    danger: '★☆☆☆☆',
-    tags: ['마법 사용 가능', '문명 건설종', '다단티아 주요 종족'],
-    desc: '다단티아 대륙을 지배하는 주요 지적 종족. 마법 적성에 개인차가 크며, 왕국·도시 등 복잡한 문명 체계를 구축하고 있다. 수명은 평균 70~90년이나 마법사는 이를 크게 상회하는 경우도 있다.',
-    ecology: '전 대륙에 분포하며 각 지역별로 문화·언어·풍습이 상이하다. 정령과의 공존 역사를 가지며 마력 전도석을 주요 에너지원으로 활용한다.',
-    note: '이중 속성 보유자는 1만 명 중 1명 비율로 태어나며 사회적으로 특별한 지위를 부여받는다.',
+    habitat: '검은숲',
+    size: '약 2~7m',
+    danger: '—',
+    tags: [],
+    desc: '—',
+    ecology: '—',
+    note: '—',
   },
 ];
 
@@ -3008,9 +3391,10 @@ function openGlossaryModal(id){
 /* ════════════════════════════════════════
    ████  생물·종족  ████
 ════════════════════════════════════════ */
-let bestiaryTab = 'creature';
+let bestiaryTab = 'race';
 const BESTIARY_CREATURE_TYPES = ['동물','마물','정령'];
 const BESTIARY_RACE_TYPES     = ['종족'];
+const BESTIARY_RACE_TAGS    = ['닫힌종족', '열린종족'];
 
 function setBestiaryTab(tab, btn){
   bestiaryTab = tab;
@@ -3023,9 +3407,13 @@ function setBestiaryTab(tab, btn){
 function renderBestiarySubfilter(){
   const wrap = document.getElementById('bestiary-subfilter-wrap');
   if(!wrap) return;
-  const types = bestiaryTab === 'creature' ? BESTIARY_CREATURE_TYPES : BESTIARY_RACE_TYPES;
-  wrap.innerHTML = '<button class="filter-btn active" onclick="setBestiaryFilter(\'all\',this)">전체</button>'
-    + types.map(t=>`<button class="filter-btn" onclick="setBestiaryFilter('${t}',this)">${t}</button>`).join('');
+  if(bestiaryTab === 'race'){
+    wrap.innerHTML = '<button class="filter-btn active" onclick="setBestiaryFilter(\'all\',this)">전체</button>'
+      + BESTIARY_RACE_TAGS.map(t=>`<button class="filter-btn" onclick="setBestiaryFilter('${t}',this)">${t}</button>`).join('');
+  } else {
+    wrap.innerHTML = '<button class="filter-btn active" onclick="setBestiaryFilter(\'all\',this)">전체</button>'
+      + BESTIARY_CREATURE_TYPES.map(t=>`<button class="filter-btn" onclick="setBestiaryFilter('${t}',this)">${t}</button>`).join('');
+  }
   bestiaryFilter = 'all';
 }
 
@@ -3033,12 +3421,22 @@ function renderBestiary(){
   const q=(document.getElementById('bestiary-search')?.value||'').toLowerCase();
   const grid=document.getElementById('bestiary-grid');
   const tabTypes = bestiaryTab === 'creature' ? BESTIARY_CREATURE_TYPES : BESTIARY_RACE_TYPES;
+  // 종족 탭은 작은 카드 그리드, 생물 탭은 넓은 카드 그리드
+  grid.style.gridTemplateColumns = bestiaryTab === 'race'
+    ? 'repeat(auto-fill,minmax(160px,1fr))'
+    : 'repeat(auto-fill,minmax(265px,1fr))';
   const list=BESTIARY.filter(b=>
     tabTypes.includes(b.type)&&
-    (bestiaryFilter==='all'||b.type===bestiaryFilter)&&
+    (bestiaryFilter==='all'||(bestiaryTab==='race' ? b.tags.includes(bestiaryFilter) : b.type===bestiaryFilter))&&
     (!q||b.name.includes(q)||b.aka.toLowerCase().includes(q)||b.tags.some(t=>t.includes(q)))
   );
-  grid.innerHTML=list.map(b=>`
+  grid.innerHTML=list.map(b=> b.type==='종족' ? `
+    <div class="race-card" onclick="openBestiaryModal('${b.id}')">
+      ${b.image
+        ? `<img class="race-card-thumb" src="${b.image}" alt="${b.name}"/>`
+        : `<div class="race-card-thumb race-card-thumb--ph">${b.icon}</div>`}
+      <div class="race-card-name">${b.name}</div>
+    </div>` : `
     <div class="bestiary-card" onclick="openBestiaryModal('${b.id}')">
       <div class="bestiary-card-img">
         ${b.image
@@ -3071,6 +3469,74 @@ function setBestiaryFilter(v,btn){
 }
 function openBestiaryModal(id){
   const b=BESTIARY.find(x=>x.id===id);if(!b)return;
+
+  /* ── 종족 전용 모달 ── */
+  if(b.type==='종족'){
+    document.getElementById('modal-label').textContent=`// ${b.id} — RACE FILE`;
+    const membersHTML = (b.members&&b.members.length)
+      ? b.members.map(name=>`<span class="rmodal-member-chip" onclick="openRaceMiniCard(this,'${name}')">${name}</span>`).join('')
+      : '';
+    const memberLinkHTML = b.memberLink
+      ? `<a class="rmodal-rainbow-link" href="${b.memberLink.url}" target="_blank">${b.memberLink.label}</a>`
+      : '';
+
+    // image1 — 설명 위 (배너 아래)
+    const img1HTML = b.images2 && b.images2[0]
+      ? `<img class="rmodal-img1" src="${b.images2[0]}" alt="${b.name} 이미지1"/>`
+      : '';
+
+    // image2~4 — 외형 및 특징 아래 슬라이더
+    const sliderImgs = (b.images2||[]).slice(1); // index 1,2,3
+    // image3, image4 자리도 미리 포함 (빈 슬롯은 제외)
+    const slideItems = sliderImgs.length
+      ? sliderImgs.map((url,i)=>`<div class="rslide-item"><img src="${url}" alt="외형 ${i+2}"/></div>`).join('')
+      : `<div class="rslide-item rslide-ph">[ 외형 이미지 ]</div>`;
+    const sliderHTML = `
+      <div class="rslider" id="rslider-${b.id}">
+        <div class="rslider-track" id="rslider-track-${b.id}">${slideItems}</div>
+        ${sliderImgs.length>1?`
+        <button class="rslider-btn rslider-btn--prev" onclick="rSlide('${b.id}',-1)">‹</button>
+        <button class="rslider-btn rslider-btn--next" onclick="rSlide('${b.id}',1)">›</button>
+        <div class="rslider-dots" id="rslider-dots-${b.id}">
+          ${sliderImgs.map((_,i)=>`<span class="rslider-dot${i===0?' active':''}" onclick="rSlideTo('${b.id}',${i})"></span>`).join('')}
+        </div>`:''}
+      </div>`;
+
+    document.getElementById('modal-content').innerHTML=`
+      <div class="rmodal-wrap" id="rmodal-wrap">
+        <div class="rmodal-mini-card" id="rmodal-mini-card">
+          <button class="rmodal-mini-close" onclick="closeRaceMiniCard()">✕</button>
+          <div id="rmodal-mini-body"></div>
+        </div>
+        <div class="rmodal-main">
+          <div class="rmodal-banner">
+            ${b.image?`<img src="${b.image}" alt="${b.name}"/>`:''}
+            ${!b.image?`<span class="rmodal-banner-icon">${b.icon}</span>`:''}
+            <div class="rmodal-banner-overlay"></div>
+          </div>
+          <div class="rmodal-header">
+            <div class="rmodal-name">${b.name}</div>
+            <div class="rmodal-aka">${b.aka}</div>
+            ${b.tags&&b.tags.length ? `<div class="rmodal-tags">${b.tags.map(t=>`<span class="rmodal-tag">${t}</span>`).join('')}</div>` : ''}
+          </div>
+          <div class="rmodal-body">
+            ${img1HTML}
+            <div class="rmodal-sec-title">// 설명</div>
+            <p class="rmodal-desc">${b.desc}</p>
+            <div class="rmodal-sec-title">// 외형 및 특징</div>
+            ${sliderHTML}
+            <p class="rmodal-desc">${b.desc2||'—'}</p>
+            <div class="rmodal-sec-title">// 개체</div>
+            ${memberLinkHTML}
+            <div class="rmodal-members">${membersHTML}</div>
+          </div>
+        </div>
+      </div>`;
+    openModal();
+    return;
+  }
+
+  /* ── 생물 기존 모달 ── */
   document.getElementById('modal-label').textContent=`// ${b.id} — CREATURE FILE`;
   document.getElementById('modal-content').innerHTML=`
     <div class="bmodal-body">
@@ -3110,6 +3576,60 @@ function openBestiaryModal(id){
       </div>
     </div>`;
   openModal();
+}
+
+function openRaceMiniCard(chipEl, charName){
+  const card = document.getElementById('rmodal-mini-card');
+  const body = document.getElementById('rmodal-mini-body');
+  // 이미 같은 칩이면 닫기
+  if(chipEl.classList.contains('active')){
+    closeRaceMiniCard();
+    return;
+  }
+  // 모든 칩 active 해제
+  document.querySelectorAll('.rmodal-member-chip').forEach(c=>c.classList.remove('active'));
+  chipEl.classList.add('active');
+
+  const c = CHARACTERS.find(x=>x.name===charName);
+  if(!c){
+    body.innerHTML=`<div style="font-size:.75rem;color:rgba(167,139,250,.4);text-align:center;padding:12px;">캐릭터 정보 없음</div>`;
+  } else {
+    body.innerHTML=`
+      ${c.face
+        ?`<img class="rmodal-mini-face" src="${c.face}" alt="${c.name}"/>`
+        :`<div class="rmodal-mini-face-ph">👤</div>`}
+      <div class="rmodal-mini-name">${c.name}</div>
+      <div class="rmodal-mini-role">${c.role||'—'}</div>
+      ${c.role2?`<div class="rmodal-mini-role" style="margin-top:2px;">${c.role2}</div>`:''}
+      <div style="margin-top:10px;font-size:.68rem;color:rgba(167,139,250,.35);font-family:'Share Tech Mono',monospace;letter-spacing:.06em;">${(c.tags||[]).join(' · ')}</div>`;
+  }
+  card.classList.add('show');
+}
+
+function closeRaceMiniCard(){
+  document.getElementById('rmodal-mini-card').classList.remove('show');
+  document.querySelectorAll('.rmodal-member-chip').forEach(c=>c.classList.remove('active'));
+}
+
+// 종족 모달 슬라이더
+const _rSlideIdx = {};
+function rSlideTo(id, idx){
+  const track = document.getElementById(`rslider-track-${id}`);
+  const dots = document.getElementById(`rslider-dots-${id}`);
+  if(!track) return;
+  const items = track.querySelectorAll('.rslide-item');
+  const total = items.length;
+  if(total===0) return;
+  idx = ((idx % total) + total) % total;
+  _rSlideIdx[id] = idx;
+  track.style.transform = `translateX(-${idx*100}%)`;
+  if(dots){
+    dots.querySelectorAll('.rslider-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+  }
+}
+function rSlide(id, dir){
+  const cur = _rSlideIdx[id] || 0;
+  rSlideTo(id, cur + dir);
 }
 
 /* ════════════════════════════════════════
