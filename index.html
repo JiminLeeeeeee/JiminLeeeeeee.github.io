@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M5HLB6SH');</script>
+<!-- End Google Tag Manager -->
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>WORLD ARCHIVE</title>
@@ -1110,6 +1117,36 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
   color:rgba(196,181,253,.85);
   letter-spacing:.04em;
 }
+.rmodal-timeline{
+  position:relative;
+  padding-left:22px;
+  margin-top:12px;
+}
+.rmodal-timeline::before{
+  content:'';position:absolute;
+  left:5px;top:8px;bottom:8px;
+  width:1px;background:rgba(167,139,250,.2);
+}
+.rtl-item{position:relative;margin-bottom:18px;}
+.rtl-item:last-child{margin-bottom:0;}
+.rtl-dot{
+  position:absolute;left:-20px;top:5px;
+  width:10px;height:10px;border-radius:50%;
+  background:#7c3aed;
+  border:2px solid rgba(167,139,250,.45);
+  box-shadow:0 0 8px rgba(124,58,237,.5);
+  flex-shrink:0;
+}
+.rtl-title{
+  font-family:'Do Hyeon','Noto Sans KR',sans-serif;
+  font-size:1rem;color:#c4b5fd;
+  margin-bottom:6px;
+}
+.rtl-body{
+  font-family:'Hahmlet','Noto Sans KR',serif;
+  font-size:.88rem;color:rgba(200,210,255,.65);
+  line-height:1.95;
+}
 .rmodal-members{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
 .rmodal-rainbow-link{
   display:inline-block;
@@ -1244,6 +1281,10 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
 </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M5HLB6SH"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <div class="grid-bg"></div>
 
 <!-- ════════════════════════════════════════
@@ -3525,7 +3566,7 @@ function openBestiaryModal(id){
             <p class="rmodal-desc">${b.desc}</p>
             <div class="rmodal-sec-title">// 외형 및 특징</div>
             ${sliderHTML}
-            <p class="rmodal-desc">${b.desc2||'—'}</p>
+            <div class="rmodal-timeline">${renderTimeline(b.desc2||'—')}</div>
             <div class="rmodal-sec-title">// 개체</div>
             ${memberLinkHTML}
             <div class="rmodal-members">${membersHTML}</div>
@@ -3604,6 +3645,50 @@ function openRaceMiniCard(chipEl, charName){
       <div style="margin-top:10px;font-size:.68rem;color:rgba(167,139,250,.35);font-family:'Share Tech Mono',monospace;letter-spacing:.06em;">${(c.tags||[]).join(' · ')}</div>`;
   }
   card.classList.add('show');
+}
+
+function renderTimeline(text){
+  if(!text || text==='—') return `<p class="rmodal-desc">—</p>`;
+
+  // <br><br> 기준으로 문단 분리
+  const paras = text.split('<br><br>').map(p=>p.trim()).filter(Boolean);
+
+  // 각 문단을 타임라인 아이템으로 변환
+  // [] 로 시작하는 문단 → 제목 아이템
+  // 그 외 → 이전 아이템의 본문 or 독립 본문
+  const items = [];
+  let cur = null;
+
+  for(const para of paras){
+    // [] 제목 감지: [제목] 으로 시작하거나 [제목] 만 있는 경우
+    const titleMatch = para.match(/^\[(.+?)\](.*)/s);
+    if(titleMatch){
+      if(cur) items.push(cur);
+      const title = titleMatch[1].trim();
+      const rest  = titleMatch[2].replace(/^<br>/, '').trim();
+      cur = {title, body: rest};
+    } else {
+      if(cur){
+        cur.body += (cur.body ? '<br><br>' : '') + para;
+      } else {
+        // [] 없이 시작하는 첫 문단 → 제목 없는 아이템
+        cur = {title: null, body: para};
+      }
+    }
+  }
+  if(cur) items.push(cur);
+
+  // 타임라인 아이템이 1개고 제목도 없으면 그냥 텍스트
+  if(items.length===1 && !items[0].title){
+    return `<p class="rmodal-desc">${items[0].body}</p>`;
+  }
+
+  return items.map(item=>`
+    <div class="rtl-item">
+      <div class="rtl-dot"></div>
+      ${item.title ? `<div class="rtl-title">${item.title}</div>` : ''}
+      ${item.body  ? `<div class="rtl-body">${item.body}</div>`  : ''}
+    </div>`).join('');
 }
 
 function closeRaceMiniCard(){
