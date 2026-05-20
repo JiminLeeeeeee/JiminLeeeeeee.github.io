@@ -902,7 +902,10 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
   font-size:3rem;
   background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(79,46,220,.06));
 }
-.race-card-name{
+.race-card--disabled{opacity:.45;cursor:default;}
+.race-card--disabled:hover{transform:none;box-shadow:none;border-color:var(--border);}
+.race-card-soon{font-size:.6rem;color:rgba(167,139,250,.5);margin-left:6px;font-family:'Share Tech Mono',monospace;letter-spacing:.06em;}
+.race-card-name{padding:10px 12px;font-size:.9rem;font-weight:700;color:var(--text-soft);text-align:center;letter-spacing:.03em;display:flex;align-items:center;justify-content:center;}
   padding:10px 12px;
   font-size:.9rem;
   font-weight:700;
@@ -1322,6 +1325,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="cat-desc">지리·역사·세력 데이터</div><span class="cat-arrow">›</span>
     </a>
 
+    <a class="cat-card" onclick="goPage('page-bestiary');return false;" href="#">
+      <div class="cat-id">CAT-03</div><div class="cat-name">🦎 생물 · 종족</div>
+      <div class="cat-desc">세계관 생물 · 종족 DB</div><span class="cat-arrow">›</span>
+    </a>
     <a class="cat-card" onclick="tryOpenEtc();return false;" href="#" style="border-color:rgba(255,159,0,.25);">
       <div class="cat-id" style="color:var(--neon-orange);">CAT-04</div>
       <div class="cat-name" style="color:var(--neon-orange);">🔒 기타</div>
@@ -1493,12 +1500,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="etc-card-desc">고유명사·개념 인덱스</div>
       <span class="etc-card-arrow">›</span>
     </a>
-    <a class="etc-card" onclick="goPage('page-bestiary');return false;" href="#">
-      <div class="etc-card-icon">🦎</div>
-      <div class="etc-card-name">생물 · 종족</div>
-      <div class="etc-card-desc">세계관 생물 · 종족 데이터베이스</div>
-      <span class="etc-card-arrow">›</span>
-    </a>
+    
     <a class="etc-card" onclick="goPage('page-charlog');return false;" href="#">
       <div class="etc-card-icon">📸</div>
       <div class="etc-card-name">캐릭터 로그</div>
@@ -1512,7 +1514,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                사건·역사
 ════════════════════════════════════════ -->
 <div class="page" id="page-history">
-  <button class="back-btn" onclick="goPage('page-etc')">← BACK TO 기타</button>
+  <button class="back-btn" onclick="goPage('page-main')">← BACK TO 기타</button>
   <h2 class="page-title">⚔️ HISTORY DATABASE</h2>
   <p class="page-sub">// 연대기·주요 사건 기록 //</p>
   <div class="filter-bar">
@@ -1529,7 +1531,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                용어사전
 ════════════════════════════════════════ -->
 <div class="page" id="page-glossary">
-  <button class="back-btn" onclick="goPage('page-etc')">← BACK TO 기타</button>
+  <button class="back-btn" onclick="goPage('page-main')">← BACK TO 기타</button>
   <h2 class="page-title">🔖 GLOSSARY DATABASE</h2>
   <p class="page-sub">// 고유명사·개념 인덱스 //</p>
   <div class="filter-bar">
@@ -1544,7 +1546,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                생물도감
 ════════════════════════════════════════ -->
 <div class="page" id="page-bestiary">
-  <button class="back-btn" onclick="goPage('page-etc')">← BACK TO 기타</button>
+  <button class="back-btn" onclick="goPage('page-main')">← BACK TO 기타</button>
   <h2 class="page-title">🦎 생물 · 종족</h2>
   <p class="page-sub">// 세계관 생물 · 종족 데이터베이스 //</p>
   <div class="filter-bar">
@@ -1564,7 +1566,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                캐릭터 로그
 ════════════════════════════════════════ -->
 <div class="page" id="page-charlog">
-  <button class="back-btn" onclick="goPage('page-etc')">← BACK TO 기타</button>
+  <button class="back-btn" onclick="goPage('page-main')">← BACK TO 기타</button>
   <h2 class="page-title">📸 캐릭터 로그</h2>
   <p class="page-sub">// 캐릭터별 로그 이미지 모음 //</p>
   <div class="filter-bar">
@@ -2209,6 +2211,7 @@ const BESTIARY = [
     ecology: '—',
     note: '—',
     members: [],
+    link: 'https://moonnelno.tistory.com/2',
     memberLink: {url:'https://moonnelno.tistory.com/3', label:'📖 개체 정보 보러가기'},
   },
     {
@@ -2229,6 +2232,7 @@ const BESTIARY = [
     ecology: '—',
     note: '—',
     members: [],
+    link: 'https://moonnelno.tistory.com/5?category=999587',
   },
     {
     id: 'BST-005',
@@ -2248,6 +2252,7 @@ const BESTIARY = [
     ecology: '—',
     note: '—',
     members: [],
+    link: 'https://moonnelno.tistory.com/7',
   },
     {
     id: 'BST-006',
@@ -2267,6 +2272,7 @@ const BESTIARY = [
     ecology: '—',
     note: '—',
     members: [],
+    link: 'https://moonnelno.tistory.com/8',
   },
     {
     id: 'BST-007',
@@ -2286,6 +2292,7 @@ const BESTIARY = [
     ecology: '—',
     note: '—',
     members: [],
+    link: 'https://moonnelno.tistory.com/10',
   },
     {
     id: 'BST-008',
@@ -2305,6 +2312,7 @@ const BESTIARY = [
     ecology: '—',
     note: '—',
     members: [],
+    link: 'https://moonnelno.tistory.com/14',
   },
     {
     id: 'BST-009',
@@ -2324,6 +2332,7 @@ const BESTIARY = [
     ecology: '—',
     note: '—',
     members: [],
+    link: 'https://moonnelno.tistory.com/11',
   },
     {
     id: 'BST-010',
@@ -2343,6 +2352,7 @@ const BESTIARY = [
     ecology: '—',
     note: '—',
     members: [],
+    link: 'https://moonnelno.tistory.com/13',
   },
   {
     id: 'BST-011',
@@ -2359,6 +2369,26 @@ const BESTIARY = [
     desc: '—',
     ecology: '—',
     note: '—',
+  },
+  {
+    id: 'BST-012',
+    name: '이르민',
+    aka: 'Irmin',
+    type: '종족',
+    icon: '🌿',
+    image: null,
+    images2: [],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '—',
+    desc2: '—',
+    ecology: '—',
+    note: '—',
+    members: [],
+    link: 'https://moonnelno.tistory.com/12',
   },
 ];
 
@@ -3480,11 +3510,11 @@ function renderBestiary(){
     (!q||b.name.includes(q)||b.aka.toLowerCase().includes(q)||b.tags.some(t=>t.includes(q)))
   );
   grid.innerHTML=list.map(b=> b.type==='종족' ? `
-    <div class="race-card" onclick="openBestiaryModal('${b.id}')">
+    <div class="race-card ${b.link ? '' : 'race-card--disabled'}" ${b.link ? `onclick="window.open('${b.link}','_blank')"` : ''}>
       ${b.image
         ? `<img class="race-card-thumb" src="${b.image}" alt="${b.name}"/>`
         : `<div class="race-card-thumb race-card-thumb--ph">${b.icon}</div>`}
-      <div class="race-card-name">${b.name}</div>
+      <div class="race-card-name">${b.name}${b.link ? '' : '<span class="race-card-soon"> 준비중</span>'}</div>
     </div>` : `
     <div class="bestiary-card" onclick="openBestiaryModal('${b.id}')">
       <div class="bestiary-card-img">
