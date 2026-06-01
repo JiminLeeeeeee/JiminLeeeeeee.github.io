@@ -489,7 +489,52 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
 .org-section-header{margin-bottom:12px;}
 .org-section-title{font-size:.9rem;font-weight:700;color:var(--blue-glow);display:flex;align-items:center;gap:9px;padding-bottom:9px;border-bottom:1px solid var(--border);margin-bottom:10px;}
 .org-section-title::before{content:'';display:inline-block;width:3px;height:1em;background:var(--grad-blue);border-radius:2px;}
-.org-intro{font-size:.8rem;color:var(--text-soft);line-height:1.8;padding:11px 16px;background:rgba(37,99,235,.08);border-left:2px solid var(--border-bright);border-radius:0 10px 10px 0;margin-bottom:14px;}
+.org-intro{font-size:.8rem;color:var(--text-soft);line-height:1.8;padding:11px 16px;background:rgba(52,211,153,.07);border-left:2px solid rgba(52,211,153,.45);border-radius:0 10px 10px 0;margin-bottom:14px;}
+/* 조직·모임 전용 소제목 */
+.org-group-title{
+  font-size:1.08rem;font-weight:800;
+  color:#34d399;
+  letter-spacing:.06em;
+  margin-bottom:13px;padding-bottom:10px;
+  border-bottom:1px solid rgba(52,211,153,.25);
+  display:flex;align-items:center;gap:10px;
+}
+.org-group-title::before{
+  content:'';display:inline-block;
+  width:3px;height:1.1em;
+  background:linear-gradient(180deg,#34d399,#059669);
+  border-radius:2px;
+}
+/* 지역과 장소 전용 소제목 — 주황 계열 */
+.place-group-title{
+  font-size:1.08rem;font-weight:800;
+  color:#fb923c;
+  letter-spacing:.06em;
+  margin-bottom:13px;padding-bottom:10px;
+  border-bottom:1px solid rgba(251,146,60,.25);
+  display:flex;align-items:center;gap:10px;
+}
+.place-group-title::before{
+  content:'';display:inline-block;
+  width:3px;height:1.1em;
+  background:linear-gradient(180deg,#fb923c,#ea580c);
+  border-radius:2px;
+}
+/* 기타 설정 전용 소제목 — 분홍 계열 */
+.misc-group-title{
+  font-size:1.08rem;font-weight:800;
+  color:#f472b6;
+  letter-spacing:.06em;
+  margin-bottom:13px;padding-bottom:10px;
+  border-bottom:1px solid rgba(244,114,182,.25);
+  display:flex;align-items:center;gap:10px;
+}
+.misc-group-title::before{
+  content:'';display:inline-block;
+  width:3px;height:1.1em;
+  background:linear-gradient(180deg,#f472b6,#db2777);
+  border-radius:2px;
+}
 .org-intro-icon{margin-right:6px;}
 .org-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
 .org-card{border-radius:14px;border:1px solid var(--border);background:linear-gradient(160deg,rgba(37,99,235,.08),rgba(124,58,237,.05));padding:16px 15px 14px;transition:all .22s;backdrop-filter:blur(6px);}
@@ -498,6 +543,25 @@ footer{font-size:.66rem;color:var(--text-muted);letter-spacing:.08em;text-align:
 .org-card-name{font-size:.87rem;font-weight:700;color:var(--text-white);}
 .org-card-badge{font-size:.6rem;font-weight:700;padding:2px 9px;border-radius:6px;background:rgba(37,99,235,.2);color:#93c5fd;border:1px solid var(--border);}
 .org-card-desc{font-size:.76rem;color:var(--text-soft);line-height:1.7;}
+.org-char-link{color:#34d399;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(52,211,153,.4);transition:color .18s;}
+.org-char-link:hover{color:#6ee7b7;text-decoration-color:rgba(110,231,183,.7);}
+/* 조직·모임 전용 카드 */
+.org-item-card{
+  border-radius:14px;border:1px solid var(--border);
+  background:linear-gradient(160deg,rgba(37,99,235,.08),rgba(124,58,237,.05));
+  cursor:pointer;transition:all .22s;overflow:hidden;backdrop-filter:blur(6px);
+  display:flex;flex-direction:column;
+  min-height:180px;
+}
+.org-item-card:hover{border-color:var(--border-bright);box-shadow:var(--shadow-blue);transform:translateY(-3px);}
+.org-item-header{padding:12px 14px 8px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.org-item-name{font-size:.95rem;font-weight:800;color:var(--text-white);letter-spacing:.02em;}
+.org-item-badge{font-size:.6rem;font-weight:700;padding:2px 9px;border-radius:6px;background:rgba(37,99,235,.2);color:#93c5fd;border:1px solid var(--border);white-space:nowrap;}
+.org-item-thumb{width:100%;height:72px;overflow:hidden;position:relative;flex-shrink:0;}
+.org-item-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s;}
+.org-item-card:hover .org-item-thumb img{transform:scale(1.06);}
+.org-item-thumb-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(124,58,237,.08));}
+.org-item-desc{padding:8px 14px 10px;font-size:.72rem;color:var(--text-muted);line-height:1.6;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 
 /* 마을 탭 */
 .town-chart{margin-bottom:28px;border-radius:16px;border:1px solid var(--border);background:linear-gradient(160deg,rgba(37,99,235,.1),rgba(124,58,237,.07));padding:22px 24px;backdrop-filter:blur(8px);}
@@ -2101,28 +2165,28 @@ const LOCATIONS = {
         group: '모임',
         groupDesc: '특정한 것을 좋아하거나 마음이 맞는 자들끼리 모인 집단. 마을·도시에 소속되어 있거나 소속이 없는 방랑자 등 다양한 자들이 모임에 가입되어 있으며 모임의 대장은 마음에 드는 자를 스카웃 해갈 수도 있다. 길드와는 다르며 가입과 탈퇴가 대부분 자유롭다.',
         items: [
-          { id:'ORG-003', name:'어스피어', badge:'모임', desc:"세계를 지키는 자들이 모인 소모임." },
-          { id:'ORG-004', name:'엑스플러', badge:'모임', desc:'탐험을 좋아하는 자들이 모인 모임. 람노서스가 최초로 만들었고 지금은 타그마가 대장으로 활동하고 있다. 단체활동을 하는 일부 단원들을 제외하면 다들 자기 할 일 바빠 서로 만나기 힘들다. 행동대장이 단원 모집에 힘쓰고 있다.' },
-          { id:'ORG-005', name:'코즈미언', badge:'모임', desc:"우주를 주 서식처로 삼거나 우주를 탐험하고 싶은 자들이 가입한 모임. 회장이 우주에서 만나는 사람마다 본인의 의견에 상관없이 닥치는 대로 모임에 넣어버린다는 소문이 있다. 새로 발견한 행성들의 이름은 이들이 짓는다." },
+          { id:'ORG-003', name:'어스피어', badge:'모임', desc:'세계를 지키는 자들이 모인 소모임.<br><br>세계의 질서를 어지럽히는 자가 있으면 앞다투어 제지하는 역할이다.<br><br>세계에 출몰한 공허를 감시하는 역할과 더불어 공허에 대해 연구도 겸하고 있다.<br><br>어스피어는 결의만 있으면 단원으로 받아주기 때문에 단원들은 전투원부터 회복을 담당하는 힐러, 아무 도움도 안되지만 결의만큼은 단단한(?) 자들 등 다양하게 존재한다.<br><br>결계 수호자들과도 아는 사이다.' },
+          { id:'ORG-004', name:'엑스플러', badge:'모임', desc:'탐험을 좋아하는 자들이 모인 모임. 람노서스가 최초로 만들었고, 지금은 타그마가 대장으로써 활동하고 있다.<br><br>던전이 발견되기 전에는 말 그대로 세계를 탐험하고 유적이나 새로운 지역을 발견하는 데에 힘썼지만 던전이 발견되고 던전마을이 지어짐에 따라 탐험가들은 무궁한 미지의 산물인 던전으로 모여들었다.<br><br>계속해서 세계를 무대로 활동하는 엑스플러들도 있지만 이제는 대부분 던전 안에서 활동한다.<br><br>단체활동을 하는 일부 단원들을 제외하면 다들 자기 할 일 바쁘므로 서로 만나기 힘들다. 행동대장이 단원 모집에 힘쓰고 있다.' },
+          { id:'ORG-005', name:'코즈미언', badge:'모임', desc:'우주를 주 서식처로 삼거나 우주를 탐험하고 싶은 자들이 가입한 모임..이지만 회장이 우주에서 만나는 사람마다 본인의 의견에 상관없이 닥치는 대로 모임에 넣어버린다는 소문이 있다.<br><br>새로 발견한 행성들의 이름은 이들이 짓는 것이다. 또한 행성에 대한 정보나 환경에 대한 데이터도 수집하고 있다.<br><br>살아 움직이는 생체우주선을 기지로 삼고 있다.' },
         ]
       },
       {
         group: '작은무리',
-        groupDesc: '특정 인물을 필두로 만들어진 소규모 무리.',
+        groupDesc: '일부 소수의 개체들이 모인 집단. 특정한 곳을 거점으로 삼고 활동하는 자들이나 떠돌이 등 다양하지만 마을이나 도시에 소속되어 있지 않다. 주로 야생에서 살아간다.',
         items: [
-          { id:'ORG-006', name:'앤마 리바스 무리', badge:'작은무리', desc:'앤마 리바스를 필두로 만들어진 무리.' },
-          { id:'ORG-007', name:'오아나 무리', badge:'작은무리', desc:'오아나를 필두로 만들어진 무리.' },
-          { id:'ORG-008', name:'크레먼 무리', badge:'작은무리', desc:'크레먼을 필두로 만들어진 무리.' },
-          { id:'ORG-009', name:'루버스 무리', badge:'작은무리', desc:'루버스를 필두로 만들어진 무리.' },
-          { id:'ORG-010', name:'캔치 무리', badge:'작은무리', desc:'캔치를 필두로 만들어진 무리.' },
-          { id:'ORG-011', name:'바른 무리', badge:'작은무리', desc:'바른을 필두로 만들어진 무리.' },
+          { id:'ORG-006', name:'앤마 리바스 무리', badge:'작은무리', desc:'<span class="org-char-link" onclick="openCharModal(\'CHR-138\')">앤마 리바스</span>를 필두로 만들어진 무리.<br><br>의도치 않았지만 2족보행을 하는 크리쳐들이 대부분인 무리로, 작은 움막을 만들어 이동생활을 하는 듯하다.<br><br>무리의 대부분 앤마 리바스의 리더십과 자상함에 감탄해서 따르게 된 자들이다.' },
+          { id:'ORG-007', name:'오아나 무리', badge:'작은무리', desc:'<span class="org-char-link" onclick="openCharModal(\'CHR-139\')">오아나</span>를 필두로 만들어진 무리. 과거 전투로 인해 뿔뿔이 흩어졌다.<br><br>바다속에서 생활하는 오아나 무리는 뛰어난 수영실력이 필수다.' },
+          { id:'ORG-008', name:'크레먼 무리', badge:'작은무리', desc:'<span class="org-char-link" onclick="openCharModal(\'CHR-141\')">크레먼</span>을 필두로 만들어진 무리.<br><br>가끔 무리 전체가 초원을 뛰어다니는 모습을 목격할 수 있다.' },
+          { id:'ORG-009', name:'루버스 무리', badge:'작은무리', desc:'<span class="org-char-link" onclick="openCharModal(\'CHR-143\')">루버스</span>를 필두로 만들어진 무리.<br><br>보석이나 돌 등을 주식으로 삼는 크리쳐들이 먹이를 찾으러 모이는 과정에서 무리가 만들어졌다.<br><br>제일 통솔력이 뛰어나고 나이가 많아서 지식이 많은 루버스가 무리의 리더가 되었다.' },
+          { id:'ORG-010', name:'캔치 무리', badge:'작은무리', desc:'<span class="org-char-link" onclick="openCharModal(\'CHR-144\')">캔치</span>를 필두로 만들어진 무리.<br><br>숲 속에서 살고 있다.<br><br>무리 자체의 분위기가 눈에 띄는 것을 싫어해서 서식지 근처에서 잘 나오지 않는다. 가끔 다른 마을 주민들을 보게 되면 서로 깜짝 놀라는 경우가 적지 않다.' },
+          { id:'ORG-011', name:'바른 무리', badge:'작은무리', desc:'<span class="org-char-link" onclick="openCharModal(\'CHR-146\')">바른</span>을 필두로 만들어진 무리.<br><br>동굴을 거처로 삼고 있으며 주변에 풀이나 먹을 것이 풍부해 보인다.<br><br>무리의 머리인 바른은 혼자 살고 싶어 하지만 어째선지 자신 주변으로 동료가 모인다고 한다.' },
         ]
       },
       {
         group: '그 외',
         groupDesc: '',
         items: [
-          { id:'ORG-012', name:'결계 수호자', badge:'그 외', desc:'다단티아를 수호하는 결계를 지키는 수호자들.' },
+          { id:'ORG-012', name:'결계 수호자', badge:'그 외', desc:'다단티아를 수호하는 결계를 지키는 수호자들.<br><br>거대하고 사악한 우주 넘어의 무언가로부터 행성 다단티아를 지키고 있다.<br><br>수호자들의 자리에 공석이 있으면 결계가 약해지므로 한 수호자가 죽으면 그 수호자의 2대가 그 자리를 넘겨받는 식으로 결계를 유지하고 있다.<br><br>결계는 수호자들의 생명력으로 유지되기 때문에 수호자들의 평균수명은 많지 않은 편이다.' },
         ]
       },
     ],
@@ -2378,7 +2442,7 @@ const BESTIARY = [
     name: '이르민',
     aka: 'Irmin',
     type: '종족',
-    icon: '🌿',
+    icon: '❓',
     image: null,
     images2: [],
     world: '다단티아',
@@ -2392,6 +2456,46 @@ const BESTIARY = [
     note: '—',
     members: [],
     link: 'https://moonnelno.tistory.com/12',
+  },
+  {
+    id: 'BST-013',
+    name: '히드라웨일',
+    aka: '히드라웨일',
+    type: '종족',
+    icon: '❓',
+    image: null,
+    images2: [],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '—',
+    desc2: '—',
+    ecology: '—',
+    note: '—',
+    members: [],
+    link: 'https://moonnelno.tistory.com/m/15',
+  },
+  {
+    id: 'BST-014',
+    name: '디카포테라',
+    aka: '디카포테라',
+    type: '종족',
+    icon: '❓',
+    image: null,
+    images2: [],
+    world: '다단티아',
+    habitat: '—',
+    size: '—',
+    danger: '—',
+    tags: ['닫힌종족'],
+    desc: '—',
+    desc2: '—',
+    ecology: '—',
+    note: '—',
+    members: [],
+    link: 'https://moonnelno.tistory.com/m/16',
   },
 ];
 
@@ -3059,7 +3163,7 @@ function goWorldDetail(id){
   } else {
     placesPanel.innerHTML = placeGroups.map(g=>`
       <div class="wd-group">
-        <div class="wd-group-title">${g.label}</div>
+        <div class="place-group-title">${g.label}</div>
         <div class="wd-place-grid">${g.items.map(p=>`
           <div class="wd-place-card" onclick="openPlaceModal2('${w.id}','${g.key}','${p.id}')">
             <div class="wd-place-thumb">
@@ -3214,20 +3318,19 @@ function goWorldDetail(id){
     }
     panel.innerHTML = orgs.map(g => `
       <div class="wd-group">
-        <div class="wd-group-title">${g.group}</div>
+        <div class="org-group-title">${g.group}</div>
+        ${g.groupDesc ? `<div class="org-intro">${g.groupDesc}</div>` : ''}
         <div class="wd-place-grid">
           ${g.items.map(item => `
-            <div class="wd-place-card" onclick="openOrgModal('${w.id}','${item.id}')">
-              <div class="wd-place-thumb">
-                <div class="wd-place-thumb-ph">🌐</div>
+            <div class="org-item-card" onclick="openOrgModal('${w.id}','${item.id}')">
+              <div class="org-item-header">
+                <span class="org-item-name">${item.name}</span>
+                <span class="org-item-badge">${item.badge}</span>
               </div>
-              <div class="wd-place-card-body">
-                <div class="wd-place-card-top">
-                  <span class="wd-place-name">${item.name}</span>
-                  <span class="wd-place-type">${item.badge}</span>
-                </div>
-                <div class="wd-place-desc">${item.desc||''}</div>
+              <div class="org-item-thumb">
+                ${item.img ? `<img src="${item.img}" alt="${item.name}"/>` : `<div class="org-item-thumb-ph">🌐</div>`}
               </div>
+              <div class="org-item-desc">${(item.desc||'').replace(/<[^>]+>/g,'')}</div>
             </div>`).join('')}
         </div>
       </div>`).join('');
@@ -3238,7 +3341,7 @@ function goWorldDetail(id){
   const misc = (loc && loc.misc) ? loc.misc : [];
   document.getElementById('wdp-misc').innerHTML = misc.length
     ? `<div class="wd-group">
-        <div class="wd-group-title">📦 기타 설정</div>
+        <div class="misc-group-title">📦 기타 설정</div>
         <div class="wd-place-grid">
           ${misc.map((m,i) => `
             <div class="wd-place-card" onclick="openMiscModal('${w.id}',${i})">
